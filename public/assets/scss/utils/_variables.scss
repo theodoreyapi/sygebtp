@@ -16,9 +16,9 @@ $font-weight-bolder: bolder;
 // Font Family
 $font-family-primary: "Roboto", sans-serif;
 $font-awesome: "Fontawesome";
-	
+
 // Theme Colors Variables
-$primary: #F26522;
+$primary: #344675;
 $primary-hover: darken($primary, 10%);
 $secondary: #3B7080;
 $secondary-hover: darken($secondary, 10%);
@@ -28,7 +28,7 @@ $info: #1B84FF;
 $info-hover: darken($info, 10%);
 $warning: #FFC107;
 $warning-hover: darken($warning, 10%);
-$danger: #E70D0D;
+$danger: #0d6efd;
 $danger-hover: darken($danger, 10%);
 $dark: #212529;
 $light: #F8F9FA;
@@ -73,7 +73,7 @@ $primary-500: #F9B291;
 $primary-600: #F7A37A;
 $primary-700: #F69364;
 $primary-800: #F5844E;
-$primary-900: #F37438;
+$primary-900: #344675;
 
 // Secondary
 $secondary-100: #DCE5E8;
@@ -286,7 +286,7 @@ $primary-gradient: linear-gradient(90deg, #FF6F28 0%, #FF5325 100%);
 $secondary-gradient: linear-gradient(180deg, #3B7080 0%, #3D90A9 100%);
 $success-gradient: linear-gradient(180deg, #2DCB73 0%, #0DA952 100%);
 $warning-gradient: linear-gradient(180deg, #FFC107 0%, #FFE8A5 100%);
-$danger-gradient: linear-gradient(180deg, #E70D0D 0%, #810707 100%);
+$danger-gradient: linear-gradient(180deg, #0d6efd 0%, #810707 100%);
 $info-gradient: linear-gradient(180deg, #177DBC 0%, #1A91DB 100%);
 $light-gradient: linear-gradient(180deg, #F8F9FA 0%, #EDEDED 100%);
 $dark-gradient: linear-gradient(180deg, #F3F6FF 0%, #FFFFFF 100%);

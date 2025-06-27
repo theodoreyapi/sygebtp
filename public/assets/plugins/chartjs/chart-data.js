@@ -490,7 +490,7 @@ if ($('#chartDonut').length > 0) {
 			backgroundColor: '#1F9CC6'
 		  }],
 	  };
-	  
+
 	var ctx12 = document.getElementById('chartRadar');
 	var radar = new Chart(ctx12, {
 		type: 'scatter',
@@ -515,11 +515,11 @@ if ($('#chartDonut').length > 0) {
             datasets: [{
                 label: 'Semi Donut',
                 data: [20, 40, 20, 10],
-                backgroundColor: ['#FFC107', '#1B84FF', '#03C95A', '#E70D0D'],
+                backgroundColor: ['#FFC107', '#1B84FF', '#03C95A', '#0d6efd'],
                 borderWidth: -10,
                 borderColor: 'transparent', // Border between segments
                 hoverBorderWidth: 0,   // Border radius for curved edges
-                cutout: '75%',   
+                cutout: '75%',
 				spacing: -30,
             }]
         },
@@ -557,12 +557,12 @@ if ($('#chartDonut').length > 0) {
             datasets: [{
                 label: 'Semi Donut',
                 data: [40, 20, 30, 10],
-                backgroundColor: ['#0C4B5E', '#03C95A', '#FFC107', '#E70D0D'],
+                backgroundColor: ['#0C4B5E', '#03C95A', '#FFC107', '#0d6efd'],
                 borderWidth: 5,
 				borderRadius: 10,
                 borderColor: '#fff', // Border between segments
                 hoverBorderWidth: 0,   // Border radius for curved edges
-                cutout: '60%',   
+                cutout: '60%',
             }]
         },
 		options: {
@@ -586,7 +586,7 @@ if ($('#chartDonut').length > 0) {
 	}
 
 	if ($('#deal_chart').length > 0) {
-		
+
 		var ctx = document.getElementById('deal_chart').getContext('2d');
 var myRadarChart = new Chart(ctx, {
     type: 'radar',
@@ -601,7 +601,7 @@ var myRadarChart = new Chart(ctx, {
                 pointBackgroundColor: '#2dcb73',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(255, 99, 132, 1)', 
+                pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
 				tension: 0.3,
             },
             {
@@ -618,9 +618,9 @@ var myRadarChart = new Chart(ctx, {
             {
                 label: 'Series 3', // Second series
                 data: [70, 43, 70, 90, 30, 30, 30, 40],
-                backgroundColor: '#F26522',
-                borderColor: '#F26522',
-                pointBackgroundColor: '#F26522',
+                backgroundColor: '#344675',
+                borderColor: '#344675',
+                pointBackgroundColor: '#344675',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
                 pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
@@ -653,7 +653,7 @@ var myRadarChart = new Chart(ctx, {
 		}
     }
 });
-		
+
 	}
 
 });

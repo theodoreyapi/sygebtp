@@ -16,62 +16,62 @@ if($('#calendar').length > 0) {
                 };
             }
         });
-        
-        var calendarEl = document.getElementById('calendar');		
+
+        var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-          initialView: 'dayGridMonth', 
+          initialView: 'dayGridMonth',
           events: [
             {
               title: 'Meeting with Team Dev',
               className: 'badge badge-pink-transparent',
               backgroundColor: '#FFEDF6',
-              textColor: "#FD3995",		
+              textColor: "#FD3995",
               start: new Date($.now() - 168000000).toJSON().slice(0, 10),
               end: new Date($.now() - 168000000).toJSON().slice(0, 10),
             },
             {
-                title: 'UI/UX Team...',	
+                title: 'UI/UX Team...',
                 className: 'badge badge-secondary-transparent',
                 backgroundColor: '#EDF2F4' ,
-                textColor: "#0C4B5E",				  
+                textColor: "#0C4B5E",
                 start: new Date($.now() + 338000000).toJSON().slice(0, 10)
             },
             {
                 title: 'Data Update...',
                 className: 'badge badge-purple-transparent',
-                backgroundColor: '#F7EEF9',		
-                textColor: "#AB47BC",		  
-                start: new Date($.now() - 338000000).toJSON().slice(0, 10) 
+                backgroundColor: '#F7EEF9',
+                textColor: "#AB47BC",
+                start: new Date($.now() - 338000000).toJSON().slice(0, 10)
             },
             {
                 title: 'Meeting with Team Dev',
                 className: 'badge badge-dark-transparent',
-                backgroundColor: '#E8E9EA',		
-                textColor: "#212529",				  
-                start: new Date($.now() + 68000000).toJSON().slice(0, 10) 
+                backgroundColor: '#E8E9EA',
+                textColor: "#212529",
+                start: new Date($.now() + 68000000).toJSON().slice(0, 10)
             },
             {
                 title: 'Design System',
                 className: 'badge badge-danger-transparent',
-                backgroundColor: '#FAE7E7',	
-                textColor: "#E70D0D",				  
-                start: new Date($.now() + 88000000).toJSON().slice(0, 10) 
+                backgroundColor: '#FAE7E7',
+                textColor: "#0d6efd",
+                start: new Date($.now() + 88000000).toJSON().slice(0, 10)
             },
           ],
           headerToolbar: {
             start: 'today prev,next',
             end: 'dayGridMonth,dayGridWeek,dayGridDay',
             center: 'title'
-          }, 
+          },
           eventClick: function(info) {
             // Open modal
             $('#event_modal').modal('show');
-            
+
             // Populate modal with event details
             document.getElementById('eventTitle').innerText = info.event.title;
           },
@@ -85,9 +85,9 @@ if($('#calendar').length > 0) {
                 // When event is dropped on calendar
                 console.log('Event added', info.event.title);
             }
-        });		
+        });
         calendar.render();
-    });			
+    });
 }
 
 
@@ -140,7 +140,7 @@ if($('#calendar1').length > 0) {
                 {
                     id: 1000,
                     title: 'Repeating Event',
-                    start: new Date($.now() - 338000000).toJSON().slice(0, 10) 
+                    start: new Date($.now() - 338000000).toJSON().slice(0, 10)
                 },
                 {
                     title: 'Meeting',
@@ -149,7 +149,7 @@ if($('#calendar1').length > 0) {
                 {
                     title: 'Click for Google',
                     start: new Date($.now() + 68000000).toJSON().slice(0, 10),
-                    className: "bg-secondary text-white" 
+                    className: "bg-secondary text-white"
                 }
             ]
         });

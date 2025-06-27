@@ -73,7 +73,7 @@ $(function() {
     // Evented example.
     $("select").change(function() {
         var text = $(this).val() + "/" + 5
-		
+
         $(this)
             .siblings("span.graph")
             .text(text)
@@ -100,7 +100,7 @@ $(function() {
 })
 
 $(".ticket-chart-1").peity("bar", {
-    fill: ["#F26522"],
+    fill: ["#344675"],
     width: '100%',
     height: '70'
 })

@@ -85,7 +85,7 @@ $(document).ready(function () {
   if ($('#invoice_chart').length > 0) {
     var pieCtx = document.getElementById("invoice_chart"),
       pieConfig = {
-        colors: ['#03C95A', '#E70D0D', '#AB47BC', '#FFC107'],
+        colors: ['#03C95A', '#0d6efd', '#AB47BC', '#FFC107'],
         series: [45, 15, 21, 5],
         chart: {
           fontFamily: 'Poppins, sans-serif',
@@ -158,7 +158,7 @@ $(document).ready(function () {
           show: false,
         }
       },
-      colors: ['#F26522'],
+      colors: ['#344675'],
       dataLabels: {
         enabled: false
       },
@@ -203,7 +203,7 @@ $(document).ready(function () {
           show: false,
         }
       },
-      colors: ['#F26522', '#888ea8'],
+      colors: ['#344675', '#888ea8'],
       dataLabels: {
         enabled: false
       },
@@ -254,7 +254,7 @@ $(document).ready(function () {
           endingShape: 'rounded'
         },
       },
-      colors: ['#F26522', '#4361ee'],
+      colors: ['#344675', '#4361ee'],
       dataLabels: {
         enabled: false
       },
@@ -326,7 +326,7 @@ $(document).ready(function () {
           horizontal: false,
         },
       },
-      colors: ['#F26522', '#E70D0D', '#03C95A', '#1B84FF'],
+      colors: ['#344675', '#0d6efd', '#03C95A', '#1B84FF'],
       series: [{
         name: 'PRODUCT A',
         data: [44, 55, 41, 67, 22, 43]
@@ -371,7 +371,7 @@ $(document).ready(function () {
           show: false,
         }
       },
-      colors: ['#F26522'],
+      colors: ['#344675'],
       plotOptions: {
         bar: {
           horizontal: true,
@@ -406,7 +406,7 @@ $(document).ready(function () {
           show: false,
         }
       },
-      colors: ['#F26522', '#888ea8'],
+      colors: ['#344675', '#888ea8'],
       series: [{
         name: 'Website Blog',
         type: 'column',
@@ -556,7 +556,7 @@ $(document).ready(function () {
         bar: {
           horizontal: false,
           borderRadius: 4,
-          borderRadiusApplication: "end", // "around" / "end" 
+          borderRadiusApplication: "end", // "around" / "end"
           borderRadiusWhenStacked: "all", // "all"/"last"
           columnWidth: '20%',
         },
@@ -780,7 +780,7 @@ $(document).ready(function () {
       },
 
       series: [15, 10, 5, 10, 60],
-      colors: ['#F26522', '#FFC107', '#E70D0D', '#03C95A', '#0C4B5E'],
+      colors: ['#344675', '#FFC107', '#0d6efd', '#03C95A', '#0C4B5E'],
       responsive: [{
         breakpoint: 480,
         options: {
@@ -1402,7 +1402,7 @@ if ($('#total-chart').length > 0) {
     },
     markers: {
       size: 0,
-      colors: ["#F26522"],
+      colors: ["#344675"],
       strokeColors: "#fff",
       strokeWidth: 2,
       hover: {
@@ -1424,7 +1424,7 @@ if ($('#total-chart').length > 0) {
       width: 2.5,
       curve: "smooth"
     },
-    colors: ["#F26522"],
+    colors: ["#344675"],
     xaxis: {
       categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]
     },
@@ -1493,7 +1493,7 @@ if ($('#active-chart').length > 0) {
     },
     markers: {
       size: 0,
-      colors: ["#F26522"],
+      colors: ["#344675"],
       strokeColors: "#fff",
       strokeWidth: 2,
       hover: {
@@ -1515,7 +1515,7 @@ if ($('#active-chart').length > 0) {
       width: 2.5,
       curve: "smooth"
     },
-    colors: ["#F26522"],
+    colors: ["#344675"],
     xaxis: {
       categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]
     },
@@ -1584,7 +1584,7 @@ if ($('#inactive-chart').length > 0) {
     },
     markers: {
       size: 0,
-      colors: ["#F26522"],
+      colors: ["#344675"],
       strokeColors: "#fff",
       strokeWidth: 2,
       hover: {
@@ -1606,7 +1606,7 @@ if ($('#inactive-chart').length > 0) {
       width: 2.5,
       curve: "smooth"
     },
-    colors: ["#F26522"],
+    colors: ["#344675"],
     xaxis: {
       categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]
     },
@@ -1675,7 +1675,7 @@ if ($('#location-chart').length > 0) {
     },
     markers: {
       size: 0,
-      colors: ["#F26522"],
+      colors: ["#344675"],
       strokeColors: "#fff",
       strokeWidth: 2,
       hover: {
@@ -1697,7 +1697,7 @@ if ($('#location-chart').length > 0) {
       width: 2.5,
       curve: "smooth"
     },
-    colors: ["#F26522"],
+    colors: ["#344675"],
     xaxis: {
       categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]
     },
@@ -2122,7 +2122,7 @@ if ($('#leave-report').length > 0) {
     }, {
       name: 'Others',
       data: [25, 20, 30, 35,50,60,25, 20, 30, 35,50,60] // Replace with your data
-    }, 
+    },
   ],
     chart: {
       type: 'bar',
@@ -2154,7 +2154,7 @@ if ($('#leave-report').length > 0) {
     legend: {
      show: false
     },
-    colors: ['#03C95A', '#FFC107', '#0C4B5E', '#F26522'], // Set your colors here
+    colors: ['#03C95A', '#FFC107', '#0C4B5E', '#344675'], // Set your colors here
     dataLabels: {
       enabled: false // Disable data labels
     }
@@ -2224,7 +2224,7 @@ if ($('#revenue-chart').length > 0) {
           bar: {
               horizontal: false,
               columnWidth: '50%',
-              endingShape: 'rounded'  
+              endingShape: 'rounded'
           },
       },
       dataLabels: {
@@ -2250,12 +2250,12 @@ if ($('#revenue-chart').length > 0) {
           }
       }
   }
-  
+
   var chart = new ApexCharts(
       document.querySelector("#revenue-chart"),
       sCol
   );
-  
+
   chart.render();
 }
 
@@ -2282,7 +2282,7 @@ if ($('#emp-department').length > 0) {
       strokeDashArray: 5,
       padding: {
         top: -20,
-        left: 0,   
+        left: 0,
         right: 0,
         bottom: 0
       }
@@ -2306,7 +2306,7 @@ if ($('#emp-department').length > 0) {
       categories: ['UI/UX', 'Development', 'Management', 'HR', 'Testing', 'Marketing'],
       labels: {
         style: {
-          colors: '#111827', 
+          colors: '#111827',
           fontSize: '13px',
         }
       }
@@ -2345,7 +2345,7 @@ if ($('#company-chart').length > 0) {
     }],
     plotOptions: {
       bar: {
-        borderRadius: 10, 
+        borderRadius: 10,
         borderRadiusWhenStacked: 'all',
         horizontal: false,
         endingShape: 'rounded',
@@ -2354,7 +2354,7 @@ if ($('#company-chart').length > 0) {
           backgroundBarOpacity: 0.5,
           hover: {
             enabled: true,
-            borderColor: '#F26522', // Color when hovering over the bar
+            borderColor: '#344675', // Color when hovering over the bar
           }
         }
       },
@@ -2367,7 +2367,7 @@ if ($('#company-chart').length > 0) {
       categories: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
       labels: {
         style: {
-          colors: '#6B7280', 
+          colors: '#6B7280',
           fontSize: '13px',
         }
       }
@@ -2375,7 +2375,7 @@ if ($('#company-chart').length > 0) {
     yaxis: {
       labels: {
         offsetX: -15,
-        show: false 
+        show: false
       }
     },
     grid: {
@@ -2415,7 +2415,7 @@ if ($('#plan-overview').length > 0) {
         show: false,
       }
     },
-    colors: ['#FFC107', '#1B84FF', '#F26522'],
+    colors: ['#FFC107', '#1B84FF', '#344675'],
     series: [20, 60, 20],
     labels: ['Enterprise', 'Premium', 'Basic'],
     plotOptions: {
@@ -2485,7 +2485,7 @@ if ($('#plan-overview').length > 0) {
       }],
       plotOptions: {
         bar: {
-          borderRadius: 5, 
+          borderRadius: 5,
           borderRadiusWhenStacked: 'all',
           horizontal: false,
           endingShape: 'rounded'
@@ -2502,7 +2502,7 @@ if ($('#plan-overview').length > 0) {
         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov', 'Dec'],
         labels: {
           style: {
-            colors: '#6B7280', 
+            colors: '#6B7280',
             fontSize: '13px',
           }
         }
@@ -2511,7 +2511,7 @@ if ($('#plan-overview').length > 0) {
         labels: {
           offsetX: -15,
           style: {
-            colors: '#6B7280', 
+            colors: '#6B7280',
             fontSize: '13px',
           }
         }
@@ -2621,7 +2621,7 @@ if ($('#plan-overview').length > 0) {
       }],
       plotOptions: {
         bar: {
-          borderRadius: 5, 
+          borderRadius: 5,
           horizontal: false,
           endingShape: 'rounded'
         },
@@ -2637,7 +2637,7 @@ if ($('#plan-overview').length > 0) {
         categories: ['Inpipeline', 'Follow Up', 'Schedule', 'Conversion'],
         labels: {
           style: {
-            colors: '#6B7280', 
+            colors: '#6B7280',
             fontSize: '13px',
           }
         }
@@ -2646,7 +2646,7 @@ if ($('#plan-overview').length > 0) {
         labels: {
           offsetX: -15,
           style: {
-            colors: '#6B7280', 
+            colors: '#6B7280',
             fontSize: '13px',
           }
         }
@@ -2678,8 +2678,8 @@ if ($('#plan-overview').length > 0) {
     series: [{
     name: 'Series 1',
     data: [80, 50, 30, 40, 100, 20],
-    color: '#F37438',
-    
+    color: '#344675',
+
   }, {
     name: 'Series 2',
     data: [20, 30, 40, 80, 20, 80],
@@ -2706,7 +2706,7 @@ if ($('#plan-overview').length > 0) {
   },
   stroke: {
     width: 2,
-    curve: 'smooth' 
+    curve: 'smooth'
   },
   fill: {
     opacity: 1
@@ -2752,8 +2752,8 @@ if ($('#plan-overview').length > 0) {
     },
   },
   colors: [
-    '#F26522',
-    '#F37438',
+    '#344675',
+    '#344675',
     '#F5844E',
     '#F69364',
     '#F7A37A',
@@ -2762,7 +2762,7 @@ if ($('#plan-overview').length > 0) {
   dataLabels: {
     enabled: true,
     formatter: function (val, opt) {
-      return opt.w.globals.labels[opt.dataPointIndex] 
+      return opt.w.globals.labels[opt.dataPointIndex]
     },
     dropShadow: {
       enabled: true,
@@ -2808,7 +2808,7 @@ if ($('#plan-overview').length > 0) {
       }],
       plotOptions: {
         bar: {
-          borderRadius: 5, 
+          borderRadius: 5,
           borderRadiusWhenStacked: 'all',
           horizontal: false,
           endingShape: 'rounded'
@@ -2825,7 +2825,7 @@ if ($('#plan-overview').length > 0) {
         categories: ['Competitor', 'Budget', 'Unresponsie', 'Timing'],
         labels: {
           style: {
-            colors: '#6B7280', 
+            colors: '#6B7280',
             fontSize: '9px',
           }
         }
@@ -2834,7 +2834,7 @@ if ($('#plan-overview').length > 0) {
         labels: {
           offsetX: -15,
           style: {
-            colors: '#6B7280', 
+            colors: '#6B7280',
             fontSize: '10px',
           }
         }
@@ -2872,7 +2872,7 @@ if ($('#plan-overview').length > 0) {
     labels: ['Paid', 'Google', 'Referals', 'Campaigns'], // Labels for the data
     colors: ['#FFC107', '#0C4B5E', '#AB47BC', '#FD3995'], // Colors from the image
     plotOptions: {
-        pie: { 
+        pie: {
             donut: {
                 size: '60%',
                 labels: {
@@ -2889,7 +2889,7 @@ if ($('#plan-overview').length > 0) {
         }
     },
     stroke: {
-   
+
   lineCap: 'round',
   show: true,
   width: 0,    // Space between donut sections
@@ -2918,7 +2918,7 @@ chart.render();
         height: 290,
     },
     labels: ['Paid', 'Google', 'Referals', 'Campaigns' , 'Campaigns'], // Labels for the data
-    colors: ['#F26522', '#FFC107', '#E70D0D', '#1B84FF' , '#0C4B5E'], // Colors from the image
+    colors: ['#344675', '#FFC107', '#0d6efd', '#1B84FF' , '#0C4B5E'], // Colors from the image
     plotOptions: {
         pie: {
             donut: {
@@ -2976,7 +2976,7 @@ chart.render();
     }],
     plotOptions: {
       bar: {
-        borderRadius: 5, 
+        borderRadius: 5,
         borderRadiusWhenStacked: 'all',
         horizontal: false,
         endingShape: 'rounded'
@@ -2993,7 +2993,7 @@ chart.render();
       categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov', 'Dec'],
       labels: {
         style: {
-          colors: '#6B7280', 
+          colors: '#6B7280',
           fontSize: '13px',
         }
       }
@@ -3004,7 +3004,7 @@ chart.render();
       labels: {
         offsetX: -15,
         style: {
-          colors: '#6B7280', 
+          colors: '#6B7280',
           fontSize: '13px',
         },
         formatter: function (value) {
@@ -3023,7 +3023,7 @@ chart.render();
       show: false
     },
     dataLabels: {
-      enabled: false 
+      enabled: false
     },
     tooltip: {
       y: {
@@ -3054,11 +3054,11 @@ chart.render();
   },
   colors: [
     "#9CA3AF",
-    "#F37438",
+    "#344675",
     "#9CA3AF",
-    "#F37438",
+    "#344675",
     "#9CA3AF",
-    "#F37438",
+    "#344675",
   ],
     series: [
       {
@@ -3070,11 +3070,11 @@ chart.render();
         {
           x: 'Tue',
           y: 29
-        }, 
+        },
         {
           x: 'Wed',
           y: 13
-        }, 
+        },
         {
           x: 'Thu',
           y: 32
@@ -3103,11 +3103,11 @@ chart.render();
         {
           x: 'Tue',
           y: 29
-        }, 
+        },
         {
           x: 'Wed',
           y: 13
-        }, 
+        },
         {
           x: 'Thu',
           y: 32
@@ -3135,11 +3135,11 @@ chart.render();
         {
           x: 'Tue',
           y: 29
-        }, 
+        },
         {
           x: 'Wed',
           y: 13
-        }, 
+        },
         {
           x: 'Thu',
           y: 32
@@ -3167,11 +3167,11 @@ chart.render();
         {
           x: 'Tue',
           y: 29
-        }, 
+        },
         {
           x: 'Wed',
           y: 13
-        }, 
+        },
         {
           x: 'Thu',
           y: 32
@@ -3199,11 +3199,11 @@ chart.render();
         {
           x: 'Tue',
           y: 20
-        }, 
+        },
         {
           x: 'Wed',
           y: 13
-        }, 
+        },
         {
           x: 'Thu',
           y: 32
@@ -3231,11 +3231,11 @@ chart.render();
         {
           x: 'Tue',
           y: 0
-        }, 
+        },
         {
           x: 'Wed',
           y: 75
-        }, 
+        },
         {
           x: 'Thu',
           y: 0
