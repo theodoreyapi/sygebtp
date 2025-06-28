@@ -12,15 +12,17 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-
 //error
 Route::fallback(function () {
     return response()->view('errors.error-404', [], 404);
 });
 
 // Dashboard
+Route::get('index', function () {
+    return view('dashboard.index');
+});
 Route::get('employee-dashboard', function () {
-    return view('dashboard.entreprises.employee-dashboard');
+    return view('dashboard.employee-dashboard');
 });
 
 //Profile
@@ -76,45 +78,40 @@ Route::get('leave-type', function () {
     return view('profile.leave-type');
 });
 
-// Applications
-Route::get('calendar', function () {
-    return view('applications.calendar');
-});
-
 //CRM
 Route::get('activity', function () {
-    return view('crm.activity');
+    return view('admin.help.activity');
 });
 
 
 //Assets
 Route::get('assetes', function () {
-    return view('assets.assets');
+    return view('admin.assets.assets');
 });
 Route::get('asset-categories', function () {
-    return view('assets.asset-categories');
+    return view('admin.assets.asset-categories');
 });
 
 //Users Management
 Route::get('users', function () {
-    return view('roles.users');
+    return view('admin.user.users');
 });
 Route::get('roles-permissions', function () {
-    return view('roles.roles-permissions');
+    return view('admin.user.roles-permissions');
 });
 
 //Repports
 Route::get('attendance-report', function () {
-    return view('reports.attendance-report');
+    return view('admin.reports.attendance-report');
 });
 Route::get('daily-report', function () {
-    return view('reports.daily-report');
+    return view('admin.reports.daily-report');
 });
 Route::get('leave-report', function () {
-    return view('reports.leave-report');
+    return view('admin.reports.leave-report');
 });
 Route::get('employee-report', function () {
-    return view('reports.employee-report');
+    return view('admin.reports.employee-report');
 });
 
 // HRM
@@ -135,28 +132,28 @@ Route::get('ticket-details', function () {
 });
 Route::resource('holidays', HolidaysController::class);
 Route::get('leaves', function () {
-    return view('hrm.attendances.leaves');
+    return view('hrm.attendance.leaves.leaves');
 });
 Route::get('leaves-employee', function () {
-    return view('hrm.attendances.leaves-employee');
+    return view('hrm.attendance.leaves.leaves-employee');
 });
 Route::get('leave-settings', function () {
-    return view('hrm.attendances.leave-settings');
+    return view('hrm.attendance.leaves.leave-settings');
 });
 Route::get('attendance-admin', function () {
-    return view('hrm.attendances.attendance-admin');
+    return view('hrm.attendance.attendance-admin');
 });
 Route::get('attendance-employee', function () {
-    return view('hrm.attendances.attendance-employee');
+    return view('hrm.attendance.attendance-employee');
 });
 Route::get('timesheets', function () {
-    return view('hrm.attendances.timesheets');
+    return view('hrm.attendance.timesheets');
 });
 Route::get('schedule-timing', function () {
-    return view('hrm.attendances.schedule-timing');
+    return view('hrm.attendance.schedule-timing');
 });
 Route::get('overtime', function () {
-    return view('hrm.attendances.overtime');
+    return view('hrm.attendance.overtime');
 });
 Route::get('performance-indicator', function () {
     return view('hrm.performance.performance-indicator');
@@ -174,17 +171,17 @@ Route::get('goal-type', function () {
     return view('hrm.performance.goal-type');
 });
 Route::get('training', function () {
-    return view('hrm.trainings.training');
+    return view('hrm.training.training');
 });
 Route::resource('trainers', TrainersController::class);
 Route::resource('training-type', TrainingTypeController::class);
 Route::get('promotion', function () {
-    return view('hrm.promotions.promotion');
+    return view('hrm.promotion');
 });
 Route::get('resignation', function () {
-    return view('hrm.resignations.resignation');
+    return view('hrm.resignation');
 });
 Route::get('termination', function () {
-    return view('hrm.terminations.termination');
+    return view('hrm.termination');
 });
 

@@ -3,11 +3,11 @@
      <div class="main-header">
 
          <div class="header-left">
-             <a href="#" class="logo">
-                 <img src="{{ URL::asset('') }}assets/img/logo.svg" alt="Logo">
+             <a href="#" class="logo text-primary">
+                 <strong>SYGEBTP</strong>
              </a>
-             <a href="#" class="dark-logo">
-                 <img src="{{ URL::asset('') }}assets/img/logo-white.svg" alt="Logo">
+             <a href="#" class="dark-logo text-white">
+                 <strong>SYGEBTP</strong>
              </a>
          </div>
 
@@ -59,8 +59,7 @@
                              <span class="notification-status-dot"></span>
                          </a>
                          <div class="dropdown-menu dropdown-menu-end notification-dropdown p-4">
-                             <div
-                                 class="d-flex align-items-center justify-content-between border-bottom p-0 pb-3 mb-3">
+                             <div class="d-flex align-items-center justify-content-between border-bottom p-0 pb-3 mb-3">
                                  <h4 class="notification-title">Notifications (2)</h4>
                                  <div class="d-flex align-items-center">
                                      <a href="#" class="text-primary fs-15 me-3 lh-1">Mark all as
@@ -100,8 +99,7 @@
                                                          alt="Profile">
                                                  </span>
                                                  <div class="flex-grow-1">
-                                                     <p class="mb-1"><span
-                                                             class="text-dark fw-semibold">Shawn</span>
+                                                     <p class="mb-1"><span class="text-dark fw-semibold">Shawn</span>
                                                          performance in Math is below the threshold.</p>
                                                      <span>Just Now</span>
                                                  </div>
@@ -116,8 +114,8 @@
                                                          alt="Profile">
                                                  </span>
                                                  <div class="flex-grow-1">
-                                                     <p class="mb-1"><span
-                                                             class="text-dark fw-semibold">Sylvia</span> added
+                                                     <p class="mb-1"><span class="text-dark fw-semibold">Sylvia</span>
+                                                         added
                                                          appointment on 02:00 PM</p>
                                                      <span>10 mins ago</span>
                                                      <div class="d-flex justify-content-start align-items-center mt-1">
