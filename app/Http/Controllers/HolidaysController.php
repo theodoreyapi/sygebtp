@@ -13,7 +13,7 @@ class HolidaysController extends Controller
     public function index()
     {
         $all = Holidays::all();
-        return view('hrm.holidays.holidays', compact('all'));
+        return view('hrm.holidays', compact('all'));
     }
 
     /**

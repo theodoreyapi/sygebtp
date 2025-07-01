@@ -14,9 +14,35 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('last_name');
+            $table->string('photo')->nullable();
+            $table->string('date_embauche');
+            $table->string('contrat')->nullable();
+            $table->string('doc_contrat')->nullable();
+            $table->string('cnps')->nullable();
+            $table->string('doc_diplome')->nullable();
+            $table->integer('salaire')->nullable()->default(0);
+            $table->string('nationnalite')->nullable();
+            $table->string('type_papier')->nullable();
+            $table->string('numero_papier')->nullable();
+            $table->string('date_naissance')->nullable();
+            $table->string('lieu_naissance')->nullable();
+            $table->string('lieu_residence')->nullable();
+            $table->string('situation_matrimoniale')->nullable();
+            $table->string('sexe');
+            $table->integer('enfant')->nullable()->default(0);
+            $table->string('phone')->unique();
             $table->string('email')->unique();
+            $table->longText('about')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('department_id');
+            $table->foreign('department_id')->references('depart')->on('departments');
+            $table->unsignedBigInteger('designation_id');
+            $table->foreign('designation_id')->references('design')->on('designations');
+            $table->string('type_recru')->default('Recruter')->comment('Recruter, Encours');
+            $table->string('role')->default('Employe')->comment('Admin, Respo, Employe, Resporh');
+            $table->string('statut')->default('Active')->comment('Active, Inactive');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -45,5 +71,10 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['department_id', 'designation_id']);
+            $table->dropColumn('department_id');
+            $table->dropColumn('designation_id');
+        });
     }
 };

@@ -6,7 +6,7 @@
     <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion RH | {{ $title }}</title>
+    <title>SYGEBTP | {{ $title }}</title>
 
     <meta name="description"
         content="AptioTalent - vous permet de postuler a des offres, noté les employés et employeurs.">
@@ -19,9 +19,6 @@
     <!-- Favicon -->
     <link rel="icon" href="{{ URL::asset('') }}assets/img/favicon.png" type="image/x-icon">
     <link rel="shortcut icon" href="{{ URL::asset('') }}assets/img/favicon.png" type="image/x-icon">
-
-    <!-- Theme Script js -->
-    <script src="{{ URL::asset('') }}assets/js/theme-script.js"></script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ URL::asset('') }}assets/css/bootstrap.min.css">

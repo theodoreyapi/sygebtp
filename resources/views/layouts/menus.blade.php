@@ -96,26 +96,12 @@
                              </a>
                              <ul>
                                  <li>
-                                     <a href="{{ url('admin-dashboard') }}"
+                                     <a href="{{ url('index') }}"
                                          class="{{ Request::is('admin-dashboard') ? 'active' : '' }}{{ Request::is('index') ? 'active' : '' }}">Admin</a>
                                  </li>
                                  <li>
                                      <a href="{{ url('employee-dashboard') }}"
-                                         class="{{ Request::is('employee-dashboard') ? 'active' : '' }}{{ Request::is('index') ? 'active' : '' }}">Employé</a>
-                                 </li>
-                             </ul>
-                         </li>
-                         <li class="submenu">
-                             <a href="javascript:void(0);"
-                                 class="
-                                   {{ Request::is('calendar') ? 'active subdrop' : '' }}
-                                    ">
-                                 <i class="ti ti-layout-grid-add"></i><span>Applications</span>
-                                 <span class="menu-arrow"></span>
-                             </a>
-                             <ul>
-                                 <li><a href="{{ url('calendar') }}"
-                                         class="{{ Request::is('calendar') ? 'active' : '' }}">Calendar</a>
+                                         class="{{ Request::is('employee-dashboard') ? 'active' : '' }}{{ Request::is('employee-dashboard') ? 'active' : '' }}">Employé</a>
                                  </li>
                              </ul>
                          </li>
@@ -166,13 +152,13 @@
                              </a>
                              <ul>
                                  <li><a class="{{ Request::is('employees') ? 'active' : '' }}"
-                                         href="employees">Employés</a></li>
+                                         href="{{ url('employees') }}">Employés</a></li>
                                  <li><a class="{{ Request::is('departments') ? 'active' : '' }}"
-                                         href="departments">Départements</a></li>
+                                         href="{{ url('departments') }}">Départements</a></li>
                                  <li><a class="{{ Request::is('designations') ? 'active' : '' }}"
-                                         href="designations">Désignations</a></li>
+                                         href="{{ url('designations') }}">Désignations</a></li>
                                  <li><a class="{{ Request::is('policy') ? 'active' : '' }}"
-                                         href="policy">Politiques</a></li>
+                                         href="{{ url('policy') }}">Politiques</a></li>
                              </ul>
                          </li>
                          <li class="submenu">
@@ -183,11 +169,11 @@
                              </a>
                              <ul>
                                  <li><a class="{{ Request::is('tickets') ? 'active' : '' }}"
-                                         href="tickets">Tickets</a></li>
+                                         href="{{ url('tickets') }}">Tickets</a></li>
                              </ul>
                          </li>
                          <li class="{{ Request::is('holidays') ? 'active' : '' }}">
-                             <a href="holidays">
+                             <a href="{{ url('holidays') }}">
                                  <i class="ti ti-calendar-event"></i><span>Fériés</span>
                              </a>
                          </li>
@@ -201,16 +187,16 @@
                                      <a href="javascript:void(0);">Leaves<span
                                              class="menu-arrow inside-submenu"></span></a>
                                      <ul>
-                                         <li><a href="leaves">Leaves (Admin)</a></li>
-                                         <li><a href="leaves-employee">Leave (Employee)</a></li>
-                                         <li><a href="leave-settings">Leave Settings</a></li>
+                                         <li><a href="{{ url('leaves') }}">Leaves (Admin)</a></li>
+                                         <li><a href="{{ url('leaves-employee') }}">Leave (Employee)</a></li>
+                                         <li><a href="{{ url('leave-settings') }}">Leave Settings</a></li>
                                      </ul>
                                  </li>
-                                 <li><a href="attendance-admin">Attendance (Admin)</a></li>
-                                 <li><a href="attendance-employee">Attendance (Employee)</a></li>
-                                 <li><a href="timesheets">Timesheets</a></li>
-                                 <li><a href="schedule-timing">Shift & Schedule</a></li>
-                                 <li><a href="overtime">Overtime</a></li>
+                                 <li><a href="{{ url('attendance-admin') }}">Attendance (Admin)</a></li>
+                                 <li><a href="{{ url('attendance-employee') }}">Attendance (Employee)</a></li>
+                                 <li><a href="{{ url('timesheets') }}">Timesheets</a></li>
+                                 <li><a href="{{ url('schedule-timing') }}">Shift & Schedule</a></li>
+                                 <li><a href="{{ url('overtime') }}">Overtime</a></li>
                              </ul>
                          </li>
                          <li class="submenu">
@@ -219,11 +205,11 @@
                                  <span class="menu-arrow"></span>
                              </a>
                              <ul>
-                                 <li><a href="performance-indicator">Performance Indicator</a></li>
-                                 <li><a href="performance-review">Performance Review</a></li>
-                                 <li><a href="performance-appraisal">Performance Appraisal</a></li>
-                                 <li><a href="goal-tracking">Goal List</a></li>
-                                 <li><a href="goal-type">Goal Type</a></li>
+                                 <li><a href="{{ url('performance-indicator') }}">Performance Indicator</a></li>
+                                 <li><a href="{{ url('performance-review') }}">Performance Review</a></li>
+                                 <li><a href="{{ url('performance-appraisal') }}">Performance Appraisal</a></li>
+                                 <li><a href="{{ url('goal-tracking') }}">Goal List</a></li>
+                                 <li><a href="{{ url('goal-type') }}">Goal Type</a></li>
                              </ul>
                          </li>
                          <li class="submenu">
@@ -235,27 +221,27 @@
                                  <span class="menu-arrow"></span>
                              </a>
                              <ul>
-                                 <li><a href="training"
+                                 <li><a href="{{ url('training') }}"
                                          class="{{ Request::is('training') ? 'active' : '' }}">Formation</a></li>
-                                 <li><a href="trainers"
+                                 <li><a href="{{ url('trainers') }}"
                                          class="{{ Request::is('trainers') ? 'active' : '' }}">Formateurs</a></li>
-                                 <li><a href="training-type"
+                                 <li><a href="{{ url('training-type') }}"
                                          class="{{ Request::is('training-type') ? 'active' : '' }}">Type formation</a>
                                  </li>
                              </ul>
                          </li>
                          <li class="{{ Request::is('promotion') ? 'active' : '' }}">
-                             <a href="promotion">
+                             <a href="{{ url('promotion') }}">
                                  <i class="ti ti-speakerphone"></i><span>Promotion</span>
                              </a>
                          </li>
                          <li class="{{ Request::is('resignation') ? 'active' : '' }}">
-                             <a href="resignation">
+                             <a href="{{ url('resignation') }}">
                                  <i class="ti ti-external-link"></i><span>Démission</span>
                              </a>
                          </li>
                          <li class="{{ Request::is('termination') ? 'active' : '' }}">
-                             <a href="termination">
+                             <a href="{{ url('termination') }}">
                                  <i class="ti ti-circle-x"></i><span>Fin de contrat</span>
                              </a>
                          </li>
@@ -346,14 +332,14 @@
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('users') ? 'active subdrop' : '' }}
                                  {{ Request::is('roles-permissions') ? 'active subdrop' : '' }}">
-                                 <i class="ti ti-user-star"></i><span>User Management</span>
+                                 <i class="ti ti-user-star"></i><span>Gestion utilisateur</span>
                                  <span class="menu-arrow"></span>
                              </a>
                              <ul>
                                  <li><a href="{{ url('users') }}"
-                                         class="{{ Request::is('users') ? 'active' : '' }}">Users</a></li>
+                                         class="{{ Request::is('users') ? 'active' : '' }}">Utilisateurs</a></li>
                                  <li><a href="{{ url('roles-permissions') }}"
-                                         class="{{ Request::is('roles-permissions') ? 'active' : '' }}">Roles &
+                                         class="{{ Request::is('roles-permissions') ? 'active' : '' }}">Rôles &
                                          Permissions</a></li>
                              </ul>
                          </li>

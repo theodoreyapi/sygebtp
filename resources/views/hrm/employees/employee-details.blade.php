@@ -31,6 +31,321 @@
 @endpush
 
 @push('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    // education
+    <script>
+        $(document).ready(function() {
+            $('#education-form').on('submit', function(e) {
+                e.preventDefault();
+
+                let formData = $(this).serialize();
+                let submitBtn = $('#education-form button[type=submit]');
+                submitBtn.prop('disabled', true).text('Enregistrement...');
+
+                // Nettoyage des anciennes alertes
+                $('#ajax-alert-container').html('');
+
+                $.ajax({
+                    url: "{{ url('add-education/' . $details->id) }}",
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Fermer la modal
+                        $('#add_education').modal('hide');
+
+                        // Réinitialiser le formulaire
+                        $('#education-form')[0].reset();
+
+                        // Recharger la liste sans recharger la page
+                        $('#education-list').load(location.href + " #education-list>*", "");
+
+                        // Afficher une alerte de succès
+                        $('#ajax-alert-container').html(`
+                        <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
+                            Vous avez ajouté une formation avec succès !
+                            <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
+                                <i class="fas fa-xmark"></i>
+                            </button>
+                        </div>
+                    `);
+                    },
+                    error: function(xhr) {
+                        let errors = xhr.responseJSON?.errors;
+                        if (errors) {
+                            for (const key in errors) {
+                                $('#ajax-alert-container').append(`
+                                <div class="alert alert-danger rounded-pill alert-dismissible fade show mt-2">
+                                    ${errors[key][0]}
+                                    <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="fas fa-xmark text-white" style="color: #fff !important;"></i>
+                                    </button>
+                                </div>
+                            `);
+                            }
+                        } else {
+                            $('#ajax-alert-container').html(`
+                            <div class="alert alert-danger rounded-pill alert-dismissible fade show mt-3">
+                                Une erreur est survenue. Veuillez réessayer.
+                                <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
+                                    <i class="fas fa-xmark text-white" style="color: #fff !important;"></i>
+                                </button>
+                            </div>
+                        `);
+                        }
+                    },
+                    complete: function() {
+                        submitBtn.prop('disabled', false).text('Enregistrer');
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            // ⚠️ Utilise "on" sur document pour intercepter tous les nouveaux éléments
+            $(document).on('click', '.edit-education', function() {
+                // Récupération des données dynamiques
+                let id = $(this).data('id');
+                let school = $(this).data('school');
+                let formation = $(this).data('formation');
+                let debut = $(this).data('debut');
+                let fin = $(this).data('fin');
+
+                // Injection dans les champs
+                $('#edit-id').val(id);
+                $('#edit-school').val(school);
+                $('#edit-formation').val(formation);
+                $('#edit-debutt').val(debut);
+                $('#edit-fin').val(fin);
+            });
+
+            // Soumission du formulaire de modification (existant)
+            $('#edit-education-form').on('submit', function(e) {
+                e.preventDefault();
+
+                let formData = $(this).serialize();
+                let id = $('#edit-id').val();
+
+                $.ajax({
+                    url: `/edit-education/${id}`,
+                    method: 'POST',
+                    data: formData,
+                    success: function() {
+                        $('#edit_education_modal').modal('hide');
+                        $('#education-list').load(location.href + " #education-list>*", "");
+
+                        $('#ajax-alert-container').html(`
+                    <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
+                        Éducation modifiée avec succès !
+                        <button type="button" class="btn-close" data-bs-dismiss="alert">
+                            <i class="fas fa-xmark"></i>
+                        </button>
+                    </div>
+                `);
+                    },
+                    error: function() {
+                        alert('Erreur lors de la modification');
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            let deleteId = null;
+
+            // Récupère l’ID quand on clique sur l’icône
+            $(document).on('click', '.delete-education', function() {
+                deleteId = $(this).data('id');
+                $('#delete-education-id').val(deleteId); // facultatif
+            });
+
+            // Quand on clique sur le bouton "Oui, supprimer"
+            $('#confirm-delete-education').on('click', function() {
+                const id = deleteId;
+
+                $.ajax({
+                    url: `/delete-education/${id}`,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function() {
+                        $('#delete_education_modal').modal('hide');
+                        $('#education-list').load(location.href + " #education-list>*", "");
+                        $('#ajax-alert-container').html(`
+                        <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
+                            Éducation supprimée avec succès.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                                <i class="fas fa-xmark"></i>
+                            </button>
+                        </div>
+                    `);
+                    },
+                    error: function() {
+                        alert('Erreur lors de la suppression.');
+                    }
+                });
+            });
+        });
+    </script>
+
+    // experience
+    <script>
+        $(document).ready(function() {
+            $('#experience-form').on('submit', function(e) {
+                e.preventDefault();
+
+                let formData = $(this).serialize();
+                let submitBtn = $('#experience-form button[type=submit]');
+                submitBtn.prop('disabled', true).text('Enregistrement...');
+
+                // Nettoyage des anciennes alertes
+                $('#ajax-alert-container').html('');
+
+                $.ajax({
+                    url: "{{ url('add-experience/' . $details->id) }}",
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Fermer la modal
+                        $('#add_experience').modal('hide');
+
+                        // Réinitialiser le formulaire
+                        $('#experience-form')[0].reset();
+
+                        // Recharger la liste sans recharger la page
+                        $('#experience-list').load(location.href + " #experience-list>*", "");
+
+                        // Afficher une alerte de succès
+                        $('#ajax-alert-container').html(`
+                        <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
+                            Vous avez ajouté une experience avec succès !
+                            <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
+                                <i class="fas fa-xmark"></i>
+                            </button>
+                        </div>
+                    `);
+                    },
+                    error: function(xhr) {
+                        let errors = xhr.responseJSON?.errors;
+                        if (errors) {
+                            for (const key in errors) {
+                                $('#ajax-alert-container').append(`
+                                <div class="alert alert-danger rounded-pill alert-dismissible fade show mt-2">
+                                    ${errors[key][0]}
+                                    <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="fas fa-xmark text-white" style="color: #fff !important;"></i>
+                                    </button>
+                                </div>
+                            `);
+                            }
+                        } else {
+                            $('#ajax-alert-container').html(`
+                            <div class="alert alert-danger rounded-pill alert-dismissible fade show mt-3">
+                                Une erreur est survenue. Veuillez réessayer.
+                                <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
+                                    <i class="fas fa-xmark text-white" style="color: #fff !important;"></i>
+                                </button>
+                            </div>
+                        `);
+                        }
+                    },
+                    complete: function() {
+                        submitBtn.prop('disabled', false).text('Enregistrer');
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            // ⚠️ Utilise "on" sur document pour intercepter tous les nouveaux éléments
+            $(document).on('click', '.edit-experience', function() {
+                // Récupération des données dynamiques
+                let id = $(this).data('id');
+                let entreprise = $(this).data('entreprise');
+                let poste = $(this).data('poste');
+                let debut = $(this).data('debut');
+                let fin = $(this).data('fin');
+                let present = $(this).data('present');
+
+                // Injection dans les champs
+                $('#edit-id').val(id);
+                $('#edit-entreprise').val(entreprise);
+                $('#edit-poste').val(poste);
+                $('#edit-debut').val(debut);
+                $('#edit-fin').val(fin);
+                $('#edit-present').val(present);
+            });
+
+            // Soumission du formulaire de modification (existant)
+            $('#edit-experience-form').on('submit', function(e) {
+                e.preventDefault();
+
+                let formData = $(this).serialize();
+                let id = $('#edit-id').val();
+
+                $.ajax({
+                    url: `/edit-experience/${id}`,
+                    method: 'POST',
+                    data: formData,
+                    success: function() {
+                        $('#edit_experience_modal').modal('hide');
+                        $('#experience-list').load(location.href + " #experience-list>*", "");
+
+                        $('#ajax-alert-container').html(`
+                    <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
+                        Experience modifiée avec succès !
+                        <button type="button" class="btn-close" data-bs-dismiss="alert">
+                            <i class="fas fa-xmark"></i>
+                        </button>
+                    </div>
+                `);
+                    },
+                    error: function() {
+                        alert('Erreur lors de la modification');
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            let deleteId = null;
+
+            // Récupère l’ID quand on clique sur l’icône
+            $(document).on('click', '.delete-experience', function() {
+                deleteId = $(this).data('id');
+                $('#delete-experience-id').val(deleteId); // facultatif
+            });
+
+            // Quand on clique sur le bouton "Oui, supprimer"
+            $('#confirm-delete-experience').on('click', function() {
+                const id = deleteId;
+
+                $.ajax({
+                    url: `/delete-experience/${id}`,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function() {
+                        $('#delete_experience_modal').modal('hide');
+                        $('#experience-list').load(location.href + " #experience-list>*", "");
+                        $('#ajax-alert-container').html(`
+                        <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
+                            Experience supprimée avec succès.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                                <i class="fas fa-xmark"></i>
+                            </button>
+                        </div>
+                    `);
+                    },
+                    error: function() {
+                        alert('Erreur lors de la suppression.');
+                    }
+                });
+            });
+        });
+    </script>
+
     <!-- Slimscroll JS -->
     <script src="{{ URL::asset('') }}assets/js/jquery.slimscroll.min.js"></script>
 
@@ -69,16 +384,16 @@
         <!-- Breadcrumb -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
-                <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0"><a href="employees.html">
-                        <i class="ti ti-arrow-left me-2"></i>Employee Details</a>
+                <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0"><a href="{{ url('employees') }}">
+                        <i class="ti ti-arrow-left me-2"></i>Détails Employé</a>
                 </h6>
             </div>
             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-                <div class="mb-2">
+                {{-- <div class="mb-2">
                     <a href="#" data-bs-toggle="modal" data-bs-target="#add_bank_satutory"
                         class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>Bank &
                         Statutory</a>
-                </div>
+                </div> --}}
                 <div class="head-icons ms-2">
                     <a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top"
                         data-bs-original-title="Collapse" id="collapse-header">
@@ -89,47 +404,52 @@
         </div>
         <!-- /Breadcrumb -->
 
+        <div id="ajax-alert-container"></div>
+
         <div class="row">
             <div class="col-xl-4 theiaStickySidebar">
                 <div class="card card-bg-1">
                     <div class="card-body p-0">
                         <span class="avatar avatar-xl avatar-rounded border border-2 border-white m-auto d-flex mb-2">
-                            <img src="{{ URL::asset('') }}assets/img/users/user-13.jpg" class="w-auto h-auto"
-                                alt="Img">
+                            <img src="{{ $details->photo == '' ? URL::asset('assets/img/users/user-13.jpg') : url($details->photo) }}"
+                                class="w-auto h-auto" alt="Img">
                         </span>
                         <div class="text-center px-3 pb-3 border-bottom">
                             <div class="mb-3">
-                                <h5 class="d-flex align-items-center justify-content-center mb-1">Stephan
-                                    Peralt<i class="ti ti-discount-check-filled text-success ms-1"></i></h5>
+                                <h5 class="d-flex align-items-center justify-content-center mb-1">
+                                    {{ $details->name }} {{ $details->last_name }}
+                                    <i class="ti ti-discount-check-filled text-success ms-1"></i>
+                                </h5>
                                 <span class="badge badge-soft-dark fw-medium me-2">
-                                    <i class="ti ti-point-filled me-1"></i>Software Developer
+                                    <i class="ti ti-point-filled me-1"></i>
+                                    {{ $details->name_designation }}
                                 </span>
-                                <span class="badge badge-soft-secondary fw-medium">10+ years of
-                                    Experience</span>
+                                {{-- <span class="badge badge-soft-secondary fw-medium">10+ years of
+                                    Experience</span> --}}
                             </div>
                             <div>
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <span class="d-inline-flex align-items-center">
                                         <i class="ti ti-id me-2"></i>
-                                        Client ID
+                                        Employé ID
                                     </span>
-                                    <p class="text-dark">CLT-0024</p>
+                                    <p class="text-dark">EMP-00{{ $details->id }}</p>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <span class="d-inline-flex align-items-center">
                                         <i class="ti ti-star me-2"></i>
-                                        Team
+                                        Equipe
                                     </span>
-                                    <p class="text-dark">UI/UX Design</p>
+                                    <p class="text-dark">{{ $details->deparment_name }}</p>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <span class="d-inline-flex align-items-center">
                                         <i class="ti ti-calendar-check me-2"></i>
-                                        Date Of Join
+                                        Date d'embauche
                                     </span>
-                                    <p class="text-dark">1st Jan 2023</p>
+                                    <p class="text-dark">{{ $details->date_embauche }}</p>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-between">
+                                {{-- <div class="d-flex align-items-center justify-content-between">
                                     <span class="d-inline-flex align-items-center">
                                         <i class="ti ti-calendar-check me-2"></i>
                                         Report Office
@@ -141,8 +461,8 @@
                                         </span>
                                         <p class="text-gray-9 mb-0">Doglas Martini</p>
                                     </div>
-                                </div>
-                                <div class="row gx-2 mt-3">
+                                </div> --}}
+                                {{-- <div class="row gx-2 mt-3">
                                     <div class="col-6">
                                         <div>
                                             <a href="#" class="btn btn-dark w-100" data-bs-toggle="modal"
@@ -155,88 +475,91 @@
                                                     class="ti ti-message-heart me-1"></i>Message</a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="p-3 border-bottom">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <h6>Basic information</h6>
-                                <a href="javascript:void(0);" class="btn btn-icon btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#edit_employee"><i class="ti ti-edit"></i></a>
+                                <h6>Informations basiques</h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-phone me-2"></i>
-                                    Phone
+                                    Téléphone
                                 </span>
-                                <p class="text-dark">(163) 2459 315</p>
+                                <p class="text-dark">{{ $details->phone }}</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-mail-check me-2"></i>
-                                    Email
+                                    E-mail
                                 </span>
                                 <a href="javascript:void(0);"
-                                    class="text-info d-inline-flex align-items-center">perralt12@example.com<i
+                                    class="text-info d-inline-flex align-items-center">{{ $details->email }}<i
                                         class="ti ti-copy text-dark ms-2"></i></a>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-gender-male me-2"></i>
-                                    Gender
+                                    Sexe
                                 </span>
-                                <p class="text-dark text-end">Male</p>
+                                <p class="text-dark text-end">{{ $details->sexe }}</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-cake me-2"></i>
-                                    Birdthday
+                                    Date anniversaire
                                 </span>
-                                <p class="text-dark text-end">24th July 2000</p>
+                                <p class="text-dark text-end">{{ $details->date_naissance }}</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-map-pin-check me-2"></i>
-                                    Address
+                                    Habitation
                                 </span>
-                                <p class="text-dark text-end">1861 Bayonne Ave, <br> Manchester, NJ, 08759</p>
+                                <p class="text-dark text-end">{{ $details->lieu_residence }}</p>
                             </div>
                         </div>
                         <div class="p-3 border-bottom">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <h6>Personal Information</h6>
-                                <a href="javascript:void(0);" class="btn btn-icon btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#edit_personal"><i class="ti ti-edit"></i></a>
+                                <h6>Informationns personnelles</h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-e-passport me-2"></i>
-                                    Passport No
+                                    Type pièce
                                 </span>
-                                <p class="text-dark">QRET4566FGRT</p>
+                                <p class="text-dark">{{ $details->type_papier }}</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="d-inline-flex align-items-center">
+                                    <i class="ti ti-e-passport me-2"></i>
+                                    Numéro pièce
+                                </span>
+                                <p class="text-dark">{{ $details->numero_papier }}</p>
+                            </div>
+                            {{-- <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-calendar-x me-2"></i>
                                     Passport Exp Date
                                 </span>
                                 <p class="text-dark text-end">15 May 2029</p>
-                            </div>
+                            </div> --}}
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-gender-male me-2"></i>
-                                    Nationality
+                                    Nationnalité
                                 </span>
-                                <p class="text-dark text-end">Indian</p>
+                                <p class="text-dark text-end">{{ $details->nationnalite }}</p>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between mb-2">
+                            {{-- <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-bookmark-plus me-2"></i>
                                     Religion
                                 </span>
                                 <p class="text-dark text-end">Christianity</p>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between mb-2">
+                            </div> --}}
+                            {{-- <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-hotel-service me-2"></i>
                                     Marital status
@@ -249,19 +572,19 @@
                                     Employment of spouse
                                 </span>
                                 <p class="text-dark text-end">No</p>
-                            </div>
+                            </div> --}}
                             <div class="d-flex align-items-center justify-content-between">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="ti ti-baby-bottle me-2"></i>
-                                    No. of children
+                                    Nombre enfant
                                 </span>
-                                <p class="text-dark text-end">2</p>
+                                <p class="text-dark text-end">{{ $details->enfant }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h6>Emergency Contact Number</h6>
+                    <h6>Contact en cas d'urgence</h6>
                     <a href="javascript:void(0);" class="btn btn-icon btn-sm" data-bs-toggle="modal"
                         data-bs-target="#edit_emergency"><i class="ti ti-edit"></i></a>
                 </div>
@@ -305,10 +628,8 @@
                                     <div class="accordion-header" id="headingOne">
                                         <div class="accordion-button">
                                             <div class="d-flex align-items-center flex-fill">
-                                                <h5>About Employee</h5>
-                                                <a href="#" class="btn btn-sm btn-icon ms-auto"
-                                                    data-bs-toggle="modal" data-bs-target="#edit_employee"><i
-                                                        class="ti ti-edit"></i></a>
+                                                <h5>Apropos</h5>
+                                                <a href="#" class="btn btn-sm btn-icon ms-auto"></a>
                                                 <a href="#"
                                                     class="d-flex align-items-center collapsed collapse-arrow"
                                                     data-bs-toggle="collapse" data-bs-target="#primaryBorderOne"
@@ -321,11 +642,7 @@
                                     <div id="primaryBorderOne" class="accordion-collapse collapse show border-top"
                                         aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div class="accordion-body mt-2">
-                                            As an award winning designer, I deliver exceptional quality work and
-                                            bring value to your brand! With 10 years of experience and 350+
-                                            projects completed worldwide with satisfied customers, I developed
-                                            the 360° brand approach, which helped me to create numerous brands
-                                            that are relevant, meaningful and loved.
+                                            {{ $details->about }}
                                         </div>
                                     </div>
                                 </div>
@@ -333,10 +650,10 @@
                                     <div class="accordion-header" id="headingTwo">
                                         <div class="accordion-button">
                                             <div class="d-flex align-items-center flex-fill">
-                                                <h5>Bank Information</h5>
+                                                <h5>Information bancaire</h5>
                                                 <a href="#" class="btn btn-sm btn-icon ms-auto"
-                                                    data-bs-toggle="modal" data-bs-target="#edit_bank"><i
-                                                        class="ti ti-edit"></i></a>
+                                                    data-bs-toggle="modal" data-bs-target="#add_bank"><i
+                                                        class="ti ti-plus"></i></a>
                                                 <a href="#"
                                                     class="d-flex align-items-center collapsed collapse-arrow"
                                                     data-bs-toggle="collapse" data-bs-target="#primaryBorderTwo"
@@ -349,36 +666,223 @@
                                     <div id="primaryBorderTwo" class="accordion-collapse collapse border-top"
                                         aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <span class="d-inline-flex align-items-center">
-                                                        Bank Name
-                                                    </span>
-                                                    <h6 class="d-flex align-items-center fw-medium mt-1">Swiz
-                                                        Intenational Bank</h6>
+                                            @foreach ($banks as $bank)
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            Nom de la banque
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">
+                                                            {{ $bank->name_bank }}
+                                                        </h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            Code banque
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">
+                                                            {{ $bank->code_bank }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            Code guichet
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">
+                                                            {{ $bank->code_guichet_bank }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            Numéro compte
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">
+                                                            {{ $bank->number_compte_bank }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            Clé RIB
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">
+                                                            {{ $bank->cle_rib_bank }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            IBAN
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">
+                                                            {{ $bank->iban_bank }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            SWIFT
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">
+                                                            {{ $bank->swift_bank }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        @if ($bank->statut_bank == 'Active')
+                                                            <span
+                                                                class="badge badge-success d-inline-flex align-items-center badge-sm">
+                                                                <i class="ti ti-point-filled me-1"></i>Active
+                                                            </span>
+                                                        @else
+                                                            <span
+                                                                class="badge badge-danger d-inline-flex align-items-center badge-sm">
+                                                                <i class="ti ti-point-filled me-1"></i>Inactive
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <a href="#" class="me-2" data-bs-toggle="modal"
+                                                            data-bs-target="#edit_employee{{ $bank->bank }}"><i
+                                                                class="ti ti-edit text-info"></i></a>
+                                                        <div class="modal fade" id="edit_employee{{ $bank->bank }}">
+                                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">Modification</h4>
+                                                                        <button type="button"
+                                                                            class="btn-close custom-btn-close"
+                                                                            data-bs-dismiss="modal" aria-label="Close">
+                                                                            <i class="ti ti-x"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <form action="{{ url('bankupdate', $bank->bank) }}"
+                                                                        method="POST" role="form">
+                                                                        @csrf
+                                                                        @method('PATCH')
+                                                                        <div class="modal-body pb-0">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Nom de la
+                                                                                            banque <span
+                                                                                                class="text-danger">
+                                                                                                *</span></label>
+                                                                                        <input required name="libelle"
+                                                                                            type="text"
+                                                                                            value="{{ $bank->name_bank }}"
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Code
+                                                                                            banque <span
+                                                                                                class="text-danger">
+                                                                                                *</span></label>
+                                                                                        <input required name="code"
+                                                                                            type="text"
+                                                                                            value="{{ $bank->code_bank }}"
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Code
+                                                                                            guichet <span
+                                                                                                class="text-danger">
+                                                                                                *</span></label>
+                                                                                        <input required name="guichet"
+                                                                                            type="text"
+                                                                                            value="{{ $bank->code_guichet_bank }}"
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Numéro de
+                                                                                            compte <span
+                                                                                                class="text-danger">
+                                                                                                *</span></label>
+                                                                                        <input required name="numero"
+                                                                                            type="text"
+                                                                                            value="{{ $bank->number_compte_bank }}"
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Clé RIB
+                                                                                            <span class="text-danger">
+                                                                                                *</span></label>
+                                                                                        <input required name="rib"
+                                                                                            type="text"
+                                                                                            value="{{ $bank->cle_rib_bank }}"
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">IBAN
+                                                                                            <span class="text-danger">
+                                                                                                *</span></label>
+                                                                                        <input required name="iban"
+                                                                                            type="text"
+                                                                                            value="{{ $bank->iban_bank }}"
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">SWIFT
+                                                                                            <span class="text-danger">
+                                                                                                *</span></label>
+                                                                                        <input required name="swift"
+                                                                                            type="text"
+                                                                                            value="{{ $bank->swift_bank }}"
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                class="btn btn-white border me-2"
+                                                                                data-bs-dismiss="modal">Annuler</button>
+                                                                            <button type="submit"
+                                                                                class="btn btn-info">Modifier</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#delete_modal{{ $bank->bank }}"><i
+                                                                class="ti ti-trash text-danger"></i></a>
+                                                        <div class="modal fade" id="delete_modal{{ $bank->bank }}">
+                                                            <div class="modal-dialog modal-dialog-centered modal-sm">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body text-center">
+                                                                        <span
+                                                                            class="avatar avatar-xl bg-transparent-danger text-danger mb-3">
+                                                                            <i class="ti ti-trash-x fs-36"></i>
+                                                                        </span>
+                                                                        <h4 class="mb-1">Confirmez la suppression</h4>
+                                                                        <p class="mb-3">You want to delete all the marked
+                                                                            items, <br>
+                                                                            this
+                                                                            cant be undone once you
+                                                                            delete.</p>
+                                                                        <form action="{{ url('bankdestroy', $bank->id) }}"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <div class="d-flex justify-content-center">
+                                                                                <a href="javascript:void(0);"
+                                                                                    class="btn btn-light me-3"
+                                                                                    data-bs-dismiss="modal">Annuler</a>
+                                                                                <button type="submit"
+                                                                                    class="btn btn-danger">Oui,
+                                                                                    Supprimer</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <span class="d-inline-flex align-items-center">
-                                                        Bank account no
-                                                    </span>
-                                                    <h6 class="d-flex align-items-center fw-medium mt-1">
-                                                        159843014641</h6>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <span class="d-inline-flex align-items-center">
-                                                        IFSC Code
-                                                    </span>
-                                                    <h6 class="d-flex align-items-center fw-medium mt-1">
-                                                        ICI24504</h6>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <span class="d-inline-flex align-items-center">
-                                                        Branch
-                                                    </span>
-                                                    <h6 class="d-flex align-items-center fw-medium mt-1">
-                                                        Alabama USA</h6>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -386,11 +890,11 @@
                                     <div class="accordion-header" id="headingThree">
                                         <div class="accordion-button">
                                             <div class="d-flex align-items-center justify-content-between flex-fill">
-                                                <h5>Family Information</h5>
+                                                <h5>Information familliale</h5>
                                                 <div class="d-flex">
                                                     <a href="#" class="btn btn-icon btn-sm" data-bs-toggle="modal"
-                                                        data-bs-target="#edit_familyinformation"><i
-                                                            class="ti ti-edit"></i></a>
+                                                        data-bs-target="#add_familyinformation"><i
+                                                            class="ti ti-plus"></i></a>
                                                     <a href="#"
                                                         class="d-flex align-items-center collapsed collapse-arrow"
                                                         data-bs-toggle="collapse" data-bs-target="#primaryBorderThree"
@@ -404,36 +908,161 @@
                                     <div id="primaryBorderThree" class="accordion-collapse collapse border-top"
                                         aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <span class="d-inline-flex align-items-center">
-                                                        Name
-                                                    </span>
-                                                    <h6 class="d-flex align-items-center fw-medium mt-1">
-                                                        Hendry Peralt</h6>
+                                            @foreach ($family as $famil)
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            Nom complet
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">
+                                                            {{ $famil->complet_name }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            Lien familliale
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">
+                                                            {{ $famil->relation_family }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            Date d'anniversaire
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">25
+                                                            {{ $famil->naissance_family }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="d-inline-flex align-items-center">
+                                                            Téléphone
+                                                        </span>
+                                                        <h6 class="d-flex align-items-center fw-medium mt-1">+1
+                                                            {{ $famil->phone_family }}</h6>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <a href="#" class="me-2" data-bs-toggle="modal"
+                                                            data-bs-target="#edit_family{{ $famil->faminf }}"><i
+                                                                class="ti ti-edit text-info"></i></a>
+                                                        <div class="modal fade" id="edit_family{{ $famil->faminf }}">
+                                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">Modification</h4>
+                                                                        <button type="button"
+                                                                            class="btn-close custom-btn-close"
+                                                                            data-bs-dismiss="modal" aria-label="Close">
+                                                                            <i class="ti ti-x"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <form
+                                                                        action="{{ url('familyupdate', $famil->faminf) }}"
+                                                                        method="POST" role="form">
+                                                                        @csrf
+                                                                        @method('PATCH')
+                                                                        <div class="modal-body pb-0">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Nom
+                                                                                            complet <span
+                                                                                                class="text-danger">
+                                                                                                *</span></label>
+                                                                                        <input type="text"
+                                                                                            value="{{ $famil->complet_name }}"
+                                                                                            name="name" required
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Lien
+                                                                                            familliale <span
+                                                                                                class="text-danger">
+                                                                                                *</span></label>
+                                                                                        <input type="text"
+                                                                                            value="{{ $famil->relation_family }}"
+                                                                                            name="lien" required
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Téléphone
+                                                                                        </label>
+                                                                                        <input type="text"
+                                                                                            name="phone"
+                                                                                            value="{{ $famil->phone_family }}"
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Date de
+                                                                                            naissance</label>
+                                                                                        <div
+                                                                                            class="input-icon-end position-relative">
+                                                                                            <input type="text"
+                                                                                                class="form-control datetimepicker"
+                                                                                                placeholder="dd/mm/yyyy"
+                                                                                                value="{{ $famil->naissance_family }}"
+                                                                                                name="date">
+                                                                                            <span class="input-icon-addon">
+                                                                                                <i
+                                                                                                    class="ti ti-calendar text-gray-7"></i>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                class="btn btn-white border me-2"
+                                                                                data-bs-dismiss="modal">Annuler</button>
+                                                                            <button type="submit"
+                                                                                class="btn btn-info">Modifier</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#delete_family{{ $famil->faminf }}"><i
+                                                                class="ti ti-trash text-danger"></i></a>
+                                                        <div class="modal fade" id="delete_family{{ $famil->faminf }}">
+                                                            <div class="modal-dialog modal-dialog-centered modal-sm">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body text-center">
+                                                                        <span
+                                                                            class="avatar avatar-xl bg-transparent-danger text-danger mb-3">
+                                                                            <i class="ti ti-trash-x fs-36"></i>
+                                                                        </span>
+                                                                        <h4 class="mb-1">Confirmez la suppression</h4>
+                                                                        <p class="mb-3">You want to delete all the marked
+                                                                            items, <br>
+                                                                            this
+                                                                            cant be undone once you
+                                                                            delete.</p>
+                                                                        <form
+                                                                            action="{{ url('familydestroy', $famil->id) }}"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <div class="d-flex justify-content-center">
+                                                                                <a href="javascript:void(0);"
+                                                                                    class="btn btn-light me-3"
+                                                                                    data-bs-dismiss="modal">Annuler</a>
+                                                                                <button type="submit"
+                                                                                    class="btn btn-danger">Oui,
+                                                                                    Supprimer</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <span class="d-inline-flex align-items-center">
-                                                        Relationship
-                                                    </span>
-                                                    <h6 class="d-flex align-items-center fw-medium mt-1">
-                                                        Brother</h6>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <span class="d-inline-flex align-items-center">
-                                                        Date of birth
-                                                    </span>
-                                                    <h6 class="d-flex align-items-center fw-medium mt-1">25
-                                                        May 2014</h6>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <span class="d-inline-flex align-items-center">
-                                                        Phone
-                                                    </span>
-                                                    <h6 class="d-flex align-items-center fw-medium mt-1">+1
-                                                        265 6956 961</h6>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -445,12 +1074,12 @@
                                                     <div class="accordion-button">
                                                         <div
                                                             class="d-flex align-items-center justify-content-between flex-fill">
-                                                            <h5>Education Details</h5>
+                                                            <h5>Détails éducation</h5>
                                                             <div class="d-flex">
                                                                 <a href="#" class="btn btn-icon btn-sm"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#edit_education"><i
-                                                                        class="ti ti-edit"></i></a>
+                                                                    data-bs-target="#add_education"><i
+                                                                        class="ti ti-plus"></i></a>
                                                                 <a href="#"
                                                                     class="d-flex align-items-center collapsed collapse-arrow"
                                                                     data-bs-toggle="collapse"
@@ -466,49 +1095,41 @@
                                                 <div id="primaryBorderFour" class="accordion-collapse collapse border-top"
                                                     aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
-                                                        <div>
-                                                            <div class="mb-3">
-                                                                <div
-                                                                    class="d-flex align-items-center justify-content-between">
-                                                                    <div>
-                                                                        <span
-                                                                            class="d-inline-flex align-items-center fw-normal">
-                                                                            Oxford University
-                                                                        </span>
-                                                                        <h6 class="d-flex align-items-center mt-1">
-                                                                            Computer Science</h6>
+                                                        <div id="education-list">
+                                                            @foreach ($education as $edu)
+                                                                <div class="mb-3">
+                                                                    <div
+                                                                        class="d-flex align-items-center justify-content-between">
+                                                                        <div>
+                                                                            <span
+                                                                                class="d-inline-flex align-items-center fw-normal">
+                                                                                {{ $edu->school }}
+                                                                            </span>
+                                                                            <h6 class="d-flex align-items-center mt-1">
+                                                                                {{ $edu->formation }}</h6>
+                                                                        </div>
+                                                                        <p class="text-dark">{{ $edu->debut }} -
+                                                                            {{ $edu->fin }}</p>
                                                                     </div>
-                                                                    <p class="text-dark">2020 - 2022</p>
+                                                                    <a href="#"
+                                                                        class="btn btn-icon btn-sm edit-education"
+                                                                        data-bs-toggle="modal"
+                                                                        data-id="{{ $edu->educ }}"
+                                                                        data-school="{{ $edu->school }}"
+                                                                        data-formation="{{ $edu->formation }}"
+                                                                        data-debut="{{ $edu->debut }}"
+                                                                        data-fin="{{ $edu->fin }}"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#edit_education_modal"><i
+                                                                            class="ti ti-edit text-info"></i></a>
+
+                                                                    <a href="#" class="delete-education"
+                                                                        data-id="{{ $edu->educ }}"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#delete_education_modal"><i
+                                                                            class="ti ti-trash text-danger"></i></a>
                                                                 </div>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <div
-                                                                    class="d-flex align-items-center justify-content-between">
-                                                                    <div>
-                                                                        <span
-                                                                            class="d-inline-flex align-items-center fw-normal">
-                                                                            Cambridge University
-                                                                        </span>
-                                                                        <h6 class="d-flex align-items-center mt-1">
-                                                                            Computer Network & Systems</h6>
-                                                                    </div>
-                                                                    <p class="text-dark">2016- 2019</p>
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <div
-                                                                    class="d-flex align-items-center justify-content-between">
-                                                                    <div>
-                                                                        <span
-                                                                            class="d-inline-flex align-items-center fw-normal">
-                                                                            Oxford School
-                                                                        </span>
-                                                                        <h6 class="d-flex align-items-center mt-1">
-                                                                            Grade X</h6>
-                                                                    </div>
-                                                                    <p class="text-dark">2012 - 2016</p>
-                                                                </div>
-                                                            </div>
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                 </div>
@@ -522,12 +1143,12 @@
                                                     <div class="accordion-button collapsed">
                                                         <div
                                                             class="d-flex align-items-center justify-content-between flex-fill">
-                                                            <h5>Experience</h5>
+                                                            <h5>Expérience</h5>
                                                             <div class="d-flex">
                                                                 <a href="#" class="btn btn-icon btn-sm"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#edit_experience"><i
-                                                                        class="ti ti-edit"></i></a>
+                                                                    data-bs-target="#add_experience"><i
+                                                                        class="ti ti-plus"></i></a>
                                                                 <a href="#"
                                                                     class="d-flex align-items-center collapsed collapse-arrow"
                                                                     data-bs-toggle="collapse"
@@ -543,58 +1164,45 @@
                                                 <div id="primaryBorderFive" class="accordion-collapse collapse border-top"
                                                     aria-labelledby="headingFive" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
-                                                        <div>
-                                                            <div class="mb-3">
-                                                                <div
-                                                                    class="d-flex align-items-center justify-content-between">
-                                                                    <div>
-                                                                        <h6
-                                                                            class="d-inline-flex align-items-center fw-medium">
-                                                                            Google
-                                                                        </h6>
-                                                                        <span
-                                                                            class="d-flex align-items-center badge bg-secondary-transparent mt-1"><i
-                                                                                class="ti ti-point-filled me-1"></i>UI/UX
-                                                                            Developer</span>
+                                                        <div id="experience-list">
+                                                            @foreach ($experience as $expe)
+                                                                <div class="mb-3">
+                                                                    <div
+                                                                        class="d-flex align-items-center justify-content-between">
+                                                                        <div>
+                                                                            <h6
+                                                                                class="d-inline-flex align-items-center fw-medium">
+                                                                                {{ $expe->entreprise }}
+                                                                            </h6>
+                                                                            <span
+                                                                                class="d-flex align-items-center badge bg-secondary-transparent mt-1"><i
+                                                                                    class="ti ti-point-filled me-1"></i>
+                                                                                {{ $expe->poste }}
+                                                                                </span>
+                                                                        </div>
+                                                                        <p class="text-dark">{{ $expe->debut }} - {{ $expe->en_poste == false ? $expe->fin : 'Present' }}
+                                                                        </p>
                                                                     </div>
-                                                                    <p class="text-dark">Jan 2013 - Present
-                                                                    </p>
+                                                                <a href="#"
+                                                                        class="btn btn-icon btn-sm edit-experience"
+                                                                        data-bs-toggle="modal"
+                                                                        data-id="{{ $expe->expe }}"
+                                                                        data-entreprise="{{ $expe->entreprise }}"
+                                                                        data-poste="{{ $expe->poste }}"
+                                                                        data-debut="{{ $expe->debut }}"
+                                                                        data-fin="{{ $expe->debut }}"
+                                                                        data-present="{{ $expe->en_poste }}"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#edit_experience_modal"><i
+                                                                            class="ti ti-edit text-info"></i></a>
+
+                                                                    <a href="#" class="delete-experience"
+                                                                        data-id="{{ $expe->expe }}"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#delete_experience_modal"><i
+                                                                            class="ti ti-trash text-danger"></i></a>
                                                                 </div>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <div
-                                                                    class="d-flex align-items-center justify-content-between">
-                                                                    <div>
-                                                                        <h6
-                                                                            class="d-inline-flex align-items-center fw-medium">
-                                                                            Salesforce
-                                                                        </h6>
-                                                                        <span
-                                                                            class="d-flex align-items-center badge bg-secondary-transparent mt-1"><i
-                                                                                class="ti ti-point-filled me-1"></i>Web
-                                                                            Developer</span>
-                                                                    </div>
-                                                                    <p class="text-dark">Dec 2012- Jan 2015
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <div
-                                                                    class="d-flex align-items-center justify-content-between">
-                                                                    <div>
-                                                                        <h6
-                                                                            class="d-inline-flex align-items-center fw-medium">
-                                                                            HubSpot
-                                                                        </h6>
-                                                                        <span
-                                                                            class="d-flex align-items-center badge bg-secondary-transparent mt-1"><i
-                                                                                class="ti ti-point-filled me-1"></i>Software
-                                                                            Developer</span>
-                                                                    </div>
-                                                                    <p class="text-dark">Dec 2011- Jan 2012
-                                                                    </p>
-                                                                </div>
-                                                            </div>
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                 </div>
@@ -602,14 +1210,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card">
+                                {{-- <div class="card">
                                     <div class="card-body">
                                         <div class="contact-grids-tab p-0 mb-3">
                                             <ul class="nav nav-underline" id="myTab" role="tablist">
                                                 <li class="nav-item" role="presentation">
                                                     <button class="nav-link active" id="info-tab2" data-bs-toggle="tab"
                                                         data-bs-target="#basic-info2" type="button" role="tab"
-                                                        aria-selected="true">Projects</button>
+                                                        aria-selected="true">Projets</button>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
                                                     <button class="nav-link" id="address-tab2" data-bs-toggle="tab"
@@ -866,795 +1474,126 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Employee -->
-    <div class="modal fade" id="edit_employee">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="d-flex align-items-center">
-                        <h4 class="modal-title me-2">Edit Employee</h4><span>Employee ID : EMP -0024</span>
-                    </div>
-                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                        <i class="ti ti-x"></i>
-                    </button>
-                </div>
-                <form action="employees-grid.html">
-                    <div class="contact-grids-tab">
-                        <ul class="nav nav-underline" id="myTab2" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="info-tab3" data-bs-toggle="tab"
-                                    data-bs-target="#basic-info3" type="button" role="tab"
-                                    aria-selected="true">Basic Information</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="address-tab3" data-bs-toggle="tab"
-                                    data-bs-target="#address3" type="button" role="tab"
-                                    aria-selected="false">Permissions</button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-content" id="myTabContent2">
-                        <div class="tab-pane fade show active" id="basic-info3" role="tabpanel"
-                            aria-labelledby="info-tab3" tabindex="0">
-                            <div class="modal-body pb-0 ">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div
-                                            class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">
-                                            <div
-                                                class="d-flex align-items-center justify-content-center avatar avatar-xxl rounded-circle border border-dashed me-2 flex-shrink-0 text-dark frames">
-                                                <img src="{{ URL::asset('') }}assets/img/users/user-13.jpg"
-                                                    alt="img" class="rounded-circle">
-                                            </div>
-                                            <div class="profile-upload">
-                                                <div class="mb-2">
-                                                    <h6 class="mb-1">Upload Profile Image</h6>
-                                                    <p class="fs-12">Image should be below 4 mb</p>
+                                </div> --}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="contact-grids-tab p-0 mb-3">
+                                            <ul class="nav nav-underline" id="myTab" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link active" id="info-tab2" data-bs-toggle="tab"
+                                                        data-bs-target="#basic-info2" type="button" role="tab"
+                                                        aria-selected="true">Contrat</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="address-tab2" data-bs-toggle="tab"
+                                                        data-bs-target="#address2" type="button" role="tab"
+                                                        aria-selected="false">Diplôme</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="tab-content" id="myTabContent3">
+                                            <div class="tab-pane fade show active" id="basic-info2" role="tabpanel"
+                                                aria-labelledby="info-tab2" tabindex="0">
+                                                <div class="row">
+                                                    <div class="col-md-12 d-flex">
+                                                        <div class="card flex-fill">
+                                                            <div class="card-body">
+                                                                <div class="row align-items-center">
+                                                                    <div class="col-md-12">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <div>
+                                                                                <h6 class="mb-1"><a
+                                                                                        href="#">{{ $details->contrat }}</a>
+                                                                                </h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        Le fichier
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="profile-uploader d-flex align-items-center">
-                                                    <div class="drag-upload-btn btn btn-sm btn-primary me-2">
-                                                        Upload
-                                                        <input type="file" class="form-control image-sign"
-                                                            multiple="">
+                                            </div>
+                                            <div class="tab-pane fade" id="address2" role="tabpanel"
+                                                aria-labelledby="address-tab2" tabindex="0">
+                                                <div class="row">
+                                                    <div class="col-md-12 d-flex">
+                                                        <div class="col-md-12 d-flex">
+                                                            <div class="card flex-fill">
+                                                                <div class="card-body">
+                                                                    <div class="row align-items-center">
+                                                                        <div class="col-md-12">
+                                                                            <div class="d-flex align-items-center">
+                                                                                <div>
+                                                                                    <h6 class="mb-1"><a
+                                                                                            href="#">DIPLÔME</a>
+                                                                                    </h6>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-12">
+                                                                            Le fichier
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <a href="javascript:void(0);" class="btn btn-light btn-sm">Cancel</a>
                                                 </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">First Name <span class="text-danger">
-                                                    *</span></label>
-                                            <input type="text" class="form-control" value="Anthony">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Last Name</label>
-                                            <input type="email" class="form-control" value="Lewis">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Employee ID <span class="text-danger">
-                                                    *</span></label>
-                                            <input type="text" class="form-control" value="Emp-001">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Joining Date <span class="text-danger">
-                                                    *</span></label>
-                                            <div class="input-icon-end position-relative">
-                                                <input type="text" class="form-control datetimepicker"
-                                                    placeholder="dd/mm/yyyy" value="17-10-2022">
-                                                <span class="input-icon-addon">
-                                                    <i class="ti ti-calendar text-gray-7"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Username <span class="text-danger">
-                                                    *</span></label>
-                                            <input type="text" class="form-control" value="Anthony">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Email <span class="text-danger">
-                                                    *</span></label>
-                                            <input type="email" class="form-control" value="anthony@example.com	">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3 ">
-                                            <label class="form-label">Password <span class="text-danger">
-                                                    *</span></label>
-                                            <div class="pass-group">
-                                                <input type="password" class="pass-input form-control">
-                                                <span class="ti toggle-password ti-eye-off"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3 ">
-                                            <label class="form-label">Confirm Password <span class="text-danger">
-                                                    *</span></label>
-                                            <div class="pass-group">
-                                                <input type="password" class="pass-inputs form-control">
-                                                <span class="ti toggle-passwords ti-eye-off"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Phone Number <span class="text-danger">
-                                                    *</span></label>
-                                            <input type="text" class="form-control" value="(123) 4567 890">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Company<span class="text-danger">
-                                                    *</span></label>
-                                            <input type="text" class="form-control" value="Abac Company">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Department</label>
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option>All Department</option>
-                                                <option selected>Finance</option>
-                                                <option>Developer</option>
-                                                <option>Executive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Designation</label>
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option selected>Finance</option>
-                                                <option>Developer</option>
-                                                <option>Executive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">About <span class="text-danger">
-                                                    *</span></label>
-                                            <textarea class="form-control" rows="3">As an award winning designer, I deliver exceptional quality work and bring value to your brand! With 10 years of experience and 350+ projects completed worldwide with satisfied customers, I developed the 360° brand approach, which helped me to create numerous brands that are relevant, meaningful and loved.
-													</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-light border me-2"
-                                    data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Save </button>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="address3" role="tabpanel" aria-labelledby="address-tab3"
-                            tabindex="0">
-                            <div class="modal-body">
-                                <div class="card bg-light-500 shadow-none">
-                                    <div
-                                        class="card-body d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                                        <h6>Enable Options</h6>
-                                        <div class="d-flex align-items-center justify-content-end">
-                                            <div class="form-check form-switch me-2">
-                                                <label class="form-check-label mt-0">
-                                                    <input class="form-check-input me-2" type="checkbox" role="switch">
-                                                    Enable all Module
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center">
-                                                <label class="form-check-label mt-0">
-                                                    <input class="form-check-input" type="checkbox" checked="">
-                                                    Select All
-                                                </label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="table-responsive border rounded">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check form-switch me-2">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input me-2" type="checkbox"
-                                                                role="switch" checked>
-                                                            Holidays
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                checked="">
-                                                            Read
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Write
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Create
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                checked="">
-                                                            Delete
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Import
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Export
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check form-switch me-2">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input me-2" type="checkbox"
-                                                                role="switch">
-                                                            Leaves
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Read
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Write
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Create
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Delete
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Import
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Export
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check form-switch me-2">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input me-2" type="checkbox"
-                                                                role="switch">
-                                                            Clients
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Read
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Write
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Create
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Delete
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Import
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Export
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check form-switch me-2">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input me-2" type="checkbox"
-                                                                role="switch">
-                                                            Projects
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Read
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Write
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Create
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Delete
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Import
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Export
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check form-switch me-2">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input me-2" type="checkbox"
-                                                                role="switch">
-                                                            Tasks
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Read
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Write
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Create
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Delete
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Import
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Export
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check form-switch me-2">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input me-2" type="checkbox"
-                                                                role="switch">
-                                                            Chats
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Read
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Write
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Create
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Delete
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Import
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Export
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check form-switch me-2">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input me-2" type="checkbox"
-                                                                role="switch" checked>
-                                                            Assets
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Read
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Write
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                checked="">
-                                                            Create
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Delete
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                checked="">
-                                                            Import
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Export
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check form-switch me-2">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input me-2" type="checkbox"
-                                                                role="switch">
-                                                            Timing Sheets
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Read
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Write
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Create
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Delete
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Import
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex align-items-center">
-                                                        <label class="form-check-label mt-0">
-                                                            <input class="form-check-input" type="checkbox">
-                                                            Export
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-light border me-2"
-                                    data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#success_modal">Save </button>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- /Edit Employee -->
-
-    <!-- Edit Personal -->
-    <div class="modal fade" id="edit_personal">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Personal Info</h4>
-                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                        <i class="ti ti-x"></i>
-                    </button>
                 </div>
-                <form action="employee-details.html">
-                    <div class="modal-body pb-0">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Passport No <span class="text-danger">
-                                            *</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Passport Expiry Date <span class="text-danger">
-                                            *</span></label>
-                                    <div class="input-icon-end position-relative">
-                                        <input type="text" class="form-control datetimepicker"
-                                            placeholder="dd/mm/yyyy">
-                                        <span class="input-icon-addon">
-                                            <i class="ti ti-calendar text-gray-7"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Nationality <span class="text-danger">
-                                            *</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Religion</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Marital status <span class="text-danger">
-                                            *</span></label>
-                                    <select class="select">
-                                        <option>Select</option>
-                                        <option>Yes</option>
-                                        <option>Nos</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Employment spouse</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">No. of children</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-white border me-2"
-                            data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
-    <!-- /Edit Personal -->
+
+    <div class="modal fade" id="delete_education_modal">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <span class="avatar avatar-xl bg-transparent-danger text-danger mb-3">
+                        <i class="ti ti-trash-x fs-36"></i>
+                    </span>
+                    <h4 class="mb-1">Confirmez la suppression</h4>
+                    <p class="mb-3">Cette action est irréversible.</p>
+                    <input type="hidden" id="delete-education-id">
+                    <div class="d-flex justify-content-center">
+                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Annuler</a>
+                        <button id="confirm-delete-education" type="submit" class="btn btn-danger">Oui,
+                            Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete_experience_modal">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <span class="avatar avatar-xl bg-transparent-danger text-danger mb-3">
+                        <i class="ti ti-trash-x fs-36"></i>
+                    </span>
+                    <h4 class="mb-1">Confirmez la suppression</h4>
+                    <p class="mb-3">Cette action est irréversible.</p>
+                    <input type="hidden" id="delete-experience-id">
+                    <div class="d-flex justify-content-center">
+                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Annuler</a>
+                        <button id="confirm-delete-experience" type="submit" class="btn btn-danger">Oui,
+                            Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Edit Emergency Contact -->
     <div class="modal fade" id="edit_emergency">
@@ -1700,38 +1639,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <h5 class="mb-3">Secondary Contact Details</h5>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Name <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Relationship </label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone No 1 <span class="text-danger">
-                                            *</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone No 2 </label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-white border me-2"
-                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-white border me-2" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
@@ -1741,50 +1651,74 @@
     <!-- /Edit Emergency Contact -->
 
     <!-- Edit Bank -->
-    <div class="modal fade" id="edit_bank">
+    <div class="modal fade" id="add_bank">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Bank Details</h4>
+                    <h4 class="modal-title">Ajouter une banque</h4>
                     <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                         <i class="ti ti-x"></i>
                     </button>
                 </div>
-                <form action="employee-details.html">
+                <form action="{{ url('add-bank', $details->id) }}" method="POST" role="form">
+                    @csrf
                     <div class="modal-body pb-0">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Bank Details <span class="text-danger">
+                                    <label class="form-label">Nom de la banque <span class="text-danger">
                                             *</span></label>
-                                    <input type="text" class="form-control">
+                                    <input required name="libelle" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Bank account No </label>
-                                    <input type="text" class="form-control">
+                                    <label class="form-label">Code banque <span class="text-danger">
+                                            *</span></label>
+                                    <input required name="code" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">IFSC Code</label>
-                                    <input type="text" class="form-control">
+                                    <label class="form-label">Code guichet <span class="text-danger">
+                                            *</span></label>
+                                    <input required name="guichet" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Branch Address</label>
-                                    <input type="text" class="form-control">
+                                    <label class="form-label">Numéro de compte <span class="text-danger">
+                                            *</span></label>
+                                    <input required name="numero" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Clé RIB <span class="text-danger">
+                                            *</span></label>
+                                    <input required name="rib" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">IBAN <span class="text-danger">
+                                            *</span></label>
+                                    <input required name="iban" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">SWIFT <span class="text-danger">
+                                            *</span></label>
+                                    <input required name="swift" type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-white border me-2"
-                            data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-white border me-2" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
                     </div>
                 </form>
             </div>
@@ -1793,44 +1727,44 @@
     <!-- /Edit Bank -->
 
     <!-- Add Family -->
-    <div class="modal fade" id="edit_familyinformation">
+    <div class="modal fade" id="add_familyinformation">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Family Information</h4>
+                    <h4 class="modal-title">Ajouter une Information familliale</h4>
                     <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                         <i class="ti ti-x"></i>
                     </button>
                 </div>
-                <form action="employee-details.html">
+                <form action="{{ url('add-famille', $details->id) }}" method="post" role="form">
+                    @csrf
                     <div class="modal-body pb-0">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Name <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control">
+                                    <label class="form-label">Nom complet <span class="text-danger"> *</span></label>
+                                    <input type="text" name="name" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Relationship </label>
-                                    <input type="text" class="form-control">
+                                    <label class="form-label">Lien familliale <span class="text-danger"> *</span></label>
+                                    <input type="text" name="lien" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Phone </label>
-                                    <input type="text" class="form-control">
+                                    <label class="form-label">Téléphone </label>
+                                    <input type="text" name="phone" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Passport Expiry Date <span class="text-danger">
-                                            *</span></label>
+                                    <label class="form-label">Date de naissance</label>
                                     <div class="input-icon-end position-relative">
                                         <input type="text" class="form-control datetimepicker"
-                                            placeholder="dd/mm/yyyy">
+                                            placeholder="dd/mm/yyyy" name="date">
                                         <span class="input-icon-addon">
                                             <i class="ti ti-calendar text-gray-7"></i>
                                         </span>
@@ -1840,9 +1774,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-white border me-2"
-                            data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-white border me-2" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
                     </div>
                 </form>
             </div>
@@ -1851,39 +1784,41 @@
     <!-- /Add Family -->
 
     <!-- Add Education -->
-    <div class="modal fade" id="edit_education">
+    <div class="modal fade" id="add_education">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Education Information</h4>
+                    <h4 class="modal-title">Education</h4>
                     <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                         <i class="ti ti-x"></i>
                     </button>
                 </div>
-                <form action="employee-details.html">
+                <form id="education-form" method="post" role="form">
+                    @csrf
+                    <input type="hidden" name="employe_id" value="{{ $details->id }}">
                     <div class="modal-body pb-0">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Institution Name <span class="text-danger">
+                                    <label class="form-label">Nom école <span class="text-danger">
                                             *</span></label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="school" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Course <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control">
+                                    <label class="form-label">Formation <span class="text-danger"> *</span></label>
+                                    <input type="text" name="formation" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Start Date <span class="text-danger">
+                                    <label class="form-label">Date début <span class="text-danger">
                                             *</span></label>
                                     <div class="input-icon-end position-relative">
                                         <input type="text" class="form-control datetimepicker"
-                                            placeholder="dd/mm/yyyy">
+                                            placeholder="dd/mm/yyyy" name="start" required>
                                         <span class="input-icon-addon">
                                             <i class="ti ti-calendar text-gray-7"></i>
                                         </span>
@@ -1892,11 +1827,11 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">End Date <span class="text-danger">
+                                    <label class="form-label">Date fin <span class="text-danger">
                                             *</span></label>
                                     <div class="input-icon-end position-relative">
                                         <input type="text" class="form-control datetimepicker"
-                                            placeholder="dd/mm/yyyy">
+                                            placeholder="dd/mm/yyyy" name="end" required>
                                         <span class="input-icon-addon">
                                             <i class="ti ti-calendar text-gray-7"></i>
                                         </span>
@@ -1906,9 +1841,74 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-white border me-2"
-                            data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-white border me-2" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="edit_education_modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Modifier Education</h4>
+                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <i class="ti ti-x"></i>
+                    </button>
+                </div>
+                <form id="edit-education-form" role="form">
+                    @csrf
+                    <input type="hidden" name="id" id="edit-id">
+                    <div class="modal-body pb-0">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nom école <span class="text-danger">
+                                            *</span></label>
+                                    <input type="text" name="school" id="edit-school" required class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Formation <span class="text-danger"> *</span></label>
+                                    <input type="text" name="formation" id="edit-formation" required
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Date début <span class="text-danger">
+                                            *</span></label>
+                                    <div class="input-icon-end position-relative">
+                                        <input type="text" class="form-control datetimepicker"
+                                            placeholder="dd/mm/yyyy" name="debut" required id="edit-debut">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-calendar text-gray-7"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Date fin <span class="text-danger">
+                                            *</span></label>
+                                    <div class="input-icon-end position-relative">
+                                        <input type="text" class="form-control datetimepicker"
+                                            placeholder="dd/mm/yyyy" name="fin" required id="edit-fin">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-calendar text-gray-7"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white border me-2" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-info">Modifier</button>
                     </div>
                 </form>
             </div>
@@ -1917,39 +1917,41 @@
     <!-- /Add Education -->
 
     <!-- Add Experience -->
-    <div class="modal fade" id="edit_experience">
+    <div class="modal fade" id="add_experience">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Company Information</h4>
+                    <h4 class="modal-title">Expérience</h4>
                     <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                         <i class="ti ti-x"></i>
                     </button>
                 </div>
-                <form action="employee-details.html">
+                <form id="experience-form" method="post" role="form">
+                    @csrf
+                    <input type="hidden" name="employe_id" value="{{ $details->id }}">
                     <div class="modal-body pb-0">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Previous Company Name <span class="text-danger">
+                                    <label class="form-label">Entreprise <span class="text-danger">
                                             *</span></label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="entreprise" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Designation <span class="text-danger">
+                                    <label class="form-label">Poste occupé <span class="text-danger">
                                             *</span></label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="poste" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Start Date <span class="text-danger">
+                                    <label class="form-label">Date début <span class="text-danger">
                                             *</span></label>
                                     <div class="input-icon-end position-relative">
-                                        <input type="text" class="form-control datetimepicker"
+                                        <input name="debut" required type="text" class="form-control datetimepicker"
                                             placeholder="dd/mm/yyyy">
                                         <span class="input-icon-addon">
                                             <i class="ti ti-calendar text-gray-7"></i>
@@ -1959,10 +1961,9 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">End Date <span class="text-danger">
-                                            *</span></label>
+                                    <label class="form-label">Date fin</label>
                                     <div class="input-icon-end position-relative">
-                                        <input type="text" class="form-control datetimepicker"
+                                        <input name="fin" type="text" class="form-control datetimepicker"
                                             placeholder="dd/mm/yyyy">
                                         <span class="input-icon-addon">
                                             <i class="ti ti-calendar text-gray-7"></i>
@@ -1973,53 +1974,95 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-check-label d-flex align-items-center mt-0">
-                                        <input class="form-check-input mt-0 me-2" type="checkbox" checked="">
-                                        <span class="text-dark">Check if you working present</span>
+                                        <input name="present" class="form-check-input mt-0 me-2" type="checkbox">
+                                        <span class="text-dark">Vous y travaillez actuellement</span>
                                     </label>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-white border me-2"
-                            data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-white border me-2" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+     <div class="modal fade" id="edit_experience_modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Modifier Experience</h4>
+                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <i class="ti ti-x"></i>
+                    </button>
+                </div>
+                <form id="edit-experience-form" role="form">
+                    @csrf
+                    <input type="hidden" name="id" id="edit-id">
+                    <div class="modal-body pb-0">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Entreprise <span class="text-danger">
+                                            *</span></label>
+                                    <input type="text" name="entreprise" required class="form-control" id="edit-entreprise">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Poste occupé <span class="text-danger">
+                                            *</span></label>
+                                    <input type="text" name="poste" required class="form-control" id="edit-poste">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Date début <span class="text-danger">
+                                            *</span></label>
+                                    <div class="input-icon-end position-relative">
+                                        <input name="debut" required type="text" class="form-control datetimepicker"
+                                            placeholder="dd/mm/yyyy" id="edit-debutt">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-calendar text-gray-7"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Date fin</label>
+                                    <div class="input-icon-end position-relative">
+                                        <input name="fin" type="text" class="form-control datetimepicker"
+                                            placeholder="dd/mm/yyyy" id="edit-fin">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-calendar text-gray-7"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-check-label d-flex align-items-center mt-0">
+                                        <input name="present" class="form-check-input mt-0 me-2" type="checkbox" id="edit-present">
+                                        <span class="text-dark">Vous y travaillez actuellement</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white border me-2" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-info">Modifier</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <!-- /Add Experience -->
-
-    <!-- Add Employee Success -->
-    <div class="modal fade" id="success_modal" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="text-center p-3">
-                        <span class="avatar avatar-lg avatar-rounded bg-success mb-3"><i
-                                class="ti ti-check fs-24"></i></span>
-                        <h5 class="mb-2">Employee Added Successfully</h5>
-                        <p class="mb-3">Stephan Peralt has been added with Client ID : <span class="text-primary">#EMP
-                                - 0001</span>
-                        </p>
-                        <div>
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <a href="employees.html" class="btn btn-dark w-100">Back to List</a>
-                                </div>
-                                <div class="col-6">
-                                    <a href="employee-details.html" class="btn btn-primary w-100">Detail
-                                        Page</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Add Client Success -->
 
     <!-- Add Statuorty -->
     <div class="modal fade" id="add_bank_satutory">

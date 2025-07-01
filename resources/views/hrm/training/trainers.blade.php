@@ -1,4 +1,4 @@
-@extends('layouts.master', ['title' => 'Trainers'])
+@extends('layouts.master', ['title' => 'Formateur'])
 
 @push('csss')
     <!-- Tabler Icon CSS -->

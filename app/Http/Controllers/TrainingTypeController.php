@@ -13,7 +13,7 @@ class TrainingTypeController extends Controller
     public function index()
     {
         $all = TrainingType::all();
-        return view('hrm.trainings.training-type', compact('all'));
+        return view('hrm.training.training-type', compact('all'));
     }
 
     /**

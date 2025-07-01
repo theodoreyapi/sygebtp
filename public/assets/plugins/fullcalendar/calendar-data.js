@@ -59,7 +59,7 @@ if($('#calendar').length > 0) {
                 title: 'Design System',
                 className: 'badge badge-danger-transparent',
                 backgroundColor: '#FAE7E7',
-                textColor: "#0d6efd",
+                textColor: "#dc2626",
                 start: new Date($.now() + 88000000).toJSON().slice(0, 10)
             },
           ],

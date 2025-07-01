@@ -15,7 +15,6 @@ class Training extends Model
         'start_traini',
         'end_traini',
         'description_traini',
-        'employe_id',
         'type_id',
         'trainer_id',
         'status_traini',

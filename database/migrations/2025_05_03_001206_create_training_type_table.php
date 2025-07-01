@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('training_type', function (Blueprint $table) {
-            $table->id('trai_type');
+            $table->id('trai_type')->primary();
             $table->string('type');
             $table->longText('description_type');
             $table->string('status_type', 20)->comment('Active, inactive');

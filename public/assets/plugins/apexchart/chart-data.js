@@ -85,7 +85,7 @@ $(document).ready(function () {
   if ($('#invoice_chart').length > 0) {
     var pieCtx = document.getElementById("invoice_chart"),
       pieConfig = {
-        colors: ['#03C95A', '#0d6efd', '#AB47BC', '#FFC107'],
+        colors: ['#03C95A', '#dc2626', '#AB47BC', '#FFC107'],
         series: [45, 15, 21, 5],
         chart: {
           fontFamily: 'Poppins, sans-serif',
@@ -326,7 +326,7 @@ $(document).ready(function () {
           horizontal: false,
         },
       },
-      colors: ['#344675', '#0d6efd', '#03C95A', '#1B84FF'],
+      colors: ['#344675', '#dc2626', '#03C95A', '#1B84FF'],
       series: [{
         name: 'PRODUCT A',
         data: [44, 55, 41, 67, 22, 43]
@@ -780,7 +780,7 @@ $(document).ready(function () {
       },
 
       series: [15, 10, 5, 10, 60],
-      colors: ['#344675', '#FFC107', '#0d6efd', '#03C95A', '#0C4B5E'],
+      colors: ['#344675', '#FFC107', '#dc2626', '#03C95A', '#0C4B5E'],
       responsive: [{
         breakpoint: 480,
         options: {
@@ -2918,7 +2918,7 @@ chart.render();
         height: 290,
     },
     labels: ['Paid', 'Google', 'Referals', 'Campaigns' , 'Campaigns'], // Labels for the data
-    colors: ['#344675', '#FFC107', '#0d6efd', '#1B84FF' , '#0C4B5E'], // Colors from the image
+    colors: ['#344675', '#FFC107', '#dc2626', '#1B84FF' , '#0C4B5E'], // Colors from the image
     plotOptions: {
         pie: {
             donut: {

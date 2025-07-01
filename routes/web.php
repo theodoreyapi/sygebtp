@@ -5,6 +5,7 @@ use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\HolidaysController;
 use App\Http\Controllers\TrainersController;
+use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TrainingTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -116,6 +117,21 @@ Route::get('employee-report', function () {
 
 // HRM
 Route::resource('employees', EmployeesController::class);
+Route::post('add-bank/{id}', [EmployeesController::class, 'bank']);
+
+Route::post('add-famille/{id}', [EmployeesController::class, 'famille']);
+
+Route::post('add-education/{id}', [EmployeesController::class, 'education']);
+Route::post('edit-education/{id}', [EmployeesController::class, 'updateEducation']);
+Route::delete('/delete-education/{id}', [EmployeesController::class, 'deleteEducation']);
+
+Route::post('add-experience/{id}', [EmployeesController::class, 'experience']);
+Route::post('edit-experience/{id}', [EmployeesController::class, 'updateExperience']);
+Route::delete('/delete-experience/{id}', [EmployeesController::class, 'deleteExperience']);
+
+Route::post('add-urgence/{id}', [EmployeesController::class, 'urgence']);
+
+Route::get('get-designations/{departement_id}', [EmployeesController::class, 'getDesignations']);
 Route::get('employee-details', function () {
     return view('hrm.employees.employee-details');
 });
@@ -170,9 +186,7 @@ Route::get('goal-tracking', function () {
 Route::get('goal-type', function () {
     return view('hrm.performance.goal-type');
 });
-Route::get('training', function () {
-    return view('hrm.training.training');
-});
+Route::resource('training', TrainingController::class);
 Route::resource('trainers', TrainersController::class);
 Route::resource('training-type', TrainingTypeController::class);
 Route::get('promotion', function () {

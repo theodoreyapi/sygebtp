@@ -12,16 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('training', function (Blueprint $table) {
-            $table->id('traini');
+            $table->id('traini')->primary();
             $table->integer('cost_traini');
             $table->string('start_traini');
             $table->string('end_traini');
             $table->longText('description_traini');
-            $table->unsignedBigInteger('employe_id')->nullable();
-            $table->foreign('employe_id')->references('id')->on('users');
-            $table->unsignedBigInteger('type_id')->nullable();
+            $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('trai_type')->on('training_type');
-            $table->unsignedBigInteger('trainer_id')->nullable();
+            $table->unsignedBigInteger('trainer_id');
             $table->foreign('trainer_id')->references('trai')->on('trainers');
             $table->string('status_traini', 20)->comment('Active, inactive');
             $table->timestamps();

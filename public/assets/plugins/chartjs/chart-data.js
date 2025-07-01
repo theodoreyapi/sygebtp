@@ -515,7 +515,7 @@ if ($('#chartDonut').length > 0) {
             datasets: [{
                 label: 'Semi Donut',
                 data: [20, 40, 20, 10],
-                backgroundColor: ['#FFC107', '#1B84FF', '#03C95A', '#0d6efd'],
+                backgroundColor: ['#FFC107', '#1B84FF', '#03C95A', '#dc2626'],
                 borderWidth: -10,
                 borderColor: 'transparent', // Border between segments
                 hoverBorderWidth: 0,   // Border radius for curved edges
@@ -557,7 +557,7 @@ if ($('#chartDonut').length > 0) {
             datasets: [{
                 label: 'Semi Donut',
                 data: [40, 20, 30, 10],
-                backgroundColor: ['#0C4B5E', '#03C95A', '#FFC107', '#0d6efd'],
+                backgroundColor: ['#0C4B5E', '#03C95A', '#FFC107', '#dc2626'],
                 borderWidth: 5,
 				borderRadius: 10,
                 borderColor: '#fff', // Border between segments
