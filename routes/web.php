@@ -4,6 +4,8 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\HolidaysController;
+use App\Http\Controllers\IncenditController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\TrainersController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TrainingTypeController;
@@ -137,9 +139,7 @@ Route::get('employee-details', function () {
 });
 Route::resource('departments', DepartmentController::class);
 Route::resource('designations', DesignationController::class);
-Route::get('policy', function () {
-    return view('hrm.employees.policy');
-});
+Route::resource('policy', PolicyController::class);
 Route::get('tickets', function () {
     return view('hrm.tickets.tickets');
 });
@@ -162,6 +162,7 @@ Route::get('attendance-admin', function () {
 Route::get('attendance-employee', function () {
     return view('hrm.attendance.attendance-employee');
 });
+Route::resource('attendance-incendit', IncenditController::class);
 Route::get('timesheets', function () {
     return view('hrm.attendance.timesheets');
 });

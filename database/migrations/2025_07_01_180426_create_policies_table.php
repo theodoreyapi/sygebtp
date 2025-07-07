@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('policies', function (Blueprint $table) {
-            $table->id('policie')->primary();
-            $table->string('file_policie')->nullable();
-            $table->string('name_policie');
-            $table->string('appraisal_policie');
-            $table->unsignedBigInteger('department_id')->nullable();
+            $table->id('policy_id')->primary();
+            $table->string('policy_name');
+            $table->string('policy_appraisal');
+            $table->string('policy_file')->nullable();
+            $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('depart')->on('departments');
             $table->timestamps();
         });

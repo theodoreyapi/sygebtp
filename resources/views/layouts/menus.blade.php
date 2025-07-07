@@ -157,11 +157,11 @@
                                          href="{{ url('departments') }}">Départements</a></li>
                                  <li><a class="{{ Request::is('designations') ? 'active' : '' }}"
                                          href="{{ url('designations') }}">Désignations</a></li>
-                                 <li><a class="{{ Request::is('policy') ? 'active' : '' }}"
-                                         href="{{ url('policy') }}">Politiques</a></li>
+                                 {{-- <li><a class="{{ Request::is('policy') ? 'active' : '' }}"
+                                         href="{{ url('policy') }}">Politiques</a></li> --}}
                              </ul>
                          </li>
-                         <li class="submenu">
+                         {{-- <li class="submenu">
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('tickets') ? 'active subdrop' : '' }}">
                                  <i class="ti ti-ticket"></i><span>Tickets</span>
@@ -171,14 +171,18 @@
                                  <li><a class="{{ Request::is('tickets') ? 'active' : '' }}"
                                          href="{{ url('tickets') }}">Tickets</a></li>
                              </ul>
-                         </li>
+                         </li> --}}
                          <li class="{{ Request::is('holidays') ? 'active' : '' }}">
                              <a href="{{ url('holidays') }}">
                                  <i class="ti ti-calendar-event"></i><span>Fériés</span>
                              </a>
                          </li>
                          <li class="submenu">
-                             <a href="javascript:void(0);">
+                             <a href="javascript:void(0);"
+                                 class="{{ Request::is('attendance-incendit') ? 'active subdrop' : '' }}
+                                 {{ Request::is('departments') ? 'active subdrop' : '' }}
+                                  {{ Request::is('designations') ? 'active subdrop' : '' }}
+                                   {{ Request::is('policy') ? 'active subdrop' : '' }}">
                                  <i class="ti ti-file-time"></i><span>Présences</span>
                                  <span class="menu-arrow"></span>
                              </a>
@@ -194,6 +198,8 @@
                                  </li>
                                  <li><a href="{{ url('attendance-admin') }}">Attendance (Admin)</a></li>
                                  <li><a href="{{ url('attendance-employee') }}">Attendance (Employee)</a></li>
+                                 <li><a class="{{ Request::is('attendance-incendit') ? 'active' : '' }}"
+                                         href="{{ url('attendance-incendit') }}">Incidents/Accidents</a></li>
                                  <li><a href="{{ url('timesheets') }}">Timesheets</a></li>
                                  <li><a href="{{ url('schedule-timing') }}">Shift & Schedule</a></li>
                                  <li><a href="{{ url('overtime') }}">Overtime</a></li>

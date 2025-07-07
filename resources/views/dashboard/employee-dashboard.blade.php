@@ -71,38 +71,20 @@
         <!-- Breadcrumb -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
-                <h2 class="mb-1">Employee Dashboard</h2>
+                <h2 class="mb-1">Tableau de bord</h2>
                 <nav>
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
-                            <a href="index.html"><i class="ti ti-smart-home"></i></a>
+                            <a href="#"><i class="ti ti-smart-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
-                            Dashboard
+                            Tableau de bord
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Employee Dashboard</li>
+                        <li class="breadcrumb-item active" aria-current="page">Tableau de bord</li>
                     </ol>
                 </nav>
             </div>
             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-                <div class="me-2 mb-2">
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
-                            data-bs-toggle="dropdown">
-                            <i class="ti ti-file-export me-1"></i>Export
-                        </a>
-                        <ul class="dropdown-menu  dropdown-menu-end p-3">
-                            <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1"><i
-                                        class="ti ti-file-type-pdf me-1"></i>Export as PDF</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1"><i
-                                        class="ti ti-file-type-xls me-1"></i>Export as Excel </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
                 <div class="input-icon w-120 position-relative mb-2">
                     <span class="input-icon-addon">
                         <i class="ti ti-calendar text-gray-9"></i>
@@ -120,7 +102,7 @@
         <!-- /Breadcrumb -->
 
         <div class="alert bg-secondary-transparent alert-dismissible fade show mb-4">
-            Your Leave Request on“24th April 2024”has been Approved!!!
+            Votre demande de congé du “24 Avril 2024” a été approuvée !!!
             <button type="button" class="btn-close fs-14" data-bs-dismiss="alert" aria-label="Close"><i
                     class="ti ti-x"></i></button>
         </div>
@@ -133,11 +115,11 @@
                                 <img src="assets/img/users/user-01.jpg" alt="Img">
                             </span>
                             <div>
-                                <h5 class="text-white mb-1">Stephan Peralt</h5>
+                                <h5 class="text-white mb-1">Yapi n'guessan kouassi théodoret</h5>
                                 <div class="d-flex align-items-center">
-                                    <p class="text-white fs-12 mb-0">Senior Product Designer</p>
+                                    <p class="text-white fs-12 mb-0">Informatique</p>
                                     <span class="mx-1"><i class="ti ti-point-filled text-primary"></i></span>
-                                    <p class="fs-12">UI/UX Design</p>
+                                    <p class="fs-12">Développeur Mobile</p>
                                 </div>
                             </div>
                         </div>
@@ -146,19 +128,19 @@
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <span class="d-block mb-1 fs-13">Phone Number</span>
+                            <span class="d-block mb-1 fs-13">Numéro de téléphone</span>
                             <p class="text-gray-9">+1 324 3453 545</p>
                         </div>
                         <div class="mb-3">
-                            <span class="d-block mb-1 fs-13">Email Address</span>
+                            <span class="d-block mb-1 fs-13">Adresse email</span>
                             <p class="text-gray-9">Steperde124@example.com</p>
                         </div>
                         <div class="mb-3">
-                            <span class="d-block mb-1 fs-13">Report Office</span>
+                            <span class="d-block mb-1 fs-13">Nationnalité</span>
                             <p class="text-gray-9">Doglas Martini</p>
                         </div>
                         <div>
-                            <span class="d-block mb-1 fs-13">Joined on</span>
+                            <span class="d-block mb-1 fs-13">Date d'embauche</span>
                             <p class="text-gray-9">15 Jan 2024</p>
                         </div>
                     </div>
@@ -168,7 +150,7 @@
                 <div class="card flex-fill">
                     <div class="card-header">
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
-                            <h5>Leave Details</h5>
+                            <h5>Détails du congé</h5>
                             <div class="dropdown">
                                 <a href="javascript:void(0);"
                                     class="btn btn-white border btn-sm d-inline-flex align-items-center"
@@ -197,21 +179,21 @@
                                         <p class="d-flex align-items-center"><i
                                                 class="ti ti-circle-filled fs-8 text-dark me-1"></i>
                                             <span class="text-gray-9 fw-semibold me-1">1254</span>
-                                            on time
+                                            à l'heure
                                         </p>
                                     </div>
                                     <div class="mb-3">
                                         <p class="d-flex align-items-center"><i
                                                 class="ti ti-circle-filled fs-8 text-success me-1"></i>
                                             <span class="text-gray-9 fw-semibold me-1">32</span>
-                                            Late Attendance
+                                            retards de présence
                                         </p>
                                     </div>
                                     <div class="mb-3">
                                         <p class="d-flex align-items-center"><i
                                                 class="ti ti-circle-filled fs-8 text-primary me-1"></i>
                                             <span class="text-gray-9 fw-semibold me-1">658</span>
-                                            Work From Home
+                                            Télétravail
                                         </p>
                                     </div>
                                     <div class="mb-3">
@@ -225,7 +207,7 @@
                                         <p class="d-flex align-items-center"><i
                                                 class="ti ti-circle-filled fs-8 text-warning me-1"></i>
                                             <span class="text-gray-9 fw-semibold me-1">68</span>
-                                            Sick Leave
+                                            Congé de maladie
                                         </p>
                                     </div>
                                 </div>
@@ -238,8 +220,8 @@
                             <div class="col-md-12">
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" id="todo1">
-                                    <label class="form-check-label" for="todo1">Better than <span
-                                            class="text-gray-9">85%</span> of Employees</label>
+                                    <label class="form-check-label" for="todo1">Mieux que <span
+                                            class="text-gray-9">85%</span> des employés</label>
                                 </div>
                             </div>
                         </div>
@@ -250,7 +232,7 @@
                 <div class="card flex-fill">
                     <div class="card-header">
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
-                            <h5>Leave Details</h5>
+                            <h5>Détails du congé</h5>
                             <div class="dropdown">
                                 <a href="javascript:void(0);"
                                     class="btn btn-white border btn-sm d-inline-flex align-items-center"
@@ -275,13 +257,13 @@
                         <div class="row align-items-center">
                             <div class="col-sm-6">
                                 <div class="mb-4">
-                                    <span class="d-block mb-1">Total Leaves</span>
+                                    <span class="d-block mb-1">Total des feuilles</span>
                                     <h4>16</h4>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="mb-4">
-                                    <span class="d-block mb-1">Taken</span>
+                                    <span class="d-block mb-1">Pris</span>
                                     <h4>10</h4>
                                 </div>
                             </div>
@@ -293,26 +275,26 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="mb-4">
-                                    <span class="d-block mb-1">Request</span>
+                                    <span class="d-block mb-1">Demandes</span>
                                     <h4>0</h4>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="mb-4">
-                                    <span class="d-block mb-1">Worked Days</span>
+                                    <span class="d-block mb-1">Jours travaillés</span>
                                     <h4>240</h4>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="mb-4">
-                                    <span class="d-block mb-1">Loss of Pay</span>
+                                    <span class="d-block mb-1">Perte de salaire</span>
                                     <h4>2</h4>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div>
                                     <a href="#" class="btn btn-dark w-100" data-bs-toggle="modal"
-                                        data-bs-target="#add_leaves">Apply New Leave</a>
+                                        data-bs-target="#add_leaves">Demander un nouveau congé</a>
                                 </div>
                             </div>
                         </div>
@@ -325,7 +307,7 @@
                 <div class="card flex-fill border-primary attendance-bg">
                     <div class="card-body">
                         <div class="mb-4 text-center">
-                            <h6 class="fw-medium text-gray-5 mb-1">Attendance</h6>
+                            <h6 class="fw-medium text-gray-5 mb-1">Présence</h6>
                             <h4>08:35 AM, 11 Mar 2025</h4>
                         </div>
                         <div class="attendance-circle-progress attendance-progress mx-auto mb-3" data-value='65'>
@@ -336,7 +318,7 @@
                                 <span class="progress-bar border-success"></span>
                             </span>
                             <div class="total-work-hours text-center w-100">
-                                <span class="fs-13 d-block mb-1">Total Hours</span>
+                                <span class="fs-13 d-block mb-1">Total heure</span>
                                 <h6>5:45:32</h6>
                             </div>
                         </div>
@@ -344,9 +326,9 @@
                             <div class="badge badge-dark badge-md mb-3">Production : 3.45 hrs</div>
                             <h6 class="fw-medium d-flex align-items-center justify-content-center mb-4">
                                 <i class="ti ti-fingerprint text-primary me-1"></i>
-                                Punch In at 10.00 AM
+                                Pointage à 10h00
                             </h6>
-                            <a href="#" class="btn btn-primary w-100">Punch Out</a>
+                            <a href="#" class="btn btn-primary w-100">Terminer service</a>
                         </div>
                     </div>
                 </div>
@@ -359,14 +341,14 @@
                                 <div class="border-bottom mb-3 pb-2">
                                     <span class="avatar avatar-sm bg-primary mb-2"><i class="ti ti-clock-stop"></i></span>
                                     <h2 class="mb-2">8.36 / <span class="fs-20 text-gray-5"> 9</span></h2>
-                                    <p class="fw-medium text-truncate">Total Hours Today</p>
+                                    <p class="fw-medium text-truncate">Heure aujourd'hui</p>
                                 </div>
                                 <div>
                                     <p class="d-flex align-items-center fs-13">
                                         <span class="avatar avatar-xs rounded-circle bg-success flex-shrink-0 me-2">
                                             <i class="ti ti-arrow-up fs-12"></i>
                                         </span>
-                                        <span>5% This Week</span>
+                                        <span>5% cette semaine</span>
                                     </p>
                                 </div>
                             </div>
@@ -378,14 +360,14 @@
                                 <div class="border-bottom mb-3 pb-2">
                                     <span class="avatar avatar-sm bg-dark mb-2"><i class="ti ti-clock-up"></i></span>
                                     <h2 class="mb-2">10 / <span class="fs-20 text-gray-5"> 40</span></h2>
-                                    <p class="fw-medium text-truncate">Total Hours Week</p>
+                                    <p class="fw-medium text-truncate">Heure semaine</p>
                                 </div>
                                 <div>
                                     <p class="d-flex align-items-center fs-13">
                                         <span class="avatar avatar-xs rounded-circle bg-success flex-shrink-0 me-2">
                                             <i class="ti ti-arrow-up fs-12"></i>
                                         </span>
-                                        <span>7% Last Week</span>
+                                        <span>7% semaine dernière</span>
                                     </p>
                                 </div>
                             </div>
@@ -397,14 +379,14 @@
                                 <div class="border-bottom mb-3 pb-2">
                                     <span class="avatar avatar-sm bg-info mb-2"><i class="ti ti-calendar-up"></i></span>
                                     <h2 class="mb-2">75 / <span class="fs-20 text-gray-5"> 98</span></h2>
-                                    <p class="fw-medium text-truncate">Total Hours Month</p>
+                                    <p class="fw-medium text-truncate">Heure mois</p>
                                 </div>
                                 <div>
                                     <p class="d-flex align-items-center fs-13 text-truncate">
                                         <span class="avatar avatar-xs rounded-circle bg-danger flex-shrink-0 me-2">
                                             <i class="ti ti-arrow-down fs-12"></i>
                                         </span>
-                                        <span>8% Last Month</span>
+                                        <span>8% mois dernier</span>
                                     </p>
                                 </div>
                             </div>
@@ -416,14 +398,14 @@
                                 <div class="border-bottom mb-3 pb-2">
                                     <span class="avatar avatar-sm bg-pink mb-2"><i class="ti ti-calendar-star"></i></span>
                                     <h2 class="mb-2">16 / <span class="fs-20 text-gray-5"> 28</span></h2>
-                                    <p class="fw-medium text-truncate">Overtime this Month</p>
+                                    <p class="fw-medium text-truncate">Heure supplémentaire</p>
                                 </div>
                                 <div>
                                     <p class="d-flex align-items-center fs-13 text-truncate">
                                         <span class="avatar avatar-xs rounded-circle bg-danger flex-shrink-0 me-2">
                                             <i class="ti ti-arrow-down fs-12"></i>
                                         </span>
-                                        <span>6% Last Month</span>
+                                        <span>6% mois dernier</span>
                                     </p>
                                 </div>
                             </div>
@@ -436,29 +418,28 @@
                                     <div class="col-xl-3">
                                         <div class="mb-4">
                                             <p class="d-flex align-items-center mb-1"><i
-                                                    class="ti ti-point-filled text-dark-transparent me-1"></i>Total Working
-                                                hours</p>
+                                                    class="ti ti-point-filled text-dark-transparent me-1"></i>Heures de travail totales</p>
                                             <h3>12h 36m</h3>
                                         </div>
                                     </div>
                                     <div class="col-xl-3">
                                         <div class="mb-4">
                                             <p class="d-flex align-items-center mb-1"><i
-                                                    class="ti ti-point-filled text-success me-1"></i>Productive Hours</p>
+                                                    class="ti ti-point-filled text-success me-1"></i>Heures productives</p>
                                             <h3>08h 36m</h3>
                                         </div>
                                     </div>
                                     <div class="col-xl-3">
                                         <div class="mb-4">
                                             <p class="d-flex align-items-center mb-1"><i
-                                                    class="ti ti-point-filled text-warning me-1"></i>Break hours</p>
+                                                    class="ti ti-point-filled text-warning me-1"></i>Heures de pause</p>
                                             <h3>22m 15s</h3>
                                         </div>
                                     </div>
                                     <div class="col-xl-3">
                                         <div class="mb-4">
                                             <p class="d-flex align-items-center mb-1"><i
-                                                    class="ti ti-point-filled text-info me-1"></i>Overtime</p>
+                                                    class="ti ti-point-filled text-info me-1"></i>Au fil du temps</p>
                                             <h3>02h 15m</h3>
                                         </div>
                                     </div>
@@ -518,7 +499,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-xl-6 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header">
@@ -930,7 +911,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="row">
             <div class="col-xl-5 d-flex">
                 <div class="card flex-fill">
@@ -970,7 +951,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 d-flex">
+            {{-- <div class="col-xl-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header">
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
@@ -1100,13 +1081,37 @@
                         </div>
                     </div>
                 </div>
+            </div> --}}
+            <div class="col-xl-4 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <h5>Membre de l'équipe</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="d-flex align-items-center">
+                                <a href="javascript:void(0);" class="avatar flex-shrink-0">
+                                    <img src="assets/img/users/user-27.jpg" class="rounded-circle border border-2"
+                                        alt="img">
+                                </a>
+                                <div class="ms-2">
+                                    <h6 class="fs-14 fw-medium text-truncate mb-1"><a href="#">Alexander Jermai</a>
+                                    </h6>
+                                    <p class="fs-13">UI/UX Designer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-xl-3 d-flex">
                 <div class="flex-fill">
                     <div class="card card-bg-5 bg-dark mb-3">
                         <div class="card-body">
                             <div class="text-center">
-                                <h5 class="text-white mb-4">Team Birthday</h5>
+                                <h5 class="text-white mb-4">Anniversaire de l'équipe</h5>
                                 <span class="avatar avatar-xl avatar-rounded mb-2">
                                     <img src="assets/img/users/user-35.jpg" alt="Img">
                                 </span>
@@ -1114,32 +1119,32 @@
                                     <h6 class="text-white fw-medium mb-1">Andrew Jermia</h6>
                                     <p>IOS Developer</p>
                                 </div>
-                                <a href="#" class="btn btn-sm btn-primary">Send Wishes</a>
+                                <a href="#" class="btn btn-sm btn-primary">Envoyer des vœux</a>
                             </div>
                         </div>
                     </div>
                     <div class="card bg-secondary mb-3">
                         <div class="card-body d-flex align-items-center justify-content-between p-3">
                             <div>
-                                <h5 class="text-white mb-1">Leave Policy</h5>
-                                <p class="text-white">Last Updated : Today</p>
+                                <h5 class="text-white mb-1">Politique de congé</h5>
+                                <p class="text-white">Dernière mise à jour : aujourd'hui</p>
                             </div>
-                            <a href="#" class="btn btn-white btn-sm px-3">View All</a>
+                            <a href="#" class="btn btn-white btn-sm px-3">Tout voir</a>
                         </div>
                     </div>
                     <div class="card bg-warning">
                         <div class="card-body d-flex align-items-center justify-content-between p-3">
                             <div>
-                                <h5 class="mb-1">Next Holiday</h5>
-                                <p class="text-gray-9">Diwali, 15 Sep 2025</p>
+                                <h5 class="mb-1">Prochain férié</h5>
+                                <p class="text-gray-9">Diwali, 15 septembre 2025</p>
                             </div>
-                            <a href="holidays.html" class="btn btn-white btn-sm px-3">View All</a>
+                            <a href="{{ url('holidays') }}" class="btn btn-white btn-sm px-3">Tout voir</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-xl-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header">
@@ -1432,6 +1437,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 @endsection
