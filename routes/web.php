@@ -1,11 +1,17 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeesController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\HolidaysController;
 use App\Http\Controllers\IncenditController;
+use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\ResignationController;
+use App\Http\Controllers\TerminationController;
 use App\Http\Controllers\TrainersController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TrainingTypeController;
@@ -118,6 +124,7 @@ Route::get('employee-report', function () {
 });
 
 // HRM
+Route::resource('evaluations', EvaluationController::class);
 Route::resource('employees', EmployeesController::class);
 Route::post('add-bank/{id}', [EmployeesController::class, 'bank']);
 
@@ -150,18 +157,14 @@ Route::resource('holidays', HolidaysController::class);
 Route::get('leaves', function () {
     return view('hrm.attendance.leaves.leaves');
 });
-Route::get('leaves-employee', function () {
-    return view('hrm.attendance.leaves.leaves-employee');
-});
 Route::get('leave-settings', function () {
     return view('hrm.attendance.leaves.leave-settings');
 });
 Route::get('attendance-admin', function () {
     return view('hrm.attendance.attendance-admin');
 });
-Route::get('attendance-employee', function () {
-    return view('hrm.attendance.attendance-employee');
-});
+Route::resource('leaves-employee', LeavesController::class);
+Route::resource('attendance-employee', AttendanceController::class);
 Route::resource('attendance-incendit', IncenditController::class);
 Route::get('timesheets', function () {
     return view('hrm.attendance.timesheets');
@@ -187,16 +190,14 @@ Route::get('goal-tracking', function () {
 Route::get('goal-type', function () {
     return view('hrm.performance.goal-type');
 });
+Route::get('/attendance/timeline', [AttendanceController::class, 'loadTimeline'])->name('attendance.timeline');
+//Route::middleware(['auth'])->group(function () {
+Route::post('/attendance/punch', [AttendanceController::class, 'storePunch'])->name('attendance.punch');
+//});
 Route::resource('training', TrainingController::class);
 Route::resource('trainers', TrainersController::class);
 Route::resource('training-type', TrainingTypeController::class);
-Route::get('promotion', function () {
-    return view('hrm.promotion');
-});
-Route::get('resignation', function () {
-    return view('hrm.resignation');
-});
-Route::get('termination', function () {
-    return view('hrm.termination');
-});
+Route::resource('promotion', PromotionController::class);
+Route::resource('resignation', ResignationController::class);
+Route::resource('termination', TerminationController::class);
 

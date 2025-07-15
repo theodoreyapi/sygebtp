@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="transparent">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="default">
 
 <head>
 
@@ -33,7 +33,7 @@
 
 </head>
 
-<body class="data-layout-transparent">
+<body class="data-default">
 
     <div id="global-loader">
         <div class="page-loader"></div>

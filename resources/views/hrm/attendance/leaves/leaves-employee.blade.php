@@ -1,4 +1,4 @@
-@extends('layouts.master', ['title' => 'Presences'])
+@extends('layouts.master', ['title' => 'Conges'])
 
 @push('csss')
     <!-- Tabler Icon CSS -->
@@ -35,6 +35,164 @@
 @endpush
 
 @push('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    // incendit
+    <script>
+        $(document).ready(function() {
+            $('#employee-form').on('submit', function(e) {
+                e.preventDefault();
+
+                let formData = $(this).serialize();
+                let submitBtn = $('#employee-form button[type=submit]');
+                submitBtn.prop('disabled', true).text('Enregistrement...');
+
+                // Nettoyage des anciennes alertes
+                $('#ajax-alert-container').html('');
+
+                $.ajax({
+                    url: "{{ route('leaves-employee.store') }}",
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Fermer la modal
+                        // $('#add_employee').modal('hide');
+
+                        // Réinitialiser le formulaire
+                        $('#employee-form')[0].reset();
+
+                        // Recharger la liste sans recharger la page
+                        $('#employee-list').load(location.href + " #employee-list>*", "");
+
+                        // Afficher une alerte de succès
+                        $('#ajax-alert-container').html(`
+                        <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
+                            Vous avez un incendit / accident avec succès !
+                            <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
+                                <i class="fas fa-xmark"></i>
+                            </button>
+                        </div>
+                    `);
+                    },
+                    error: function(xhr) {
+                        let errors = xhr.responseJSON?.errors;
+                        console.error(xhr.responseText);
+                        if (errors) {
+                            for (const key in errors) {
+                                $('#ajax-alert-container').append(`
+                                <div class="alert alert-danger rounded-pill alert-dismissible fade show mt-2">
+                                    ${errors[key][0]}
+                                    <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="fas fa-xmark text-white" style="color: #fff !important;"></i>
+                                    </button>
+                                </div>
+                            `);
+                            }
+                        } else {
+                            $('#ajax-alert-container').html(`
+                            <div class="alert alert-danger rounded-pill alert-dismissible fade show mt-3">
+                                Une erreur est survenue. Veuillez réessayer.
+                                <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
+                                    <i class="fas fa-xmark text-white" style="color: #fff !important;"></i>
+                                </button>
+                            </div>
+                        `);
+                        }
+                    },
+                    complete: function() {
+                        submitBtn.prop('disabled', false).text('Enregistrer');
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            // ⚠️ Utilise "on" sur document pour intercepter tous les nouveaux éléments
+            $(document).on('click', '.edit-education', function() {
+                // Récupération des données dynamiques
+                let id = $(this).data('id');
+                let school = $(this).data('school');
+                let formation = $(this).data('formation');
+                let debut = $(this).data('debut');
+                let fin = $(this).data('fin');
+
+                // Injection dans les champs
+                $('#edit-id').val(id);
+                $('#edit-school').val(school);
+                $('#edit-formation').val(formation);
+                $('#edit-debut').val(debut);
+                $('#edit-fin').val(fin);
+            });
+
+            // Soumission du formulaire de modification (existant)
+            $('#edit-education-form').on('submit', function(e) {
+                e.preventDefault();
+
+                let formData = $(this).serialize();
+                let id = $('#edit-id').val();
+
+                $.ajax({
+                    url: `/edit-education/${id}`,
+                    method: 'POST',
+                    data: formData,
+                    success: function() {
+                        $('#edit_education_modal').modal('hide');
+                        $('#education-list').load(location.href + " #education-list>*", "");
+
+                        $('#ajax-alert-container').html(`
+                    <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
+                        Éducation modifiée avec succès !
+                        <button type="button" class="btn-close" data-bs-dismiss="alert">
+                            <i class="fas fa-xmark"></i>
+                        </button>
+                    </div>
+                `);
+                    },
+                    error: function() {
+                        alert('Erreur lors de la modification');
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            let deleteId = null;
+
+            // Récupère l’ID quand on clique sur l’icône
+            $(document).on('click', '.delete-education', function() {
+                deleteId = $(this).data('id');
+                $('#delete-education-id').val(deleteId); // facultatif
+            });
+
+            // Quand on clique sur le bouton "Oui, supprimer"
+            $('#confirm-delete-education').on('click', function() {
+                const id = deleteId;
+
+                $.ajax({
+                    url: `/delete-education/${id}`,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function() {
+                        $('#delete_education_modal').modal('hide');
+                        $('#education-list').load(location.href + " #education-list>*", "");
+                        $('#ajax-alert-container').html(`
+                        <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
+                            Éducation supprimée avec succès.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                                <i class="fas fa-xmark"></i>
+                            </button>
+                        </div>
+                    `);
+                    },
+                    error: function() {
+                        alert('Erreur lors de la suppression.');
+                    }
+                });
+            });
+        });
+    </script>
+
     <!-- Slimscroll JS -->
     <script src="{{ URL::asset('') }}assets/js/jquery.slimscroll.min.js"></script>
 
@@ -71,16 +229,16 @@
         <!-- Breadcrumb -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
-                <h2 class="mb-1">Leaves</h2>
+                <h2 class="mb-1">Congés</h2>
                 <nav>
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
                             <a href="index.html"><i class="ti ti-smart-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
-                            Employee
+                            Employé
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Leaves</li>
+                        <li class="breadcrumb-item active" aria-current="page">Mes congés</li>
                     </ol>
                 </nav>
             </div>
@@ -89,24 +247,24 @@
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                             data-bs-toggle="dropdown">
-                            <i class="ti ti-file-export me-1"></i>Export
+                            <i class="ti ti-file-export me-1"></i>Exporter
                         </a>
                         <ul class="dropdown-menu  dropdown-menu-end p-3">
                             <li>
                                 <a href="javascript:void(0);" class="dropdown-item rounded-1"><i
-                                        class="ti ti-file-type-pdf me-1"></i>Export as PDF</a>
+                                        class="ti ti-file-type-pdf me-1"></i>Exporter en PDF</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" class="dropdown-item rounded-1"><i
-                                        class="ti ti-file-type-xls me-1"></i>Export as Excel </a>
+                                        class="ti ti-file-type-xls me-1"></i>Exporter en Excel </a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="mb-2">
                     <a href="#" data-bs-toggle="modal" data-bs-target="#add_leaves"
-                        class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>Add
-                        Leave</a>
+                        class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>Ajouter
+                        congé</a>
                 </div>
                 <div class="head-icons ms-2">
                     <a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -125,7 +283,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="text-start">
-                                <p class="mb-1">Annual Leaves</p>
+                                <p class="mb-1">Conngés annuels</p>
                                 <h4>05</h4>
                             </div>
                             <div class="d-flex">
@@ -136,7 +294,7 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="badge bg-secondary-transparent">Remaining Leaves : 07</span>
+                        <span class="badge bg-secondary-transparent">Congés restants : 07</span>
                     </div>
                 </div>
             </div>
@@ -145,7 +303,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="text-start">
-                                <p class="mb-1">Medical Leaves</p>
+                                <p class="mb-1">Congés médicaux</p>
                                 <h4>11</h4>
                             </div>
                             <div class="d-flex">
@@ -156,7 +314,7 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="badge bg-info-transparent">Remaining Leaves : 01</span>
+                        {{-- <span class="badge bg-info-transparent">Remaining Leaves : 01</span> --}}
                     </div>
                 </div>
             </div>
@@ -165,7 +323,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="text-start">
-                                <p class="mb-1">Casual Leaves</p>
+                                <p class="mb-1">Congés occasionnels</p>
                                 <h4>02</h4>
                             </div>
                             <div class="d-flex">
@@ -176,7 +334,7 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="badge bg-transparent-purple">Remaining Leaves : 10</span>
+                        {{-- <span class="badge bg-transparent-purple">Remaining Leaves : 10</span> --}}
                     </div>
                 </div>
             </div>
@@ -185,7 +343,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="text-start">
-                                <p class="mb-1">Other Leaves</p>
+                                <p class="mb-1">Autres congés</p>
                                 <h4>07</h4>
                             </div>
                             <div class="d-flex">
@@ -196,7 +354,7 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="badge bg-pink-transparent">Remaining Leaves : 05</span>
+                        {{-- <span class="badge bg-pink-transparent">Remaining Leaves : 05</span> --}}
                     </div>
                 </div>
             </div>
@@ -207,9 +365,9 @@
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
                 <div class="d-flex">
-                    <h5 class="me-2">Leave List</h5>
-                    <span class="badge bg-primary-transparent me-2">Total Leaves : 48</span>
-                    <span class="badge bg-secondary-transparent">Total Remaining Leaves : 23</span>
+                    <h5 class="me-2">Liste des congés</h5>
+                    <span class="badge bg-primary-transparent me-2">Nombre total de congés : 48</span>
+                    <span class="badge bg-secondary-transparent">Total des feuilles restantes : 23</span>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                     <div class="me-3">
@@ -315,89 +473,61 @@
                     <table class="table datatable">
                         <thead class="thead-light">
                             <tr>
-                                <th>Leave Type</th>
-                                <th>From</th>
-                                <th>Approved By</th>
-                                <th>To</th>
-                                <th>No of Days</th>
-                                <th>Status</th>
-                                <th></th>
+                                <th>Type congé</th>
+                                <th>De</th>
+                                <th>Approuvé par</th>
+                                <th>à</th>
+                                <th>Nombre de jour</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <p class="fs-14 fw-medium d-flex align-items-center mb-0">Medical Leave</p>
-                                        <a href="#" class="ms-2" data-bs-toggle="tooltip"
-                                            data-bs-placement="right"
-                                            data-bs-title="I am currently experiencing a fever and
-                                                feeling unwell.">
-                                            <i class="ti ti-info-circle text-info"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                                <td>
-                                    14 Jan 2024
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center file-name-icon">
-                                        <a href="javascript:void(0);" class="avatar avatar-md border avatar-rounded">
-                                            <img src="{{ URL::asset('') }}assets/img/users/user-34.jpg" class="img-fluid"
-                                                alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fw-medium"><a href="javascript:void(0);">Doglas Martini</a></h6>
-                                            <span class="fs-12 fw-normal ">Manager</span>
+                        <tbody id="employee-list">
+                            @foreach ($leaves as $leave)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <p class="mb-0">{{ $leave->leave_type }}</p>
+                                            @if ($leave->reason)
+                                                <a href="#" class="ms-2" data-bs-toggle="tooltip"
+                                                    title="{{ $leave->reason }}">
+                                                    <i class="ti ti-info-circle text-info"></i>
+                                                </a>
+                                            @endif
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    15 Jan 2024
-                                </td>
-                                <td>
-                                    2 Days
-                                </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <a href="javascript:void(0);"
-                                            class="dropdown-toggle btn btn-sm btn-white d-inline-flex align-items-center"
-                                            data-bs-toggle="dropdown">
-                                            <span
-                                                class="rounded-circle bg-transparent-success d-flex justify-content-center align-items-center me-2"><i
-                                                    class="ti ti-point-filled text-success"></i></span> Approved
-                                        </a>
-                                        <ul class="dropdown-menu  dropdown-menu-end p-3">
-                                            <li>
-                                                <a href="javascript:void(0);"
-                                                    class="dropdown-item rounded-1 d-flex justify-content-start align-items-center"><span
-                                                        class="rounded-circle bg-transparent-success d-flex justify-content-center align-items-center me-2"><i
-                                                            class="ti ti-point-filled text-success"></i></span>Approved</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);"
-                                                    class="dropdown-item rounded-1 d-flex justify-content-start align-items-center"><span
-                                                        class="rounded-circle bg-transparent-danger d-flex justify-content-center align-items-center me-2"><i
-                                                            class="ti ti-point-filled text-danger"></i></span>Declined</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);"
-                                                    class="dropdown-item rounded-1 d-flex justify-content-start align-items-center"><span
-                                                        class="rounded-circle bg-transparent-purple d-flex justify-content-center align-items-center me-2"><i
-                                                            class="ti ti-point-filled text-purple"></i></span>New</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="action-icon d-inline-flex">
-                                        <a href="#" class="me-2" data-bs-toggle="modal"
-                                            data-bs-target="#edit_leaves"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" data-bs-toggle="modal"
-                                            data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td>{{ $leave->start_date->format('d M Y') }}</td>
+                                    <td>
+                                        @if ($leave->approver)
+                                            <div class="d-flex align-items-center">
+                                                <span class="fw-medium">{{ $leave->approver->name }}</span>
+                                                <small
+                                                    class="text-muted d-block">{{ $leave->approver->role ?? 'Manager' }}</small>
+                                            </div>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $leave->end_date->format('d M Y') }}</td>
+                                    <td>{{ $leave->total_days }} Jour{{ $leave->total_days > 1 ? 's' : '' }}</td>
+                                    <td>
+                                        <span
+                                            class="badge bg-{{ $leave->status === 'Approved' ? 'success' : ($leave->status === 'Declined' ? 'danger' : 'secondary') }}">
+                                            {{ $leave->status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-icon d-inline-flex">
+                                            <a href="#" class="me-2" data-bs-toggle="modal"
+                                                data-bs-target="#edit_holiday"><i
+                                                    class="ti ti-edit"></i></a>
+                                            <a href="javascript:void(0);" data-bs-toggle="modal"
+                                                data-bs-target="#delete_modal"><i
+                                                    class="ti ti-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -411,43 +541,34 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add Leave</h4>
+                    <h4 class="modal-title">Demnde de congés</h4>
                     <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                         <i class="ti ti-x"></i>
                     </button>
                 </div>
-                <form action="leaves.html">
+                <div id="ajax-alert-container"></div>
+                <form id="employee-form" method="post">
+                    @csrf
                     <div class="modal-body pb-0">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Employee Name</label>
-                                    <select class="select">
-                                        <option>Select</option>
-                                        <option>Anthony Lewis</option>
-                                        <option>Brian Villalobos</option>
-                                        <option>Harvey Smith</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Leave Type</label>
-                                    <select class="select">
-                                        <option>Select</option>
-                                        <option>Medical Leave</option>
-                                        <option>Casual Leave</option>
-                                        <option>Annual Leave</option>
+                                    <label class="form-label">Type congé</label>
+                                    <select name="leave_type" required class="select">
+                                        <option value="">Sélectionne</option>
+                                        <option value="Medical">Congé médical</option>
+                                        <option value="Casual">Congé occasionnel</option>
+                                        <option value="Annual">Congé annuel</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">From </label>
+                                    <label class="form-label">De </label>
                                     <div class="input-icon-end position-relative">
-                                        <input type="text" class="form-control datetimepicker"
-                                            placeholder="dd/mm/yyyy">
+                                        <input name="start_date" required type="text"
+                                            class="form-control datetimepicker" placeholder="dd/mm/yyyy">
                                         <span class="input-icon-addon">
                                             <i class="ti ti-calendar text-gray-7"></i>
                                         </span>
@@ -456,10 +577,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">To </label>
+                                    <label class="form-label">À </label>
                                     <div class="input-icon-end position-relative">
-                                        <input type="text" class="form-control datetimepicker"
-                                            placeholder="dd/mm/yyyy">
+                                        <input name="end_date" required type="text"
+                                            class="form-control datetimepicker" placeholder="dd/mm/yyyy">
                                         <span class="input-icon-addon">
                                             <i class="ti ti-calendar text-gray-7"></i>
                                         </span>
@@ -469,7 +590,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <div class="input-icon-end position-relative">
-                                        <input type="text" class="form-control datetimepicker"
+                                        <input name="day_type" type="text" class="form-control datetimepicker"
                                             placeholder="dd/mm/yyyy" disabled>
                                         <span class="input-icon-addon">
                                             <i class="ti ti-calendar text-gray-7"></i>
@@ -479,38 +600,28 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <select class="select">
-                                        <option>Select</option>
-                                        <option>Full DAy</option>
-                                        <option>First Half</option>
-                                        <option>Second Half</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">No of Days</label>
+                                    <label class="form-label">Nombre de jour</label>
                                     <input type="text" class="form-control" disabled>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Remaining Days</label>
+                                    <label class="form-label">Jours restant</label>
                                     <input type="text" class="form-control" value="8" disabled>
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Reason</label>
-                                    <textarea class="form-control" rows="3"></textarea>
+                                    <label class="form-label">Raison</label>
+                                    <textarea name="reason" class="form-control" rows="3"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Add Leave</button>
+                        <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Demander</button>
                     </div>
                 </form>
             </div>

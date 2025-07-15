@@ -14,16 +14,33 @@ class IncenditController extends Controller
     public function index()
     {
         $all = Incendits::join('users as employe', 'employe.id', '=', 'incendits.employe_id')
+            ->join('departments as departement_employe', 'departement_employe.depart', '=', 'employe.department_id')
+            ->join('designations as designation_employe', 'designation_employe.design', '=', 'employe.designation_id')
+
             ->join('users as emetteur', 'emetteur.id', '=', 'incendits.emetteur_id')
+            // ->join('departments as departement_emetteur', 'departement_emetteur.depart', '=', 'emetteur.department_id')
+            // ->join('designations as designation_emetteur', 'designation_emetteur.design', '=', 'emetteur.designation_id')
+
             ->select(
                 'incendits.*',
+
+                // Employé
+                'employe.id as employe_emp_id',
+                'employe.photo as employe_photo',
                 'employe.name as employe_name',
                 'employe.last_name as employe_last_name',
+                'departement_employe.deparment_name as employe_departement',
+                'designation_employe.name_designation as employe_designation',
+
+                // Émetteur
                 'emetteur.name as emetteur_name',
-                'emetteur.last_name as emetteur_last_name'
+                'emetteur.last_name as emetteur_last_name',
+                // 'departement_emetteur.deparment_name as emetteur_departement',
+                // 'designation_emetteur.name_designation as emetteur_designation'
             )
             ->orderBy('incendits.incendit_id', 'desc')
             ->get();
+
 
         $employes = User::where('statut', '=', 'Active')
             ->select('name', 'last_name', 'id')
@@ -99,6 +116,7 @@ class IncenditController extends Controller
         $incendit->type_incendit = $request->type;
         $incendit->lieu_incendit = $request->lieu;
         $incendit->date_incendit = $request->date;
+        $incendit->description_incendit = $request->description;
         $incendit->gravite_incendit = $request->gravite;
         $incendit->statut_incendit = $request->statut;
         $incendit->employe_id = $request->employe;
@@ -137,44 +155,44 @@ class IncenditController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $trainer = Incendits::findOrFail($id);
+        $incendit = Incendits::findOrFail($id);
 
         $roles = [
-            'nom' => 'required',
-            'prenom' => 'required',
-            'role' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'description' => '',
+            'date' => 'required',
+            'employe' => 'required',
+            'type' => 'required',
+            'lieu' => 'required',
+            'gravite' => 'required',
+            'description' => 'required',
             'statut' => 'required',
         ];
         $customMessages = [
-            'nom.required' => "Veuillez saisir son nom.",
-            'prenom.required' => "Veuillez saisir son prénom.",
-            'role.required' => "Veuillez saisir le sa fonction dans rôle.",
-            'email.required' => "Veuillez saisir son adresse email.",
-            'phone.required' => "Veuillez saisir son numéro de téléphone.",
-            'statut.required' => "Veuillez sélectionner le statut du formateur.",
+            'date.required' => "Veuillez saisir la date de l'évènement.",
+            'employe.required' => "Veuillez sélectionner l'employé concerné.",
+            'type.required' => "Veuillez sélectionner le type d'incident.",
+            'lieu.required' => "Veuillez saisir le lieu ou l'incident s'est produit.",
+            'gravite.required' => "Veuillez sélectionner la gravité de l'incident.",
+            'description.required' => "Veuillez décrire l'incident.",
+            'statut.required' => "Veuillez sélectionner le statut de l'incident.",
         ];
 
         $request->validate($roles, $customMessages);
 
-        if ($trainer->phone_trai !== $request->phone) {
-            $trainer->phone_trai = $request->phone;
+        if ($incendit->employe_id !== $request->employe) {
+            $incendit->employe_id = $request->employe;
         }
-        if ($trainer->email_trai !== $request->email) {
-            $trainer->email_trai = $request->email;
-        }
-        if ($trainer->status_train !== $request->statut) {
-            $trainer->status_train = $request->statut;
+        if ($incendit->emetteur_id !== $request->employe) {
+            $incendit->emetteur_id = $request->employe;
         }
 
-        $trainer->name_trai = $request->nom;
-        $trainer->lastname_trai = $request->prenom;
-        $trainer->role_trai = $request->role;
-        $trainer->description_trai = $request->description;
+        $incendit->type_incendit = $request->type;
+        $incendit->lieu_incendit = $request->lieu;
+        $incendit->date_incendit = $request->date;
+        $incendit->description_incendit = $request->description;
+        $incendit->gravite_incendit = $request->gravite;
+        $incendit->statut_incendit = $request->statut;
 
-        if ($trainer->save()) {
+        if ($incendit->save()) {
             return back()->with('succes', "Vous avez modifier avec succès.");
         } else {
             return back()->withErrors(["Problème lors de la modification. Veuillez réessayer!!"]);

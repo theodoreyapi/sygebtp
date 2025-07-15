@@ -1,15 +1,15 @@
  <!-- Sidebar -->
- <div class="sidebar" id="sidebar">
+ <div class="sidebar" id="sidebar" style="background: #344676">
      <!-- Logo -->
      <div class="sidebar-logo">
-         <a href="#" class="logo logo-normal">
-             <img src="{{ URL::asset('') }}assets/img/logo.svg" alt="Logo">
+         <a href="#" class="logo logo-normal text-white">
+             <strong>SYGEBTP</strong>
          </a>
          <a href="#" class="logo-small">
-             <img src="{{ URL::asset('') }}assets/img/logo-small.svg" alt="Logo">
+             <strong>SYGEBTP</strong>
          </a>
          <a href="#" class="dark-logo">
-             <img src="{{ URL::asset('') }}assets/img/logo-white.svg" alt="Logo">
+             <strong>SYGEBTP</strong>
          </a>
      </div>
      <!-- /Logo -->
@@ -28,52 +28,6 @@
                  <li class="nav-item"><a class="nav-link border-0" href="#">Chats</a></li>
                  <li class="nav-item"><a class="nav-link border-0" href="#">Inbox</a></li>
              </ul>
-         </div>
-     </div>
-     <div class="sidebar-header p-3 pb-0 pt-2">
-         <div class="text-center rounded bg-light p-2 mb-4 sidebar-profile d-flex align-items-center">
-             <div class="avatar avatar-md onlin">
-                 <img src="{{ URL::asset('') }}assets/img/profiles/avatar-02.jpg" alt="Img"
-                     class="img-fluid rounded-circle">
-             </div>
-             <div class="text-start sidebar-profile-info ms-2">
-                 <h6 class="fs-12 fw-normal mb-1">Adrian Herman</h6>
-                 <p class="fs-10">System Admin</p>
-             </div>
-         </div>
-         <div class="input-group input-group-flat d-inline-flex mb-4">
-             <span class="input-icon-addon">
-                 <i class="ti ti-search"></i>
-             </span>
-             <input type="text" class="form-control" placeholder="Search in HRMS">
-             <span class="input-group-text">
-                 <kbd>CTRL + / </kbd>
-             </span>
-         </div>
-         <div class="d-flex align-items-center justify-content-between menu-item mb-3">
-             <div class="me-3">
-                 <a href="calendar" class="btn btn-menubar">
-                     <i class="ti ti-layout-grid-remove"></i>
-                 </a>
-             </div>
-             <div class="me-3">
-                 <a href="{{ url('chat') }}" class="btn btn-menubar position-relative">
-                     <i class="ti ti-brand-hipchat"></i>
-                     <span
-                         class="badge bg-info rounded-pill d-flex align-items-center justify-content-center header-badge">5</span>
-                 </a>
-             </div>
-             <div class="me-3 notification-item">
-                 <a href="{{ url('activity') }}" class="btn btn-menubar position-relative me-1">
-                     <i class="ti ti-bell"></i>
-                     <span class="notification-status-dot"></span>
-                 </a>
-             </div>
-             <div class="me-0">
-                 <a href="{{ url('email') }}" class="btn btn-menubar">
-                     <i class="ti ti-message"></i>
-                 </a>
-             </div>
          </div>
      </div>
      <div class="sidebar-inner slimscroll">
@@ -101,7 +55,7 @@
                                  </li>
                                  <li>
                                      <a href="{{ url('employee-dashboard') }}"
-                                         class="{{ Request::is('employee-dashboard') ? 'active' : '' }}{{ Request::is('employee-dashboard') ? 'active' : '' }}">Employé</a>
+                                         class="{{ Request::is('employee-dashboard') ? 'active' : '' }}">Employé</a>
                                  </li>
                              </ul>
                          </li>
@@ -128,7 +82,7 @@
                         </li>
                     </ul>
                 </li> --}}
-                 <li class="menu-title"><span>CRM</span></li>
+                 {{-- <li class="menu-title"><span>CRM</span></li>
                  <li>
                      <ul>
                          <li class="{{ Request::is('activity') ? 'active' : '' }}">
@@ -137,7 +91,7 @@
                              </a>
                          </li>
                      </ul>
-                 </li>
+                 </li> --}}
                  <li class="menu-title"><span>HRM</span></li>
                  <li>
                      <ul>
@@ -145,6 +99,7 @@
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('employees') ? 'active subdrop' : '' }}
                                  {{ Request::is('departments') ? 'active subdrop' : '' }}
+                                 {{ Request::is('evaluations') ? 'active subdrop' : '' }}
                                   {{ Request::is('designations') ? 'active subdrop' : '' }}
                                    {{ Request::is('policy') ? 'active subdrop' : '' }}">
                                  <i class="ti ti-users"></i><span>Employés</span>
@@ -153,6 +108,8 @@
                              <ul>
                                  <li><a class="{{ Request::is('employees') ? 'active' : '' }}"
                                          href="{{ url('employees') }}">Employés</a></li>
+                                 <li><a class="{{ Request::is('evaluations') ? 'active' : '' }}"
+                                         href="{{ url('evaluations') }}">Evaluations</a></li>
                                  <li><a class="{{ Request::is('departments') ? 'active' : '' }}"
                                          href="{{ url('departments') }}">Départements</a></li>
                                  <li><a class="{{ Request::is('designations') ? 'active' : '' }}"
@@ -180,32 +137,30 @@
                          <li class="submenu">
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('attendance-incendit') ? 'active subdrop' : '' }}
-                                 {{ Request::is('departments') ? 'active subdrop' : '' }}
-                                  {{ Request::is('designations') ? 'active subdrop' : '' }}
                                    {{ Request::is('policy') ? 'active subdrop' : '' }}">
                                  <i class="ti ti-file-time"></i><span>Présences</span>
                                  <span class="menu-arrow"></span>
                              </a>
                              <ul>
                                  <li class="submenu submenu-two">
-                                     <a href="javascript:void(0);">Leaves<span
+                                     <a href="javascript:void(0);">Congés<span
                                              class="menu-arrow inside-submenu"></span></a>
                                      <ul>
-                                         <li><a href="{{ url('leaves') }}">Leaves (Admin)</a></li>
-                                         <li><a href="{{ url('leaves-employee') }}">Leave (Employee)</a></li>
-                                         <li><a href="{{ url('leave-settings') }}">Leave Settings</a></li>
+                                         <li><a href="{{ url('leaves') }}">Congés (Admin)</a></li>
+                                         <li><a href="{{ url('leaves-employee') }}">Congés (Employé)</a></li>
+                                         {{-- <li><a href="{{ url('leave-settings') }}">Leave Settings</a></li> --}}
                                      </ul>
                                  </li>
-                                 <li><a href="{{ url('attendance-admin') }}">Attendance (Admin)</a></li>
-                                 <li><a href="{{ url('attendance-employee') }}">Attendance (Employee)</a></li>
+                                 <li><a href="{{ url('attendance-admin') }}">Présence (Admin)</a></li>
+                                 <li><a href="{{ url('attendance-employee') }}">Présence (Employé)</a></li>
                                  <li><a class="{{ Request::is('attendance-incendit') ? 'active' : '' }}"
                                          href="{{ url('attendance-incendit') }}">Incidents/Accidents</a></li>
-                                 <li><a href="{{ url('timesheets') }}">Timesheets</a></li>
+                                 {{-- <li><a href="{{ url('timesheets') }}">Timesheets</a></li>
                                  <li><a href="{{ url('schedule-timing') }}">Shift & Schedule</a></li>
-                                 <li><a href="{{ url('overtime') }}">Overtime</a></li>
+                                 <li><a href="{{ url('overtime') }}">Overtime</a></li> --}}
                              </ul>
                          </li>
-                         <li class="submenu">
+                         {{-- <li class="submenu">
                              <a href="javascript:void(0);" class="">
                                  <i class="ti ti-school"></i><span>Performance</span>
                                  <span class="menu-arrow"></span>
@@ -217,7 +172,7 @@
                                  <li><a href="{{ url('goal-tracking') }}">Goal List</a></li>
                                  <li><a href="{{ url('goal-type') }}">Goal Type</a></li>
                              </ul>
-                         </li>
+                         </li> --}}
                          <li class="submenu">
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('training') ? 'active subdrop' : '' }}
@@ -298,7 +253,7 @@
                  <li class="menu-title"><span>ADMINISTRATION</span></li>
                  <li>
                      <ul>
-                         <li class="submenu">
+                         {{-- <li class="submenu">
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('assetes') ? 'active subdrop' : '' }}
                                  {{ Request::is('asset-categories') ? 'active subdrop' : '' }}">
@@ -316,7 +271,7 @@
                                          Categories</a>
                                  </li>
                              </ul>
-                         </li>
+                         </li> --}}
                          {{-- <li class="submenu">
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('knowledgebase') ? 'active subdrop' : '' }}
@@ -344,9 +299,9 @@
                              <ul>
                                  <li><a href="{{ url('users') }}"
                                          class="{{ Request::is('users') ? 'active' : '' }}">Utilisateurs</a></li>
-                                 <li><a href="{{ url('roles-permissions') }}"
+                                 {{-- <li><a href="{{ url('roles-permissions') }}"
                                          class="{{ Request::is('roles-permissions') ? 'active' : '' }}">Rôles &
-                                         Permissions</a></li>
+                                         Permissions</a></li> --}}
                              </ul>
                          </li>
                          <li class="submenu">
@@ -374,7 +329,7 @@
                                          quotidien</a></li>
                              </ul>
                          </li>
-                         <li class="submenu">
+                         {{-- <li class="submenu">
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('clear-cache') ? 'active subdrop' : '' }}
                                  {{ Request::is('profile-settings') ? 'active subdrop' : '' }}
@@ -591,7 +546,7 @@
                                      </ul>
                                  </li>
                              </ul>
-                         </li>
+                         </li> --}}
                      </ul>
                  </li>
              </ul>

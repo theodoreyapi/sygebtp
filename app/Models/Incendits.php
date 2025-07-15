@@ -11,6 +11,7 @@ class Incendits extends Model
         'type_incendit',
         'lieu_incendit',
         'date_incendit',
+        'description_incendit',
         'gravite_incendit',
         'statut_incendit',
         'employe_id',

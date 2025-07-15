@@ -321,6 +321,141 @@
                                                 data-bs-target="#delete_modal{{ $item->incendit_id }}"><i
                                                     class="ti ti-trash"></i></a>
                                         </div>
+                                        <!-- View Plan -->
+                                        <div class="modal fade" id="view_holiday{{ $item->incendit_id }}">
+                                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Détails</h4>
+                                                        <button type="button" class="btn-close custom-btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close">
+                                                            <i class="ti ti-x"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body pb-0">
+                                                        <div class="row">
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-between mb-2">
+                                                                <span
+                                                                    class="badge badge-info d-inline-flex align-items-center badge-xs">
+                                                                    {{ $item->reference_incendit }}
+                                                                </span>
+                                                                <p class="text-dark">
+                                                                    @if ($item->statut_incendit == 'Traite')
+                                                                        <span
+                                                                            class="badge badge-success d-inline-flex align-items-center badge-xs">
+                                                                            Traité
+                                                                        </span>
+                                                                    @elseif ($item->statut_incendit == 'Encours')
+                                                                        <span
+                                                                            class="badge badge-warning d-inline-flex align-items-center badge-xs">
+                                                                            En cours
+                                                                        </span>
+                                                                    @else
+                                                                        <span
+                                                                            class="badge badge-danger d-inline-flex align-items-center badge-xs">
+                                                                            Refusé
+                                                                        </span>
+                                                                    @endif
+                                                                    @if ($item->gravite_incendit == 'Mineur')
+                                                                        <span
+                                                                            class="badge badge-info d-inline-flex align-items-center badge-xs">
+                                                                            Mineur
+                                                                        </span>
+                                                                    @elseif ($item->gravite_incendit == 'Majeur')
+                                                                        <span
+                                                                            class="badge badge-warning d-inline-flex align-items-center badge-xs">
+                                                                            Majeur
+                                                                        </span>
+                                                                    @else
+                                                                        <span
+                                                                            class="badge badge-danger d-inline-flex align-items-center badge-xs">
+                                                                            Critique
+                                                                        </span>
+                                                                    @endif
+                                                                </p>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-between mb-2">
+                                                                <h6>Informationns générales</h6>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-between mb-2">
+                                                                <span class="d-inline-flex align-items-center">
+                                                                    Date
+                                                                </span>
+                                                                <p class="text-dark">{{ $item->date_incendit }}</p>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-between mb-2">
+                                                                <span class="d-inline-flex align-items-center">
+                                                                    Type
+                                                                </span>
+                                                                <p class="text-dark">{{ $item->type_incendit }}</p>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-between mb-2">
+                                                                <span class="d-inline-flex align-items-center">
+                                                                    Lieu
+                                                                </span>
+                                                                <p class="text-dark">{{ $item->lieu_incendit }}</p>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-between mb-2">
+                                                                <h6>Employé concerné</h6>
+                                                            </div>
+                                                            <div class="d-flex align-items-center">
+                                                                <a href="#" class="avatar avatar-md"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#view_details"><img
+                                                                        src="{{ $item->employe_photo == '' ? URL::asset('assets/img/users/user-36.jpg') : url($item->employe_photo) }}"
+                                                                        class="img-fluid rounded-circle"
+                                                                        alt="img"></a>
+                                                                <div class="ms-2">
+                                                                    <p class="text-dark mb-0"><a
+                                                                            href="#">{{ $item->employe_name }}
+                                                                            {{ $item->employe_last_name }}</a>
+                                                                    </p>
+                                                                    <span
+                                                                        class="fs-12">{{ $item->employe_designation }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <span class="d-inline-flex align-items-center">
+                                                                Matricule: EMP-00{{ $item->employe_emp_id }} | Département:
+                                                                {{ $item->employe_departement }}
+                                                            </span>
+                                                            <br>
+                                                            <br>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-between mb-2">
+                                                                <h6>Description</h6>
+                                                            </div>
+                                                            <div
+                                                                class="alert alert-dark rounded-pill alert-dismissible fade show">
+                                                                {{ $item->description_incendit }}
+                                                            </div>
+                                                            <br>
+                                                            <br>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-between mb-2">
+                                                                <h6>Emetteur</h6>
+                                                            </div>
+                                                            <div>
+                                                                <li>{{ $item->created_at }}</li>
+                                                                <strong>Déclaration de l'incendit</strong>
+                                                                <p>Par: {{ $item->emetteur_name }}
+                                                                    {{ $item->emetteur_last_name }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-light me-2"
+                                                            data-bs-dismiss="modal">Fermer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /View Plan -->
                                         <!-- Edit Plan -->
                                         <div class="modal fade" id="edit_holiday{{ $item->incendit_id }}">
                                             <div class="modal-dialog modal-dialog-centered modal-md">
@@ -339,47 +474,99 @@
                                                         @method('PATCH')
                                                         <div class="modal-body pb-0">
                                                             <div class="row">
-                                                                <div class="col-md-12">
+                                                                <div class="col-md-6">
                                                                     <div class="mb-3">
-                                                                        <label class="form-label">Titre</label>
-                                                                        <input name="titre" required type="text"
-                                                                            class="form-control"
-                                                                            value="{{ $item->title }}">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-12">
-                                                                    <div class="mb-3">
-                                                                        <label class="form-label">Date</label>
+                                                                        <label class="form-label">Date de
+                                                                            l'évènement</label>
                                                                         <div class="input-icon-end position-relative">
-                                                                            <input type="text" name="date" required
+                                                                            <input name="date" required type="text"
                                                                                 class="form-control datetimepicker"
-                                                                                value="{{ $item->date }}">
+                                                                                placeholder="dd/mm/yyyy"
+                                                                                value="{{ $item->date_incendit }}">
                                                                             <span class="input-icon-addon">
                                                                                 <i class="ti ti-calendar text-gray-7"></i>
                                                                             </span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-12">
+                                                                <div class="col-md-6">
                                                                     <div class="mb-3">
-                                                                        <label class="form-label">Description</label>
-                                                                        <textarea class="form-control" name="description" required rows="3">
-                                                                        {{ $item->description }}
-                                                                    </textarea>
+                                                                        <label class="form-label">Employé concerné</label>
+                                                                        <br>
+                                                                        <select name="employe" required class="select">
+                                                                            @foreach ($employes as $employ)
+                                                                                <option
+                                                                                    @if ($item->employe_id == $employ->id) selected @endif
+                                                                                    value="{{ $employ->id }}">
+                                                                                    {{ $employ->name }}
+                                                                                    {{ $employ->last_name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Type</label>
+                                                                        <br>
+                                                                        <select name="type" required class="select">
+                                                                            <option
+                                                                                @if ($item->type_incendit == 'Incendit') selected @endif
+                                                                                value="Incendit">Incendit</option>
+                                                                            <option
+                                                                                @if ($item->type_incendit == 'Accident') selected @endif
+                                                                                value="Accident">Accident</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Lieu</label>
+                                                                        <input type="text" name="lieu" required
+                                                                            value="{{ $item->lieu_incendit }}"
+                                                                            class="form-control">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Gravité</label>
+                                                                        <br>
+                                                                        <select name="gravite" required class="select">
+                                                                            <option
+                                                                                @if ($item->gravite_incendit == 'Mineur') selected @endif
+                                                                                value="Mineur">Mineur</option>
+                                                                            <option
+                                                                                @if ($item->gravite_incendit == 'Majeur') selected @endif
+                                                                                value="Majeur">Majeur</option>
+                                                                            <option
+                                                                                @if ($item->gravite_incendit == 'Critique') selected @endif
+                                                                                value="Critique">Critique</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Statut</label>
+                                                                        <br>
+                                                                        <select name="statut" required class="select">
+                                                                            <option
+                                                                                @if ($item->statut_incendit == 'Traite') selected @endif
+                                                                                value="Traite">Traité</option>
+                                                                            <option
+                                                                                @if ($item->statut_incendit == 'Encours') selected @endif
+                                                                                value="Encours">En cours</option>
+                                                                            <option
+                                                                                @if ($item->statut_incendit == 'Refuse') selected @endif
+                                                                                value="Refuse">Refusé</option>
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-12">
                                                                     <div class="mb-3">
-                                                                        <label class="form-label">Status</label>
-                                                                        <br>
-                                                                        <select name="statut" required class="select">
-                                                                            <option
-                                                                                @if ($item->status_depart == 'Active') selected @endif
-                                                                                value="Active">Active</option>
-                                                                            <option
-                                                                                @if ($item->status_depart == 'Inactive') selected @endif
-                                                                                value="Inactive">Inactive</option>
-                                                                        </select>
+                                                                        <label class="form-label">Description /
+                                                                            Détails</label>
+                                                                        <textarea name="description" required class="form-control" rows="3">
+                                                                            {{ $item->description_incendit }}
+                                                                        </textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>

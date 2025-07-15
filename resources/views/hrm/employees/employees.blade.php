@@ -693,7 +693,7 @@
                                                                                     <label
                                                                                         class="form-label">Département</label>
                                                                                     <br>
-                                                                                    <select id="departement-select"
+                                                                                    <select id="departement-select-"
                                                                                         name="departement" required
                                                                                         class="select">
                                                                                         <option
@@ -714,7 +714,7 @@
                                                                                     <label
                                                                                         class="form-label">Désignation</label>
                                                                                     <br>
-                                                                                    <select id="designation-select"
+                                                                                    <select id="designation-select-"
                                                                                         name="designation" required
                                                                                         class="select">
                                                                                         <option

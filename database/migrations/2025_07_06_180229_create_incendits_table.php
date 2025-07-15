@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('lieu_incendit');
             $table->string('gravite_incendit')->comment('Mineur, Majeur, Critique');
             $table->string('date_incendit');
+            $table->string('description_incendit');
             $table->string('statut_incendit')->comment('Traite, Encours, Refuse');
             $table->unsignedBigInteger('employe_id');
             $table->foreign('employe_id')->references('id')->on('users')->onDelete('cascade');

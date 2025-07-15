@@ -75,12 +75,12 @@
                 <nav>
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
-                            <a href="index.html"><i class="ti ti-smart-home"></i></a>
+                            <a href="#"><i class="ti ti-smart-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
                             Performance
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Ajouter formation</li>
+                        <li class="breadcrumb-item active" aria-current="page">Formation</li>
                     </ol>
                 </nav>
             </div>
@@ -122,66 +122,55 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($all as $item)
+                            @foreach ($all as $item => $items)
+                                @php $formation = $items->first(); @endphp
                                 <tr>
                                     <td>
-                                        Git Training
+                                        {{ $formation->type }}
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center file-name-icon">
-                                            <a href="#" class="avatar avatar-md border avatar-rounded">
-                                                <img src="{{ URL::asset('') }}assets/img/users/user-32.jpg"
-                                                    class="img-fluid" alt="img">
-                                            </a>
                                             <div class="ms-2">
-                                                <h6 class="fw-medium"><a href="#">Anthony Lewis</a></h6>
+                                                <h6 class="fw-medium"><a href="#">{{ $formation->name_trai }}
+                                                        {{ $formation->lastname_trai }}</a></h6>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="avatar-list-stacked avatar-group-sm">
-                                            <span class="avatar border-0">
-                                                <img src="{{ URL::asset('') }}assets/img/users/user-01.jpg"
-                                                    class="rounded-circle" alt="img">
-                                            </span>
-                                            <span class="avatar border-0">
-                                                <img src="{{ URL::asset('') }}assets/img/users/user-02.jpg"
-                                                    class="rounded-circle" alt="img">
-                                            </span>
-                                            <span class="avatar border-0">
-                                                <img src="{{ URL::asset('') }}assets/img/users/user-03.jpg"
-                                                    class="rounded-circle" alt="img">
-                                            </span>
-                                            <span class="avatar border-0">
-                                                <img src="{{ URL::asset('') }}assets/img/users/user-04.jpg"
-                                                    class="rounded-circle" alt="img">
-                                            </span>
-                                            <span class="avatar border-0">
-                                                <img src="{{ URL::asset('') }}assets/img/users/user-05.jpg"
-                                                    class="rounded-circle" alt="img">
-                                            </span>
-                                            <span class="avatar group-counts bg-primary rounded-circle border-0 fs-10">
-                                                +4
-                                            </span>
+                                            @foreach ($items as $emp)
+                                                <span class="avatar border-0">
+                                                    <img title="{{ $emp->employe_name }} {{ $emp->employe_last_name ?? '' }}"
+                                                        src="{{ URL::asset('') }}assets/img/users/user-01.jpg"
+                                                        class="rounded-circle" alt="img">
+                                                </span>
+                                            @endforeach
                                         </div>
                                     </td>
-                                    <td>12 Jan 2024 - 12 Feb 2024</td>
-                                    <td>Version control and code collaboration.</td>
-                                    <td>$200</td>
+                                    <td>{{ $formation->start_traini }} - {{ $formation->end_traini }}</td>
+                                    <td>{{ $formation->description_traini }}</td>
+                                    <td>{{ $formation->cost_traini }} FCFA</td>
                                     <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
+                                        @if ($formation->status_traini == 'Active')
+                                            <span class="badge badge-success d-inline-flex align-items-center badge-xs">
+                                                <i class="ti ti-point-filled me-1"></i>Active
+                                            </span>
+                                        @else
+                                        <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
+                                            <i class="ti ti-point-filled me-1"></i>Inactive
                                         </span>
+                                        @endif
                                     </td>
                                     <td>
                                         <div class="action-icon d-inline-flex">
                                             <a href="#" class="me-2" data-bs-toggle="modal"
-                                                data-bs-target="#edit_training{{ $item->traini }}"><i
+                                                data-bs-target="#edit_training{{ $formation->traini }}"><i
                                                     class="ti ti-edit"></i></a>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#delete_modal"><i
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#delete_modal{{ $formation->traini }}"><i
                                                     class="ti ti-trash"></i></a>
                                             <!-- Edit Training -->
-                                            <div class="modal fade" id="edit_training{{ $item->traini }}">
+                                            <div class="modal fade" id="edit_training{{ $formation->traini }}">
                                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -191,7 +180,7 @@
                                                                 <i class="ti ti-x"></i>
                                                             </button>
                                                         </div>
-                                                        <form action="{{ route('training.update', $item->traini) }}"
+                                                        <form action="{{ route('training.update', $formation->traini) }}"
                                                             method="post">
                                                             @csrf
                                                             @method('PATCH')
@@ -201,8 +190,7 @@
                                                                         <div class="mb-3">
                                                                             <label class="form-label">Type de
                                                                                 formation</label>
-                                                                            <select name="type" required
-                                                                                class="select">
+                                                                            <select name="type" required class="select">
                                                                                 <option value="">Sélectionne</option>
                                                                                 <option value="">Git Training
                                                                                 </option>
@@ -301,7 +289,7 @@
                                             <!-- /Edit Training -->
 
                                             <!-- Delete Modal -->
-                                            <div class="modal fade" id="delete_modal{{ $item->traini }}">
+                                            <div class="modal fade" id="delete_modal{{ $formation->traini }}">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-body text-center">
@@ -312,7 +300,8 @@
                                                             <h4 class="mb-1">Confirmez la suppression</h4>
                                                             <p class="mb-3">You want to delete all the marked items, this
                                                                 cant be undone once you delete.</p>
-                                                            <form action="{{ route('training.destroy', $item->traini) }}"
+                                                            <form
+                                                                action="{{ route('training.destroy', $formation->traini) }}"
                                                                 method="post">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -362,7 +351,11 @@
                                     <label class="form-label">Type de formation</label>
                                     <select name="type" required class="select">
                                         <option value="">Sélectionne</option>
-                                        <option value="">Git Training</option>
+                                        @foreach ($types as $type)
+                                            <option value="{{ $type->trai_type }}">
+                                                {{ $type->type }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -371,7 +364,10 @@
                                     <label class="form-label">Formateur</label>
                                     <select name="formateur" required class="select">
                                         <option value="">Sélectionne</option>
-                                        <option value="">Anthony Lewis</option>
+                                        @foreach ($formateurs as $formateur)
+                                            <option value="{{ $formateur->trai }}">{{ $formateur->name_trai }}
+                                                {{ $formateur->lastname_trai }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -379,7 +375,10 @@
                                 <div class="mb-3">
                                     <label class="form-label">Employé</label>
                                     <select name="employe[]" required class="select2 select2-hidden-accessible" multiple>
-                                        <option value="">Bernardo Galaviz</option>
+                                        @foreach ($employes as $employe)
+                                            <option value="{{ $employe->id }}">{{ $employe->name }}
+                                                {{ $employe->last_name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
