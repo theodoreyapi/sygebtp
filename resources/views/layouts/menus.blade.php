@@ -137,22 +137,34 @@
                          <li class="submenu">
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('attendance-incendit') ? 'active subdrop' : '' }}
-                                   {{ Request::is('policy') ? 'active subdrop' : '' }}">
+                                   {{ Request::is('leaves') ? 'active subdrop' : '' }}
+                                   {{ Request::is('leaves-employee') ? 'active subdrop' : '' }}
+                                   {{ Request::is('attendance-admin') ? 'active subdrop' : '' }}
+                                   {{ Request::is('attendance-employee') ? 'active subdrop' : '' }}
+                                   {{ Request::is('attendance-incendit') ? 'active subdrop' : '' }}
+                                    ">
                                  <i class="ti ti-file-time"></i><span>Présences</span>
                                  <span class="menu-arrow"></span>
                              </a>
                              <ul>
                                  <li class="submenu submenu-two">
-                                     <a href="javascript:void(0);">Congés<span
+                                     <a href="javascript:void(0);"
+                                         class="{{ Request::is('leaves') ? 'active subdrop' : '' }}
+                                   {{ Request::is('leaves-employee') ? 'active subdrop' : '' }}
+                                    ">Congés<span
                                              class="menu-arrow inside-submenu"></span></a>
                                      <ul>
-                                         <li><a href="{{ url('leaves') }}">Congés (Admin)</a></li>
-                                         <li><a href="{{ url('leaves-employee') }}">Congés (Employé)</a></li>
+                                         <li><a class="{{ Request::is('leaves') ? 'active' : '' }}"
+                                                 href="{{ url('leaves') }}">Congés</a></li>
+                                         <li><a class="{{ Request::is('leaves-employee') ? 'active' : '' }}"
+                                                 href="{{ url('leaves-employee') }}">Mes Congés</a></li>
                                          {{-- <li><a href="{{ url('leave-settings') }}">Leave Settings</a></li> --}}
                                      </ul>
                                  </li>
-                                 <li><a href="{{ url('attendance-admin') }}">Présence (Admin)</a></li>
-                                 <li><a href="{{ url('attendance-employee') }}">Présence (Employé)</a></li>
+                                 <li><a class="{{ Request::is('attendance-admin') ? 'active' : '' }}"
+                                         href="{{ url('attendance-admin') }}">Présences</a></li>
+                                 <li><a class="{{ Request::is('attendance-employee') ? 'active' : '' }}"
+                                         href="{{ url('attendance-employee') }}">Mes Présences</a></li>
                                  <li><a class="{{ Request::is('attendance-incendit') ? 'active' : '' }}"
                                          href="{{ url('attendance-incendit') }}">Incidents/Accidents</a></li>
                                  {{-- <li><a href="{{ url('timesheets') }}">Timesheets</a></li>

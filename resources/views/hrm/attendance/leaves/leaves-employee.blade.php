@@ -66,7 +66,7 @@
                         // Afficher une alerte de succès
                         $('#ajax-alert-container').html(`
                         <div class="alert alert-success rounded-pill alert-dismissible fade show mt-3">
-                            Vous avez un incendit / accident avec succès !
+                            Votre demande de congé a bien été envoyé avec succès !
                             <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close">
                                 <i class="fas fa-xmark"></i>
                             </button>
@@ -75,7 +75,6 @@
                     },
                     error: function(xhr) {
                         let errors = xhr.responseJSON?.errors;
-                        console.error(xhr.responseText);
                         if (errors) {
                             for (const key in errors) {
                                 $('#ajax-alert-container').append(`
@@ -363,7 +362,7 @@
 
         <!-- Leaves list -->
         <div class="card">
-            <div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+            {{-- <div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
                 <div class="d-flex">
                     <h5 class="me-2">Liste des congés</h5>
                     <span class="badge bg-primary-transparent me-2">Nombre total de congés : 48</span>
@@ -467,7 +466,7 @@
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="card-body p-0">
                 <div class="custom-datatable-filter table-responsive">
                     <table class="table datatable">

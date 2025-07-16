@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendaceAdminController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\HolidaysController;
 use App\Http\Controllers\IncenditController;
+use App\Http\Controllers\LeavesAdminController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\PromotionController;
@@ -154,16 +156,12 @@ Route::get('ticket-details', function () {
     return view('hrm.tickets.ticket-details');
 });
 Route::resource('holidays', HolidaysController::class);
-Route::get('leaves', function () {
-    return view('hrm.attendance.leaves.leaves');
-});
 Route::get('leave-settings', function () {
     return view('hrm.attendance.leaves.leave-settings');
 });
-Route::get('attendance-admin', function () {
-    return view('hrm.attendance.attendance-admin');
-});
+Route::resource('leaves', LeavesAdminController::class);
 Route::resource('leaves-employee', LeavesController::class);
+Route::resource('attendance-admin', AttendaceAdminController::class);
 Route::resource('attendance-employee', AttendanceController::class);
 Route::resource('attendance-incendit', IncenditController::class);
 Route::get('timesheets', function () {

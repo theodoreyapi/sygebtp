@@ -141,7 +141,7 @@
                                             @foreach ($items as $emp)
                                                 <span class="avatar border-0">
                                                     <img title="{{ $emp->employe_name }} {{ $emp->employe_last_name ?? '' }}"
-                                                        src="{{ URL::asset('') }}assets/img/users/user-01.jpg"
+                                                        src="{{ $emp->employe_photo == '' ? URL::asset('assets/img/users/user-01.jpg') : url($emp->employe_photo) }} }}"
                                                         class="rounded-circle" alt="img">
                                                 </span>
                                             @endforeach
@@ -156,9 +156,9 @@
                                                 <i class="ti ti-point-filled me-1"></i>Active
                                             </span>
                                         @else
-                                        <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Inactive
-                                        </span>
+                                            <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
+                                                <i class="ti ti-point-filled me-1"></i>Inactive
+                                            </span>
                                         @endif
                                     </td>
                                     <td>
@@ -190,32 +190,51 @@
                                                                         <div class="mb-3">
                                                                             <label class="form-label">Type de
                                                                                 formation</label>
+                                                                            <br>
                                                                             <select name="type" required class="select">
                                                                                 <option value="">Sélectionne</option>
-                                                                                <option value="">Git Training
-                                                                                </option>
+                                                                                @foreach ($types as $type)
+                                                                                    <option
+                                                                                        @if ($type->trai_type == $formation->type_id) selected @endif
+                                                                                        value="{{ $type->trai_type }}">
+                                                                                        {{ $type->type }}
+                                                                                    </option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="mb-3">
                                                                             <label class="form-label">Formateur</label>
+                                                                            <br>
                                                                             <select name="formateur" required
                                                                                 class="select">
                                                                                 <option value="">Sélectionne</option>
-                                                                                <option value="">Anthony Lewis
-                                                                                </option>
+                                                                                @foreach ($formateurs as $formateur)
+                                                                                    <option
+                                                                                        @if ($formateur->trai == $formation->trainer_id) selected @endif
+                                                                                        value="{{ $formateur->trai }}">
+                                                                                        {{ $formateur->name_trai }}
+                                                                                        {{ $formateur->lastname_trai }}
+                                                                                    </option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="mb-3">
                                                                             <label class="form-label">Employé</label>
+                                                                            <br>
                                                                             <select name="employe[]" required
                                                                                 class="select2 select2-hidden-accessible"
                                                                                 multiple>
-                                                                                <option value="">Bernardo Galaviz
-                                                                                </option>
+                                                                                @foreach ($employes as $employe)
+                                                                                    <option
+                                                                                        @if ($employe->id == $formation->employe_id) selected @endif
+                                                                                        value="{{ $employe->id }}">
+                                                                                        {{ $employe->name }}
+                                                                                        {{ $employe->last_name }}</option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -224,7 +243,8 @@
                                                                             <label class="form-label">Coût de la
                                                                                 formation</label>
                                                                             <input name="cout" required type="number"
-                                                                                class="form-control">
+                                                                                class="form-control"
+                                                                                value="{{ $formation->cost_traini }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
@@ -233,6 +253,7 @@
                                                                             <div class="input-icon-end position-relative">
                                                                                 <input name="debut" required
                                                                                     type="text"
+                                                                                    value="{{ $formation->start_traini }}"
                                                                                     class="form-control datetimepicker"
                                                                                     placeholder="dd/mm/yyyy">
                                                                                 <span class="input-icon-addon">
@@ -248,6 +269,7 @@
                                                                             <div class="input-icon-end position-relative">
                                                                                 <input required name="fin"
                                                                                     type="text"
+                                                                                    value="{{ $formation->end_traini }}"
                                                                                     class="form-control datetimepicker"
                                                                                     placeholder="dd/mm/yyyy">
                                                                                 <span class="input-icon-addon">
@@ -260,17 +282,23 @@
                                                                     <div class="col-md-12">
                                                                         <div class="mb-3">
                                                                             <label class="form-label">Description</label>
-                                                                            <textarea name="description" class="form-control"></textarea>
+                                                                            <textarea name="description" class="form-control">
+                                                                                {{ $formation->description_traini }}
+                                                                            </textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-12">
                                                                         <div class="mb-3">
                                                                             <label class="form-label">Statut</label>
+                                                                            <br>
                                                                             <select name="statut" required
                                                                                 class="select">
-                                                                                <option value="">Sélectionne</option>
-                                                                                <option value="Active">Active</option>
-                                                                                <option value="Inactive">Inactive</option>
+                                                                                <option
+                                                                                    @if ($formation->start_traini == 'Active') selected @endif
+                                                                                    value="Active">Active</option>
+                                                                                <option
+                                                                                    @if ($formation->start_traini == 'Inactive') selected @endif
+                                                                                    value="Inactive">Inactive</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -280,7 +308,7 @@
                                                                 <button type="button" class="btn btn-light me-2"
                                                                     data-bs-dismiss="modal">Annuler</button>
                                                                 <button type="submit"
-                                                                    class="btn btn-primary">Modifier</button>
+                                                                    class="btn btn-info">Modifier</button>
                                                             </div>
                                                         </form>
                                                     </div>

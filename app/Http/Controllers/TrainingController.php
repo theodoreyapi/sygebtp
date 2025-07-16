@@ -37,6 +37,7 @@ class TrainingController extends Controller
                 'trainers.lastname_trai',
 
                 'users.id as employe_id',
+                'users.photo as employe_photo',
                 'users.name as employe_name',
                 'users.last_name as employe_last_name'
             )
@@ -131,8 +132,6 @@ class TrainingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $evaluation = Training::findOrFail($id);
-
         $rules = [
             'employe' => 'required',
             'debut' => 'required',
@@ -152,21 +151,30 @@ class TrainingController extends Controller
 
         $request->validate($rules, $messages);
 
-        if ($evaluation->employe_id !== $request->employe) {
-            $evaluation->employe_id = $request->employe;
-        }
-        if ($evaluation->evaluateur_id !== $request->evaluateur) {
-            $evaluation->evaluateur_id = $request->evaluateur;
-        }
-        $evaluation->date_evaluation = $request->date;
-        $evaluation->periode_debut = $request->debut;
-        $evaluation->periode_fin = $request->fin;
-        $evaluation->commentaire = $request->commentaire;
+        $eval = Training::findOrFail($id);
+        $eval->type_id = $request->type;
+        $eval->trainer_id = $request->formateur;
+        $eval->cost_traini = $request->cout;
+        $eval->start_traini = $request->debut;
+        $eval->end_traini = $request->fin;
+        $eval->status_traini = $request->statut;
+        $eval->description_traini = $request->description;
 
-        if ($evaluation->save()) {
-            return back()->with('succes', "Vous avez modifier avec succès.");
+        if ($eval->save()) {
+            // On supprime les anciennes associations
+            AssoTypeTraining::where('formation_id', $eval->traini)->delete();
+
+            // On ajoute les nouvelles
+            foreach ($request->employe as $employeId) {
+                AssoTypeTraining::create([
+                    'employe_id' => $employeId,
+                    'formation_id' => $eval->traini,
+                ]);
+            }
+
+            return back()->with('succes', "La formation a été mise à jour avec succès.");
         } else {
-            return back()->withErrors(["Problème lors de la modification. Veuillez réessayer!!"]);
+            return back()->withErrors(["Problème lors de la mise à jour. Veuillez réessayer."]);
         }
     }
 
