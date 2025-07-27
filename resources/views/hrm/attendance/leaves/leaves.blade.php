@@ -1,4 +1,4 @@
-@extends('layouts.master', ['title' => 'Presences'])
+@extends('layouts.master', ['title' => 'Conges'])
 
 @push('csss')
     <!-- Tabler Icon CSS -->
@@ -71,16 +71,16 @@
         <!-- Breadcrumb -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
-                <h2 class="mb-1">Leaves</h2>
+                <h2 class="mb-1">Congés employé</h2>
                 <nav>
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
-                            <a href="index.html"><i class="ti ti-smart-home"></i></a>
+                            <a href="#"><i class="ti ti-smart-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
-                            Employee
+                            Employé
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Leaves</li>
+                        <li class="breadcrumb-item active" aria-current="page">Congés</li>
                     </ol>
                 </nav>
             </div>
@@ -89,25 +89,25 @@
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                             data-bs-toggle="dropdown">
-                            <i class="ti ti-file-export me-1"></i>Export
+                            <i class="ti ti-file-export me-1"></i>Exporter
                         </a>
                         <ul class="dropdown-menu  dropdown-menu-end p-3">
                             <li>
                                 <a href="javascript:void(0);" class="dropdown-item rounded-1"><i
-                                        class="ti ti-file-type-pdf me-1"></i>Export as PDF</a>
+                                        class="ti ti-file-type-pdf me-1"></i>Exporter en PDF</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" class="dropdown-item rounded-1"><i
-                                        class="ti ti-file-type-xls me-1"></i>Export as Excel </a>
+                                        class="ti ti-file-type-xls me-1"></i>Exporter en Excel </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="mb-2">
+                {{-- <div class="mb-2">
                     <a href="#" data-bs-toggle="modal" data-bs-target="#add_leaves"
-                        class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>Add
-                        Leave</a>
-                </div>
+                        class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>Ajouter un
+                        congé</a>
+                </div> --}}
                 <div class="head-icons ms-2">
                     <a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top"
                         data-bs-original-title="Collapse" id="collapse-header">
@@ -118,9 +118,11 @@
         </div>
         <!-- /Breadcrumb -->
 
+        @include('layouts.status')
+
         <!-- Leaves Info -->
         <div class="row">
-            <div class="col-xl-3 col-md-6">
+            {{-- <div class="col-xl-3 col-md-6">
                 <div class="card bg-green-img">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
@@ -139,6 +141,46 @@
                         </div>
                     </div>
                 </div>
+            </div> --}}
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-yellow-img">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0 me-2">
+                                    <span
+                                        class="avatar avatar-md rounded-circle bg-white d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-user-question text-warning fs-18"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <p class="mb-1">Demandes en attente</p>
+                                <h4>{{ $encours }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-green-img">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0 me-2">
+                                    <span
+                                        class="avatar avatar-md rounded-circle bg-white d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-user-edit text-success fs-18"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <p class="mb-1">Congés acceptés</p>
+                                <h4>{{ $valide }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-pink-img">
@@ -148,53 +190,13 @@
                                 <div class="flex-shrink-0 me-2">
                                     <span
                                         class="avatar avatar-md rounded-circle bg-white d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-user-edit text-pink fs-18"></i>
+                                        <i class="ti ti-user-exclamation text-danger fs-18"></i>
                                     </span>
                                 </div>
                             </div>
                             <div class="text-end">
-                                <p class="mb-1">Planned Leaves</p>
-                                <h4>10</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-yellow-img">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 me-2">
-                                    <span
-                                        class="avatar avatar-md rounded-circle bg-white d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-user-exclamation text-warning fs-18"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                <p class="mb-1">Unplanned Leaves</p>
-                                <h4>10</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-blue-img">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 me-2">
-                                    <span
-                                        class="avatar avatar-md rounded-circle bg-white d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-user-question text-info fs-18"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                <p class="mb-1">Pending Requests</p>
-                                <h4>15</h4>
+                                <p class="mb-1">Congés réfusés</p>
+                                <h4>{{ $annule }}</h4>
                             </div>
                         </div>
                     </div>
@@ -206,8 +208,8 @@
         <!-- Leaves list -->
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                <h5>Leave List</h5>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+                <h5>Liste des congés</h5>
+                {{-- <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                     <div class="me-3">
                         <div class="input-icon-end position-relative">
                             <input type="text" class="form-control date-range bookingrange"
@@ -259,63 +261,140 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="card-body p-0">
                 <div class="custom-datatable-filter table-responsive">
                     <table class="table datatable">
                         <thead class="thead-light">
                             <tr>
-                                <th>Employee</th>
-                                <th>Leave Type</th>
-                                <th>From</th>
-                                <th>To</th>
-                                <th>No of Days</th>
+                                <th>Employé</th>
+                                <th>Type de congé</th>
+                                <th>De</th>
+                                <th>À</th>
+                                <th>Nombre de jours</th>
+                                <th>Statut</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center file-name-icon">
-                                        <a href="javascript:void(0);" class="avatar avatar-md border avatar-rounded">
-                                            <img src="{{ URL::asset('') }}assets/img/users/user-32.jpg" class="img-fluid"
-                                                alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fw-medium"><a href="javascript:void(0);">Anthony Lewis</a></h6>
-                                            <span class="fs-12 fw-normal ">Finance</span>
+                            @foreach ($leaves as $leave)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center file-name-icon">
+                                            <a href="javascript:void(0);" class="avatar avatar-md border avatar-rounded">
+                                                <img src="{{ $leave->user_photo == '' ? URL::asset('assets/img/users/user-32.jpg') : url($leave->user_photo) }}"
+                                                    class="img-fluid" alt="img">
+                                            </a>
+                                            <div class="ms-2">
+                                                <h6 class="fw-medium">
+                                                    <a href="javascript:void(0);">
+                                                        {{ $leave->user_name }} {{ $leave->user_last_name }}
+                                                    </a>
+                                                </h6>
+                                                <span class="fs-12 fw-normal ">{{ $leave->department_name }}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <p class="fs-14 fw-medium d-flex align-items-center mb-0">Medical Leave</p>
-                                        <a href="#" class="ms-2" data-bs-toggle="tooltip"
-                                            data-bs-placement="right"
-                                            data-bs-title="I am currently experiencing a fever and design & Development">
-                                            <i class="ti ti-info-circle text-info"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                                <td>
-                                    14 Jan 2024
-                                </td>
-                                <td>
-                                    15 Jan 2024
-                                </td>
-                                <td>
-                                    2 Days
-                                </td>
-                                <td>
-                                    <div class="action-icon d-inline-flex">
-                                        <a href="#" class="me-2" data-bs-toggle="modal"
-                                            data-bs-target="#edit_leaves"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" data-bs-toggle="modal"
-                                            data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <p class="mb-0">{{ $leave->leave_type }}</p>
+                                            @if ($leave->reason)
+                                                <a href="#" class="ms-2" data-bs-toggle="tooltip"
+                                                    title="{{ $leave->reason }}">
+                                                    <i class="ti ti-info-circle text-info"></i>
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{ $leave->start_date->format('d M Y') }}
+                                    </td>
+                                    <td>
+                                        {{ $leave->end_date->format('d M Y') }}
+                                    </td>
+                                    <td>
+                                        {{ $leave->total_days }} Jour{{ $leave->total_days > 1 ? 's' : '' }}
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="badge bg-{{ $leave->status === 'Approved' ? 'success' : ($leave->status === 'Declined' ? 'danger' : 'secondary') }}">
+                                            {{ $leave->status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-icon d-inline-flex">
+                                            <a href="#" class="me-2" data-bs-toggle="modal"
+                                                data-bs-target="#edit_leaves{{ $leave->leave_id }}"><i
+                                                    class="ti ti-edit"></i></a>
+                                            <div class="modal fade" id="edit_leaves{{ $leave->leave_id }}">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Validation de la demande</h4>
+                                                            <button type="button" class="btn-close custom-btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close">
+                                                                <i class="ti ti-x"></i>
+                                                            </button>
+                                                        </div>
+                                                        <form action="{{ route('leaves.update', $leave->leave_id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <div class="modal-body pb-0">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">Responsable</label>
+                                                                            <br>
+                                                                            <select name="responsable" required
+                                                                                class="select">
+                                                                                <option value="">Sélectionne</option>
+                                                                                @foreach ($employees as $employe)
+                                                                                    <option value="{{ $employe->id }}">
+                                                                                        {{ $employe->name }}
+                                                                                        {{ $employe->last_name }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">Réponse</label>
+                                                                            <br>
+                                                                            <select name="response" required
+                                                                                class="select">
+                                                                                <option value="">Sélectionne</option>
+                                                                                <option value="Approved">Accorder</option>
+                                                                                <option value="Declined">Annuler</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">Raison</label>
+                                                                            <textarea name="reason" class="form-control" rows="3"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light me-2"
+                                                                    data-bs-dismiss="modal">Annuler</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary">Enregistrer</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{-- <a href="javascript:void(0);" data-bs-toggle="modal"
+                                                data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a> --}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
@@ -13,7 +14,11 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        // $user = auth()->user();
+        if (!Auth::check()) {
+            return view('auth.login');
+        }
+
+        $user = Auth::user();
 
         $today = now()->toDateString();
         $weekStart = now()->startOfWeek();
@@ -23,32 +28,32 @@ class AttendanceController extends Controller
 
         $stats = [
             // Heures aujourd'hui
-            'today' => Attendance::where('user_id', 1)
+            'today' => Attendance::where('user_id', $user->id)
                 ->whereDate('date', $today)
                 ->sum('worked_hours'),
 
             // Heures cette semaine
-            'week' => Attendance::where('user_id', 1)
+            'week' => Attendance::where('user_id', $user->id)
                 ->whereBetween('date', [$weekStart, $weekEnd])
                 ->sum('worked_hours'),
 
             // Heures ce mois
-            'month' => Attendance::where('user_id', 1)
+            'month' => Attendance::where('user_id', $user->id)
                 ->whereBetween('date', [$monthStart, $monthEnd])
                 ->sum('worked_hours'),
 
             // Heures supplémentaires
-            'overtime' => Attendance::where('user_id', 1)
+            'overtime' => Attendance::where('user_id', $user->id)
                 ->whereBetween('date', [$monthStart, $monthEnd])
                 ->sum('overtime_hours'),
 
             // Heures productives aujourd’hui
-            'productive_today' => Attendance::where('user_id', 1)
+            'productive_today' => Attendance::where('user_id', $user->id)
                 ->whereDate('date', $today)
                 ->sum('productive_hours'),
 
             // Pauses aujourd’hui
-            'break_today' => Attendance::where('user_id', 1)
+            'break_today' => Attendance::where('user_id', $user->id)
                 ->whereDate('date', $today)
                 ->sum('break_minutes') / 60, // en heures
         ];
@@ -64,7 +69,7 @@ class AttendanceController extends Controller
         }
 
         // Récupérer les données du jour
-        $attendances = Attendance::where('user_id', 1)
+        $attendances = Attendance::where('user_id', $user->id)
             ->whereDate('date', $today)
             ->get();
 
@@ -89,7 +94,7 @@ class AttendanceController extends Controller
             'timeline' => $timeline,
         ];
 
-        $attendance = Attendance::where('user_id', 1)
+        $attendance = Attendance::where('user_id', $user->id)
             ->get();
 
         return view('hrm.attendance.attendance-employee', compact('stats', 'states', 'attendance'));
@@ -129,7 +134,7 @@ class AttendanceController extends Controller
 
     public function loadTimeline(Request $request)
     {
-        //$user = auth()->user();
+        $user = Auth::user();
         $date = $request->input('date', now()->toDateString());
 
         $timeline = [];
@@ -141,7 +146,7 @@ class AttendanceController extends Controller
             ];
         }
 
-        $attendances = Attendance::where('user_id', 1)
+        $attendances = Attendance::where('user_id', $user->id)
             ->whereDate('date', $date)
             ->get();
 
@@ -163,7 +168,7 @@ class AttendanceController extends Controller
 
     public function storePunch(Request $request)
     {
-        $userId = 1; // Remplace par auth()->id() quand l'auth est prête
+        $userId = Auth::user()->id; // Remplace par auth()->id() quand l'auth est prête
         $today = now()->toDateString();
 
         $attendance = Attendance::firstOrNew([

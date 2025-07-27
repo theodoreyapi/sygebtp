@@ -34,30 +34,12 @@
                              <i class="ti ti-maximize"></i>
                          </a>
                      </div>
-                     <div class="dropdown me-1">
-                         <a href="#" class="btn btn-menubar" data-bs-toggle="dropdown">
-                             <i class="ti ti-layout-grid-remove"></i>
-                         </a>
-                         <div class="dropdown-menu dropdown-menu-end">
-                             <div class="card mb-0 border-0 shadow-none">
-                                 <div class="card-header">
-                                     <h4>Applications</h4>
-                                 </div>
-                                 <div class="card-body">
-                                     <a href="{{ url('calendar') }}" class="d-block pb-2">
-                                         <span class="avatar avatar-md bg-transparent-dark me-2"><i
-                                                 class="ti ti-calendar text-gray-9"></i></span>Calendar
-                                     </a>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
                      <div class="me-1 notification_item">
-                         <a href="#" class="btn btn-menubar position-relative me-1" id="notification_popup"
+                         {{-- <a href="#" class="btn btn-menubar position-relative me-1" id="notification_popup"
                              data-bs-toggle="dropdown">
                              <i class="ti ti-bell"></i>
                              <span class="notification-status-dot"></span>
-                         </a>
+                         </a> --}}
                          <div class="dropdown-menu dropdown-menu-end notification-dropdown p-4">
                              <div class="d-flex align-items-center justify-content-between border-bottom p-0 pb-3 mb-3">
                                  <h4 class="notification-title">Notifications (2)</h4>
@@ -138,8 +120,8 @@
                          <a href="javascript:void(0);" class="dropdown-toggle d-flex align-items-center"
                              data-bs-toggle="dropdown">
                              <span class="avatar avatar-sm online">
-                                 <img src="{{ URL::asset('') }}assets/img/profiles/avatar-12.jpg" alt="Img"
-                                     class="img-fluid rounded-circle">
+                                 <img src="{{ Auth::user()->photo == '' ? URL::asset('assets/img/profiles/avatar-12.jpg') : url(Auth::user()->photo) }}"
+                                     alt="Img" class="img-fluid rounded-circle">
                              </span>
                          </a>
                          <div class="dropdown-menu shadow-none">
@@ -147,12 +129,13 @@
                                  <div class="card-header">
                                      <div class="d-flex align-items-center">
                                          <span class="avatar avatar-lg me-2 avatar-rounded">
-                                             <img src="{{ URL::asset('') }}assets/img/profiles/avatar-12.jpg"
+                                             <img src="{{ Auth::user()->photo == '' ? URL::asset('assets/img/profiles/avatar-12.jpg') : url(Auth::user()->photo) }}"
                                                  alt="img">
                                          </span>
                                          <div>
-                                             <h5 class="mb-0">Théodore Yapi</h5>
-                                             <p class="fs-12 fw-medium mb-0">nyapi@aptiotalent.com</p>
+                                             <h5 class="mb-0">{{ Auth::user()->name }} {{ Auth::user()->last_name }}
+                                             </h5>
+                                             <p class="fs-12 fw-medium mb-0">{{ Auth::user()->email }}</p>
                                          </div>
                                      </div>
                                  </div>

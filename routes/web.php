@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendaceAdminController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeesController;
@@ -17,9 +18,18 @@ use App\Http\Controllers\TerminationController;
 use App\Http\Controllers\TrainersController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TrainingTypeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+
+Route::get('index', [CustomAuthController::class, 'dashboard']);
+Route::post('custom-login', [CustomAuthController::class, 'customLogin']);
+Route::get('logout', [CustomAuthController::class, 'signOut'])->name('logout');
+
 Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->intended('index');
+    }
     return view('auth.login');
 });
 

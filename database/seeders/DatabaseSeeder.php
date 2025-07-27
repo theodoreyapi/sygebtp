@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
             'department_id' => $depart->depart,
             'designation_id' => $desig->design,
             'type_recru' => "Recruter",
-            'role' => "Employe",
+            'role' => "Admin",
             'about' => "",
             'password' => Hash::make(1234567890),
         ]);

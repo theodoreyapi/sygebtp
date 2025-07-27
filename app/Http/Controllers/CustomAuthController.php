@@ -33,21 +33,25 @@ class CustomAuthController extends Controller
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
 
-            if ($user->status == 'Active') {
+            if ($user->statut == 'Active') {
                 Auth::login($user);
                 return redirect()->intended('index');
             } else {
                 return back()->withErrors(['Votre compte est désactivé. Veuillez contacter l\'administrateur.']);
             }
         } else {
-            return back()->withErrors( ['E-mail ou mot de passe incorrect.']);
+            return back()->withErrors(['E-mail ou mot de passe incorrect.']);
         }
     }
 
     public function dashboard()
     {
         if (Auth::check()) {
-            return view('dashboard.entreprises.index');
+            if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Resporh') {
+                return view('dashboard.index');
+            } else {
+                return view('dashboard.employee-dashboard');
+            }
         } else {
             return view('auth.login');
         }

@@ -275,6 +275,8 @@
         </div>
         <!-- /Breadcrumb -->
 
+        @include('layouts.status')
+
         <!-- Leaves Info -->
         <div class="row">
             <div class="col-xl-3 col-md-6">
@@ -283,7 +285,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="text-start">
                                 <p class="mb-1">Conngés annuels</p>
-                                <h4>05</h4>
+                                <h4>{{ $leaveStats['Annual']['taken'] }}</h4>
                             </div>
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-2">
@@ -293,7 +295,8 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="badge bg-secondary-transparent">Congés restants : 07</span>
+                        <span class="badge bg-secondary-transparent">Congés restants :
+                            {{ $leaveStats['Annual']['remaining'] }}</span>
                     </div>
                 </div>
             </div>
@@ -303,7 +306,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="text-start">
                                 <p class="mb-1">Congés médicaux</p>
-                                <h4>11</h4>
+                                <h4>{{ $leaveStats['Medical']['taken'] }}</h4>
                             </div>
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-2">
@@ -323,7 +326,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="text-start">
                                 <p class="mb-1">Congés occasionnels</p>
-                                <h4>02</h4>
+                                <h4>{{ $leaveStats['Casual']['taken'] }}</h4>
                             </div>
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-2">
@@ -343,7 +346,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="text-start">
                                 <p class="mb-1">Autres congés</p>
-                                <h4>07</h4>
+                                <h4>{{ $leaveStats['Autres']['taken'] }}</h4>
                             </div>
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-2">
@@ -475,7 +478,7 @@
                                 <th>Type congé</th>
                                 <th>De</th>
                                 <th>Approuvé par</th>
-                                <th>à</th>
+                                <th>À</th>
                                 <th>Nombre de jour</th>
                                 <th>Statut</th>
                                 <th>Actions</th>
@@ -499,9 +502,13 @@
                                     <td>
                                         @if ($leave->approver)
                                             <div class="d-flex align-items-center">
-                                                <span class="fw-medium">{{ $leave->approver->name }}</span>
-                                                <small
-                                                    class="text-muted d-block">{{ $leave->approver->role ?? 'Manager' }}</small>
+                                                <p class="mb-0">{{ $leave->approver->name }}</p>
+                                                @if ($leave->justification)
+                                                    <a href="#" class="ms-2" data-bs-toggle="tooltip"
+                                                        title="{{ $leave->justification }}">
+                                                        <i class="ti ti-info-circle text-info"></i>
+                                                    </a>
+                                                @endif
                                             </div>
                                         @else
                                             <span class="text-muted">-</span>
@@ -517,12 +524,39 @@
                                     </td>
                                     <td>
                                         <div class="action-icon d-inline-flex">
-                                            <a href="#" class="me-2" data-bs-toggle="modal"
-                                                data-bs-target="#edit_holiday"><i
-                                                    class="ti ti-edit"></i></a>
+                                            {{-- <a href="#" class="me-2" data-bs-toggle="modal"
+                                                data-bs-target="#edit_holiday"><i class="ti ti-edit"></i></a> --}}
                                             <a href="javascript:void(0);" data-bs-toggle="modal"
-                                                data-bs-target="#delete_modal"><i
+                                                data-bs-target="#delete_modal{{ $leave->leave_id }}"><i
                                                     class="ti ti-trash"></i></a>
+                                            <div class="modal fade" id="delete_modal{{ $leave->leave_id }}">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body text-center">
+                                                            <span
+                                                                class="avatar avatar-xl bg-transparent-danger text-danger mb-3">
+                                                                <i class="ti ti-trash-x fs-36"></i>
+                                                            </span>
+                                                            <h4 class="mb-1">Confirme la suppression</h4>
+                                                            <p class="mb-3">You want to delete all the marked items, this
+                                                                cant be undone once you delete.</p>
+                                                            <form
+                                                                action="{{ route('leaves-employee.destroy', $leave->leave_id) }}"
+                                                                method="post">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <div class="d-flex justify-content-center">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-light me-3"
+                                                                        data-bs-dismiss="modal">Annuler</a>
+                                                                    <button type="submit" class="btn btn-danger">Oui,
+                                                                        Supprimer</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -547,7 +581,7 @@
                     </button>
                 </div>
                 <div id="ajax-alert-container"></div>
-                <form id="employee-form" method="post">
+                <form action="{{ route('leaves-employee.store') }}" method="post">
                     @csrf
                     <div class="modal-body pb-0">
                         <div class="row">
@@ -559,6 +593,7 @@
                                         <option value="Medical">Congé médical</option>
                                         <option value="Casual">Congé occasionnel</option>
                                         <option value="Annual">Congé annuel</option>
+                                        <option value="Autres">Autres congés</option>
                                     </select>
                                 </div>
                             </div>
@@ -586,7 +621,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="mb-3">
                                     <div class="input-icon-end position-relative">
                                         <input name="day_type" type="text" class="form-control datetimepicker"
@@ -596,19 +631,19 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
+                            </div> --}}
+                            {{-- <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Nombre de jour</label>
                                     <input type="text" class="form-control" disabled>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
+                            </div> --}}
+                            {{-- <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Jours restant</label>
                                     <input type="text" class="form-control" value="8" disabled>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -764,22 +799,6 @@
     <!-- /Edit Leaves -->
 
     <!-- Delete Modal -->
-    <div class="modal fade" id="delete_modal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <span class="avatar avatar-xl bg-transparent-danger text-danger mb-3">
-                        <i class="ti ti-trash-x fs-36"></i>
-                    </span>
-                    <h4 class="mb-1">Confirm Delete</h4>
-                    <p class="mb-3">You want to delete all the marked items, this cant be undone once you delete.</p>
-                    <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                        <a href="leaves-employee.html" class="btn btn-danger">Yes, Delete</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- /Delete Modal -->
 @endsection

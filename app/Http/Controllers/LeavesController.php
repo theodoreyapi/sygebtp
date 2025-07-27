@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\leaves;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LeavesController extends Controller
 {
@@ -13,9 +15,45 @@ class LeavesController extends Controller
      */
     public function index()
     {
-        $leaves = leaves::with(['employee', 'approver'])->latest()->get();
+        $leaves = leaves::where('user_id', Auth::user()->id)->get();
 
-        return view('hrm.attendance.leaves.leaves-employee', compact('leaves'));
+        // Définir les types
+        $types = ['Annual', 'Medical', 'Casual', 'Autres'];
+
+        // Initialisation
+        $leaveStats = [];
+
+        foreach ($types as $type) {
+            // Total de jours pris pour ce type
+            $daysTaken = leaves::where('user_id', Auth::user()->id)
+                ->where('leave_type', $type)
+                ->where('status', 'Approved') // seulement les approuvés
+                ->get()
+                ->sum(function ($leave) {
+                    return Carbon::parse($leave->start_date)->diffInDays(Carbon::parse($leave->end_date)) + 1;
+                });
+
+            // Pour les congés annuels, on calcule les jours acquis (2.5 par mois)
+            if ($type === 'Annual') {
+                $employee = User::find(Auth::user()->id);
+                $dateStart = $employee->hire_date ?? now(); // Date d'embauche
+
+                $monthsWorked = Carbon::parse($dateStart)->diffInMonths(now());
+                $acquiredDays = $monthsWorked * 2.5;
+
+                $remaining = max(0, $acquiredDays - $daysTaken);
+            } else {
+                // Pour les autres types, tu peux fixer un quota si besoin, sinon 0
+                $remaining = null; // ou ex: 10 - $daysTaken
+            }
+
+            $leaveStats[$type] = [
+                'taken' => $daysTaken,
+                'remaining' => $remaining,
+            ];
+        }
+
+        return view('hrm.attendance.leaves.leaves-employee', compact('leaves', 'leaveStats'));
     }
 
     /**
@@ -31,51 +69,68 @@ class LeavesController extends Controller
      */
     public function store(Request $request)
     {
-        $roles = [
-            //'user_id' => 'required|exists:users,id',
+        $rules = [
             'leave_type' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'day_type' => 'nullable|string',
+            // 'day_type' => 'nullable|string',
             'reason' => 'nullable|string',
         ];
-        $customMessages = [
-            'leave_type.required' => "Veuillez sélectionner le type de conge.",
-            'start_date.required' => "Veuillez sélectionner la date de debut.",
+
+        $messages = [
+            'leave_type.required' => "Veuillez sélectionner le type de congé.",
+            'start_date.required' => "Veuillez sélectionner la date de début.",
             'end_date.required' => "Veuillez sélectionner la date de fin.",
         ];
 
-        $request->validate($roles, $customMessages);
+        $request->validate($rules, $messages);
 
+        $user = Auth::user();
         $start = Carbon::parse($request->start_date);
         $end = Carbon::parse($request->end_date);
-        $total_days = $start->diffInDays($end) + 1;
 
-        if (in_array($request->day_type, ['First Half', 'Second Half'])) {
-            $total_days = 0.5;
+        // Acquisition mensuelle depuis la date d'embauche
+        $startDate = Carbon::parse($user->date_embauche);
+        $monthsWorked = $startDate->diffInMonths(now());
+        $totalAcquired = $monthsWorked * 2.5;
+
+        // Jours déjà consommés
+        $daysTaken = Leaves::where('user_id', $user->id)
+            ->where('status', '!=', 'Declined')
+            ->sum('total_days');
+
+        $remaining_days = max($totalAcquired - $daysTaken, 0);
+
+        // Calcul des jours demandés
+        $total_days = in_array($request->day_type, ['First Half', 'Second Half'])
+            ? 0.5
+            : $start->diffInDays($end) + 1;
+
+        if ($total_days > $remaining_days) {
+            return $request->ajax()
+                ? response()->json(['success' => false, 'message' => "Vous n’avez pas assez de jours de congés. Il vous reste $remaining_days jours."], 500)
+                : back()->withErrors(['message' => "Vous n’avez pas assez de jours de congés. Il vous reste $remaining_days jours."]);
         }
 
-        // Ensuite, crée l'objet
-        $incendit = new leaves();
-        $incendit->user_id = 1;
-        $incendit->leave_type = $request->leave_type;
-        $incendit->start_date = $start;
-        $incendit->end_date = $end;
-        $incendit->day_type = $request->day_type;
-        $incendit->total_days = $total_days;
-        $incendit->remaining_days = 8;
-        $incendit->reason = $request->reason;
-        $incendit->status = 'New';
-        if ($incendit->save()) {
-            if ($request->ajax()) {
-                return response()->json(['success' => true, 'message' => 'Incident ajouté avec succès']);
-            }
-            return back()->with('succes', "Vous avez ajouté " . $request->leave_type);
+        // Enregistrement du congé
+        $leave = new leaves();
+        $leave->user_id = $user->id;
+        $leave->leave_type = $request->leave_type;
+        $leave->start_date = $start;
+        $leave->end_date = $end;
+        //$leave->day_type = $request->day_type;
+        $leave->total_days = $total_days;
+        $leave->remaining_days = $remaining_days - $total_days;
+        $leave->reason = $request->reason;
+        $leave->status = 'New';
+        if ($leave->save()) {
+            return $request->ajax()
+                ? response()->json(['success' => true, 'message' => 'Congé ajouté avec succès'])
+                : back()->with('succes', "Votre demande de congé a été envoyé avec succès.");
         } else {
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Impossible d\'ajouter. Veuillez réessayer.'], 500);
-            }
-            return back()->withErrors(["Impossible d'ajouter. Veuillez réessayer!!"]);
+            return $request->ajax()
+                ? response()->json(['success' => false, 'message' => 'Impossible d\'envoyer votre demande. Veuillez réessayer.'], 500)
+                : back()->withErrors(["Impossible d'envoyer votre demande. Veuillez réessayer !!"]);
         }
     }
 

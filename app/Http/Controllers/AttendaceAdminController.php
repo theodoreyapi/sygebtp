@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AttendaceAdminController extends Controller
 {
@@ -14,6 +15,10 @@ class AttendaceAdminController extends Controller
      */
     public function index()
     {
+        if (!Auth::check()) {
+            return view('auth.login');
+        }
+
         $today = now()->toDateString();
         $weekStart = now()->startOfWeek();
         $weekEnd = now()->endOfWeek();

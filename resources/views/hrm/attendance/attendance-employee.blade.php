@@ -299,19 +299,6 @@
         </div>
         <!-- /Breadcrumb -->
 
-        <form id="filter-form" class="d-flex align-items-center gap-2 mb-3">
-            <input type="date" name="date" id="filter-date" class="form-control w-auto"
-                value="{{ now()->toDateString() }}">
-            <button type="submit" class="btn btn-primary">Filtrer</button>
-        </form>
-
-
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <canvas id="timelineStackedChart" height="130"></canvas>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-xl-3 col-lg-4 d-flex">
                 <div class="card flex-fill">
@@ -414,6 +401,19 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <form id="filter-form" class="d-flex align-items-center gap-2 mb-3">
+            <input type="date" name="date" id="filter-date" class="form-control w-auto"
+                value="{{ now()->toDateString() }}">
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+        </form>
+
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <canvas id="timelineStackedChart" height="130"></canvas>
             </div>
         </div>
 

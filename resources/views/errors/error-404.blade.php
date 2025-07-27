@@ -8,29 +8,29 @@
     <meta name="keywords" content="admin, estimates, bootstrap, business, html5, responsive, Projects">
     <meta name="author" content="Dreams technologies - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>Smarthr Admin Template</title>
+    <title>SYGEBTP</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ URL::asset('') }}assets/img/favicon.png">
 
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ URL::asset('') }}assets/img/apple-touch-icon.png">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ URL::asset('') }}assets/css/bootstrap.min.css">
 
     <!-- Feather CSS -->
-    <link rel="stylesheet" href="assets/plugins/icons/feather/feather.css">
+    <link rel="stylesheet" href="{{ URL::asset('') }}assets/plugins/icons/feather/feather.css">
 
     <!-- Tabler Icon CSS -->
-    <link rel="stylesheet" href="assets/plugins/tabler-icons/tabler-icons.css">
+    <link rel="stylesheet" href="{{ URL::asset('') }}assets/plugins/tabler-icons/tabler-icons.css">
 
     <!-- Fontawesome CSS -->
-    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="{{ URL::asset('') }}assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="{{ URL::asset('') }}assets/plugins/fontawesome/css/all.min.css">
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="{{ URL::asset('') }}assets/css/style.css">
 
 </head>
 
@@ -49,19 +49,21 @@
                     <div class="col-md-8 d-flex justify-content-center align-items-center mx-auto">
                         <div>
                             <div class="p-4 text-center">
-                                <img src="assets/img/logo.svg" alt="logo" class="img-fluid">
+                                <h4>SYGEBTP</h4>
                             </div>
                             <div class="error-images mb-4">
-                                <img src="assets/img/bg/error-404.svg" alt="image" class="img-fluid">
+                                <img src="{{ URL::asset('') }}assets/img/bg/error-404.svg" alt="image"
+                                    class="img-fluid">
                             </div>
                             <div class="text-center">
-                                <h1 class="mb-3">Oops, something went wrong</h1>
-                                <p class="fs-16 text-center">Error 404 Page not found. Sorry the page you looking <br>
-                                    for doesn’t exist or has been moved</p>
+                                <h1 class="mb-3">Oups, quelque chose s'est mal passé</h1>
+                                <p class="fs-16 text-center">Erreur 404 : Page introuvable. Désolé, la page recherchée
+                                    <br>
+                                    n'existe pas ou a été déplacée.</p>
                                 <div class="d-flex justify-content-center pb-4">
                                     <a href="{{ url()->previous() }}"
                                         class="btn btn-primary d-flex align-items-center "><i
-                                            class="ti ti-arrow-left me-2"></i>Back</a>
+                                            class="ti ti-arrow-left me-2"></i>Retour</a>
                                 </div>
                             </div>
                         </div>
@@ -73,16 +75,16 @@
     <!-- /Main Wrapper -->
 
     <!-- jQuery -->
-    <script src="assets/js/jquery-3.7.1.min.js"></script>
+    <script src="{{ URL::asset('') }}assets/js/jquery-3.7.1.min.js"></script>
 
     <!-- Bootstrap Core JS -->
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ URL::asset('') }}assets/js/bootstrap.bundle.min.js"></script>
 
     <!-- Feather Icon JS -->
-    <script src="assets/js/feather.min.js"></script>
+    <script src="{{ URL::asset('') }}assets/js/feather.min.js"></script>
 
     <!-- Custom JS -->
-    <script src="assets/js/script.js"></script>
+    <script src="{{ URL::asset('') }}assets/js/script.js"></script>
 
 </body>
 

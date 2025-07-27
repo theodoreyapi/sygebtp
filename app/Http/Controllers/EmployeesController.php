@@ -168,6 +168,7 @@ class EmployeesController extends Controller
     {
         $details = User::join('departments', 'users.department_id', '=', 'departments.depart')
             ->join('designations', 'users.designation_id', '=', 'designations.design')
+            ->where('users.id', $id)
             ->select(
                 'departments.deparment_name',
                 'designations.name_designation',

@@ -1,3 +1,35 @@
+ <style>
+     .sidebar .sidebar-menu>ul li .submenu>ul li a.active {
+         color: #70e0e1;
+     }
+
+     .sidebar .sidebar-menu>ul li .submenu>ul li a {
+         color: #ffffff;
+     }
+
+     .sidebar .sidebar-menu>ul li .submenu.submenu-two a.subdrop,
+     .sidebar .sidebar-menu>ul li .submenu.submenu-two a.active {
+         background: transparent;
+         color: #70e0e1;
+     }
+
+     .sidebar .sidebar-menu>ul>li ul li a span {
+         font-size: 14px;
+         font-weight: 500;
+         white-space: nowrap;
+         color: #ffffff;
+         margin-left: 8px;
+     }
+
+     .sidebar .sidebar-menu>ul>li ul li.active a span {
+         color: #000000;
+         /* noir */
+     }
+
+     .sidebar .sidebar-menu>ul>li ul li a.active span {
+         color: #000000;
+     }
+ </style>
  <!-- Sidebar -->
  <div class="sidebar" id="sidebar" style="background: #344676">
      <!-- Logo -->
