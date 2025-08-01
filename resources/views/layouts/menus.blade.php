@@ -348,7 +348,7 @@
                                          Permissions</a></li> --}}
                              </ul>
                          </li>
-                         <li class="submenu">
+                         {{-- <li class="submenu">
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('attendance-report') ? 'active subdrop' : '' }}
                                  {{ Request::is('daily-report') ? 'active subdrop' : '' }}
@@ -372,7 +372,7 @@
                                          class="{{ Request::is('daily-report') ? 'active' : '' }}">Rapport
                                          quotidien</a></li>
                              </ul>
-                         </li>
+                         </li> --}}
                          {{-- <li class="submenu">
                              <a href="javascript:void(0);"
                                  class="{{ Request::is('clear-cache') ? 'active subdrop' : '' }}

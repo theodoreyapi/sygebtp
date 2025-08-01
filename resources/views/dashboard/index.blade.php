@@ -65,6 +65,72 @@
     <script src="{{ URL::asset('') }}assets/js/todo.js"></script>
     <script src="{{ URL::asset('') }}assets/js/theme-colorpicker.js"></script>
     <script src="{{ URL::asset('') }}assets/js/script.js"></script>
+    <script>
+        // Employee Department
+
+        var counts = {!! json_encode($counts) !!};
+        var departments = {!! json_encode($departments) !!};
+
+        if ($('#emp-department').length > 0) {
+            var sBar = {
+                chart: {
+                    height: 220,
+                    type: 'bar',
+                    padding: {
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0
+                    },
+                    toolbar: {
+                        show: false,
+                    }
+                },
+                colors: ['#FF6F28'],
+                grid: {
+                    borderColor: '#E5E7EB',
+                    strokeDashArray: 5,
+                    padding: {
+                        top: -20,
+                        left: 0,
+                        right: 0,
+                        bottom: 0
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 5,
+                        horizontal: true,
+                        barHeight: '35%',
+                        endingShape: 'rounded'
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                series: [{
+                    data: counts,
+                    name: 'Employés'
+                }],
+                xaxis: {
+                    categories: departments,
+                    labels: {
+                        style: {
+                            colors: '#111827',
+                            fontSize: '13px',
+                        }
+                    }
+                }
+            }
+
+            var chart = new ApexCharts(
+                document.querySelector("#emp-department"),
+                sBar
+            );
+
+            chart.render();
+        }
+    </script>
 @endpush
 
 @section('content')
@@ -110,15 +176,19 @@
             <div class="card-body d-flex align-items-center justify-content-between flex-wrap pb-1">
                 <div class="d-flex align-items-center mb-3">
                     <span class="avatar avatar-xl flex-shrink-0">
-                        <img src="assets/img/profiles/avatar-31.jpg" class="rounded-circle" alt="img">
+                        <img src="{{ Auth::user()->photo == '' ? URL::asset('assets/img/profiles/avatar-12.jpg') : url(Auth::user()->photo) }}"
+                            class="rounded-circle" alt="img">
                     </span>
                     <div class="ms-3">
-                        <h3 class="mb-2">Bienvenue, Théodore Yapi <a href="javascript:void(0);" class="edit-icon"><i
-                                    class="ti ti-edit fs-14"></i></a></h3>
-                        <p>Vous avez
-                            {{-- <span class="text-primary text-decoration-underline">21</span> approbations en attente et <span
-                                class="text-primary text-decoration-underline"> --}}
-                            14</span> demandes de congé en attente</p>
+                        <h3 class="mb-2">Bienvenue, {{ Auth::user()->name }}
+                            {{-- <a href="javascript:void(0);" class="edit-icon">
+                            <i class="ti ti-edit fs-14"></i>
+                                </a> --}}
+                        </h3>
+                        {{-- <p>Vous avez
+                            <span class="text-primary text-decoration-underline">21</span> approbations en attente et <span
+                                class="text-primary text-decoration-underline">
+                            14</span> demandes de congé en attente</p> --}}
                     </div>
                 </div>
             </div>
@@ -130,7 +200,7 @@
             <!-- Widget Info -->
             <div class="col-xxl-8 d-flex">
                 <div class="row flex-fill">
-                    <div class="col-md-3 d-flex">
+                    {{-- <div class="col-md-3 d-flex">
                         <div class="card flex-fill">
                             <div class="card-body">
                                 <span class="avatar rounded-circle bg-primary mb-2">
@@ -142,7 +212,7 @@
                                 <a href="{{ url('attendance-employee') }}" class="link-default">Voir les détails</a>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     {{-- <div class="col-md-3 d-flex">
                         <div class="card flex-fill">
                             <div class="card-body">
@@ -215,8 +285,10 @@
                                     <i class="ti ti-users-group fs-16"></i>
                                 </span>
                                 <h6 class="fs-13 fw-medium text-default mb-1">Utilisateurs Active</h6>
-                                <h3 class="mb-3">98 <span class="fs-12 fw-medium text-success"><i
-                                            class="fa-solid fa-caret-up me-1"></i>+2.1%</span></h3>
+                                <h3 class="mb-3">{{ $active }}
+                                    {{-- <span class="fs-12 fw-medium text-success"><i
+                                            class="fa-solid fa-caret-up me-1"></i>+2.1%</span> --}}
+                                </h3>
                                 <a href="{{ url('employees') }}" class="link-default">Voir tout</a>
                             </div>
                         </div>
@@ -228,8 +300,10 @@
                                     <i class="ti ti-users-group fs-16"></i>
                                 </span>
                                 <h6 class="fs-13 fw-medium text-default mb-1">Utilisateurs Inactive</h6>
-                                <h3 class="mb-3">98 <span class="fs-12 fw-medium text-success"><i
-                                            class="fa-solid fa-caret-up me-1"></i>+2.1%</span></h3>
+                                <h3 class="mb-3">{{ $inactive }}
+                                    {{-- <span class="fs-12 fw-medium text-success"><i
+                                            class="fa-solid fa-caret-up me-1"></i>+2.1%</span> --}}
+                                </h3>
                                 <a href="{{ url('employees') }}" class="link-default">Voir tout</a>
                             </div>
                         </div>
@@ -241,8 +315,10 @@
                                     <i class="ti ti-users-group fs-16"></i>
                                 </span>
                                 <h6 class="fs-13 fw-medium text-default mb-1">Utilisateurs En cours</h6>
-                                <h3 class="mb-3">98 <span class="fs-12 fw-medium text-success"><i
-                                            class="fa-solid fa-caret-up me-1"></i>+2.1%</span></h3>
+                                <h3 class="mb-3">{{ $encours }}
+                                    {{-- <span class="fs-12 fw-medium text-success"><i
+                                            class="fa-solid fa-caret-up me-1"></i>+2.1%</span> --}}
+                                </h3>
                                 <a href="{{ url('employees') }}" class="link-default">Voir tout</a>
                             </div>
                         </div>
@@ -254,8 +330,10 @@
                                     <i class="ti ti-home fs-16"></i>
                                 </span>
                                 <h6 class="fs-13 fw-medium text-default mb-1">Département</h6>
-                                <h3 class="mb-3">98 <span class="fs-12 fw-medium text-success"><i
-                                            class="fa-solid fa-caret-up me-1"></i>+2.1%</span></h3>
+                                <h3 class="mb-3">{{ $department }}
+                                    {{-- <span class="fs-12 fw-medium text-success"><i
+                                            class="fa-solid fa-caret-up me-1"></i>+2.1%</span> --}}
+                                </h3>
                                 <a href="{{ url('employees') }}" class="link-default">Voir tout</a>
                             </div>
                         </div>
@@ -282,7 +360,7 @@
                 <div class="card flex-fill">
                     <div class="card-header pb-2 d-flex align-items-center justify-content-between flex-wrap">
                         <h5 class="mb-2">Employés par département</h5>
-                        <div class="dropdown mb-2">
+                        {{-- <div class="dropdown mb-2">
                             <a href="javascript:void(0);"
                                 class="btn btn-white border btn-sm d-inline-flex align-items-center"
                                 data-bs-toggle="dropdown">
@@ -299,13 +377,13 @@
                                     <a href="javascript:void(0);" class="dropdown-item rounded-1">Last Week</a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="card-body">
                         <div id="emp-department"></div>
-                        <p class="fs-13"><i class="ti ti-circle-filled me-2 fs-8 text-primary"></i>Le nombre d'employés a
+                        {{-- <p class="fs-13"><i class="ti ti-circle-filled me-2 fs-8 text-primary"></i>Le nombre d'employés a
                             augmenté de <span class="text-success fw-bold">+20%</span> par rapport à la semaine dernière
-                        </p>
+                        </p> --}}
                     </div>
                 </div>
             </div>
@@ -313,7 +391,7 @@
 
         </div>
 
-        <div class="row">
+        {{-- <div class="row">
 
             <!-- Total Employee -->
             <div class="col-xxl-4 d-flex">
@@ -390,7 +468,8 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="p-2 flex-fill text-end">
-                                        <p class="fs-13 mb-2"><i class="ti ti-square-filled text-pink me-2 fs-12"></i>Travail à domicile
+                                        <p class="fs-13 mb-2"><i
+                                                class="ti ti-square-filled text-pink me-2 fs-12"></i>Travail à domicile
                                             <span class="text-gray-9">(20%)</span>
                                         </p>
                                         <h2 class="display-1">04</h2>
@@ -500,7 +579,8 @@
                                     </a>
                                 </div>
                             </div>
-                            <a href="{{ url('leaves') }}" class="fs-13 link-primary text-decoration-underline mb-2">Voir les détails</a>
+                            <a href="{{ url('leaves') }}" class="fs-13 link-primary text-decoration-underline mb-2">Voir
+                                les détails</a>
                         </div>
                     </div>
                 </div>
@@ -614,16 +694,17 @@
                                         class="ti ti-circle-filled fs-5 me-1"></i>08:35</span>
                             </div>
                         </div>
-                        <a href="{{ url('attendance-report') }}" class="btn btn-light btn-md w-100">Voir toutes les présences</a>
+                        <a href="{{ url('attendance-report') }}" class="btn btn-light btn-md w-100">Voir toutes les
+                            présences</a>
                     </div>
                 </div>
             </div>
             <!-- /Clock-In/Out -->
-        </div>
+        </div> --}}
 
         <div class="row">
             <!-- Employees -->
-            <div class="col-xxl-4 col-xl-6 d-flex">
+            <div class="col-xxl-6 col-xl-6 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header pb-2 d-flex align-items-center justify-content-between flex-wrap">
                         <h5 class="mb-2">Employés</h5>
@@ -639,96 +720,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar">
-                                                    <img src="assets/img/users/user-32.jpg"
-                                                        class="img-fluid rounded-circle" alt="img">
-                                                </a>
-                                                <div class="ms-2">
-                                                    <h6 class="fw-medium"><a href="javascript:void(0);">Anthony Lewis</a>
-                                                    </h6>
-                                                    <span class="fs-12">Finance</span>
+                                    @foreach ($employes as $empl)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="ms-2">
+                                                        <h6 class="fw-medium"><a href="javascript:void(0);">
+                                                                {{ $empl->name }} {{ $empl->last_name }}
+                                                            </a>
+                                                        </h6>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-secondary-transparent badge-xs">
-                                                Finance
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <a href="#" class="avatar">
-                                                    <img src="assets/img/users/user-09.jpg"
-                                                        class="img-fluid rounded-circle" alt="img">
-                                                </a>
-                                                <div class="ms-2">
-                                                    <h6 class="fw-medium"><a href="#">Brian Villalobos</a></h6>
-                                                    <span class="fs-12">PHP Developer</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-danger-transparent badge-xs">Development</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <a href="#" class="avatar">
-                                                    <img src="assets/img/users/user-01.jpg"
-                                                        class="img-fluid rounded-circle" alt="img">
-                                                </a>
-                                                <div class="ms-2">
-                                                    <h6 class="fw-medium"><a href="#">Stephan Peralt</a></h6>
-                                                    <span class="fs-12">Executive</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-info-transparent badge-xs">Marketing</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar">
-                                                    <img src="assets/img/users/user-34.jpg"
-                                                        class="img-fluid rounded-circle" alt="img">
-                                                </a>
-                                                <div class="ms-2">
-                                                    <h6 class="fw-medium"><a href="javascript:void(0);">Doglas Martini</a>
-                                                    </h6>
-                                                    <span class="fs-12">Project Manager</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-purple-transparent badge-xs">Manager</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border-0">
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar">
-                                                    <img src="assets/img/users/user-37.jpg"
-                                                        class="img-fluid rounded-circle" alt="img">
-                                                </a>
-                                                <div class="ms-2">
-                                                    <h6 class="fw-medium"><a href="javascript:void(0);">Anthony Lewis</a>
-                                                    </h6>
-                                                    <span class="fs-12">UI/UX Designer</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0">
-                                            <span class="badge badge-pink-transparent badge-xs">UI/UX Design</span>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-secondary-transparent badge-xs">
+                                                    {{ $empl->department_name }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -737,7 +747,7 @@
             </div>
             <!-- /Employees -->
 
-            <div class="col-xxl-4 col-xl-6 d-flex">
+            {{-- <div class="col-xxl-4 col-xl-6 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header pb-2 d-flex align-items-center justify-content-between flex-wrap">
                         <h5 class="mb-2">Activités récentes</h5>
@@ -764,80 +774,88 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!-- /Recent Activities -->
 
             <!-- Birthdays -->
-            <div class="col-xxl-4 col-xl-6 d-flex">
+            <div class="col-xxl-6 col-xl-6 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header pb-2 d-flex align-items-center justify-content-between flex-wrap">
                         <h5 class="mb-2">Anniversaires</h5>
                         <a href="javascript:void(0);" class="btn btn-light btn-md mb-2">Tout voir</a>
                     </div>
                     <div class="card-body pb-1">
-                        <h6 class="mb-2">Aujourd'hui</h6>
-                        <div class="bg-light p-2 border border-dashed rounded-top mb-3">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <a href="javascript:void(0);" class="avatar">
-                                        <img src="assets/img/users/user-38.jpg" class="rounded-circle" alt="img">
-                                    </a>
-                                    <div class="ms-2 overflow-hidden">
-                                        <h6 class="fs-medium ">Andrew Jermia</h6>
-                                        <p class="fs-13">IOS Developer</p>
+
+                        @if ($todayBirthdays->count() > 0)
+                            <h6 class="mb-2">Aujourd'hui</h6>
+                            @foreach ($todayBirthdays as $user)
+                                <div class="bg-light p-2 border border-dashed rounded-top mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <a href="javascript:void(0);" class="avatar">
+                                                <img src="{{ asset($user->photo ?? 'assets/img/default.jpg') }}"
+                                                    class="rounded-circle" alt="img">
+                                            </a>
+                                            <div class="ms-2 overflow-hidden">
+                                                <h6 class="fs-medium ">{{ $user->name }} {{ $user->last_name }}</h6>
+                                                <p class="fs-13">{{ $user->designation_id }}</p>
+                                            </div>
+                                        </div>
+                                        <a href="javascript:void(0);" class="btn btn-secondary btn-xs">
+                                            <i class="ti ti-cake me-1"></i>Envoyer
+                                        </a>
                                     </div>
                                 </div>
-                                <a href="javascript:void(0);" class="btn btn-secondary btn-xs"><i
-                                        class="ti ti-cake me-1"></i>Envoyer</a>
-                            </div>
-                        </div>
-                        <h6 class="mb-2">Demain</h6>
-                        <div class="bg-light p-2 border border-dashed rounded-top mb-3">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <a href="javascript:void(0);" class="avatar">
-                                        <img src="assets/img/users/user-10.jpg" class="rounded-circle" alt="img">
-                                    </a>
-                                    <div class="ms-2 overflow-hidden">
-                                        <h6 class="fs-medium"><a href="javascript:void(0);">Mary Zeen</a></h6>
-                                        <p class="fs-13">UI/UX Designer</p>
+                            @endforeach
+                        @endif
+
+                        @if ($tomorrowBirthdays->count() > 0)
+                            <h6 class="mb-2">Demain</h6>
+                            @foreach ($tomorrowBirthdays as $user)
+                                <div class="bg-light p-2 border border-dashed rounded-top mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <a href="javascript:void(0);" class="avatar">
+                                                <img src="{{ asset($user->photo ?? 'assets/img/default.jpg') }}"
+                                                    class="rounded-circle" alt="img">
+                                            </a>
+                                            <div class="ms-2 overflow-hidden">
+                                                <h6 class="fs-medium">{{ $user->name }} {{ $user->last_name }}</h6>
+                                                <p class="fs-13">{{ $user->name_designation }}</p>
+                                            </div>
+                                        </div>
+                                        <a href="javascript:void(0);" class="btn btn-secondary btn-xs">
+                                            <i class="ti ti-cake me-1"></i>Envoyer
+                                        </a>
                                     </div>
                                 </div>
-                                <a href="javascript:void(0);" class="btn btn-secondary btn-xs"><i
-                                        class="ti ti-cake me-1"></i>Send</a>
-                            </div>
-                        </div>
-                        <div class="bg-light p-2 border border-dashed rounded-top mb-3">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <a href="javascript:void(0);" class="avatar">
-                                        <img src="assets/img/users/user-09.jpg" class="rounded-circle" alt="img">
-                                    </a>
-                                    <div class="ms-2 overflow-hidden">
-                                        <h6 class="fs-medium "><a href="javascript:void(0);">Antony Lewis</a></h6>
-                                        <p class="fs-13">Android Developer</p>
+                            @endforeach
+                        @endif
+
+                        @if ($upcomingBirthdays->count() > 0)
+                            @foreach ($upcomingBirthdays as $user)
+                                <h6 class="mb-2">{{ \Carbon\Carbon::parse($user->date_naissance)->format('d F Y') }}
+                                </h6>
+                                <div class="bg-light p-2 border border-dashed rounded-top mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar">
+                                                <img src="{{ asset($user->photo ?? 'assets/img/default.jpg') }}"
+                                                    class="rounded-circle" alt="img">
+                                            </span>
+                                            <div class="ms-2 overflow-hidden">
+                                                <h6 class="fs-medium ">{{ $user->name }} {{ $user->last_name }}</h6>
+                                                <p class="fs-13">{{ $user->name_designation }}</p>
+                                            </div>
+                                        </div>
+                                        <a href="javascript:void(0);" class="btn btn-secondary btn-xs">
+                                            <i class="ti ti-cake me-1"></i>Envoyer
+                                        </a>
                                     </div>
                                 </div>
-                                <a href="javascript:void(0);" class="btn btn-secondary btn-xs"><i
-                                        class="ti ti-cake me-1"></i>Send</a>
-                            </div>
-                        </div>
-                        <h6 class="mb-2">25 janvier 2025</h6>
-                        <div class="bg-light p-2 border border-dashed rounded-top mb-3">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span class="avatar">
-                                        <img src="assets/img/users/user-12.jpg" class="rounded-circle" alt="img">
-                                    </span>
-                                    <div class="ms-2 overflow-hidden">
-                                        <h6 class="fs-medium ">Doglas Martini</h6>
-                                        <p class="fs-13">.Net Developer</p>
-                                    </div>
-                                </div>
-                                <a href="javascript:void(0);" class="btn btn-secondary btn-xs"><i
-                                        class="ti ti-cake me-1"></i>Send</a>
-                            </div>
-                        </div>
+                            @endforeach
+                        @endif
+
                     </div>
                 </div>
             </div>

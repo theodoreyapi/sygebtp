@@ -299,13 +299,38 @@
         </div>
         <!-- /Breadcrumb -->
 
+        <script>
+            function updateDateTime() {
+                const now = new Date();
+
+                // Heure au format 24h avec les minutes
+                const time = now.toLocaleTimeString('fr-FR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }).replace(':', 'h'); // ex: 19:07 -> 19h07
+
+                // Date formatée (jour, mois abrégé, année)
+                const date = now.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+
+                document.getElementById('currentTime').textContent = `${time}, ${date}`;
+            }
+
+            // Mise à jour chaque minute
+            setInterval(updateDateTime, 1000);
+            updateDateTime();
+        </script>
+
         <div class="row">
             <div class="col-xl-3 col-lg-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body">
                         <div class="mb-3 text-center">
-                            <h6 class="fw-medium text-gray-5 mb-2">Bonjour, Adrian</h6>
-                            <h4>08:35 AM, 11 Mar 2025</h4>
+                            <h6 class="fw-medium text-gray-5 mb-2">Bonjour, {{ Auth::user()->name }}</h6>
+                            <h4 id="currentTime"></h4>
                         </div>
                         <div class="attendance-circle-progress mx-auto mb-3" data-value='65'>
                             <span class="progress-left">

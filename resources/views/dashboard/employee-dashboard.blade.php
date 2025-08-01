@@ -31,6 +31,109 @@
 @endpush
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#punch-btn').click(function() {
+                $.ajax({
+                    url: "{{ route('attendance.punch') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        $('#punch-message').text(response.message).removeClass('text-danger')
+                            .addClass('text-success');
+
+                        // Mise à jour dynamique de l'affichage
+                        if (response.data) {
+                            $('.badge-primary').text('Production : ' + response.data
+                                .productive_hours + ' hrs');
+                            $('.punch-in-time').text('Punch In at ' + response.data.punch_in);
+                            // tu peux aussi stocker dans des inputs cachés pour un affichage plus poussé
+                        }
+                    },
+                    error: function(xhr) {
+                        $('#punch-message').text("Erreur lors du pointage.").removeClass(
+                            'text-success').addClass('text-danger');
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        const ctx = document.getElementById('timelineStackedChart').getContext('2d');
+
+        const labels = [
+            @foreach ($states['timeline'] as $hour => $data)
+                '{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00',
+            @endforeach
+        ];
+
+        const productiveData = [
+            @foreach ($states['timeline'] as $data)
+                {{ round($data['productive'], 2) }},
+            @endforeach
+        ];
+
+        const breakData = [
+            @foreach ($states['timeline'] as $data)
+                {{ round($data['break'], 2) }},
+            @endforeach
+        ];
+
+        const overtimeData = [
+            @foreach ($states['timeline'] as $data)
+                {{ round($data['overtime'], 2) }},
+            @endforeach
+        ];
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                        label: 'Productifs',
+                        data: productiveData,
+                        backgroundColor: '#28a745' // Vert
+                    },
+                    {
+                        label: 'Pause',
+                        data: breakData,
+                        backgroundColor: '#ffc107' // Jaune
+                    },
+                    {
+                        label: 'Heures supplémentaires',
+                        data: overtimeData,
+                        backgroundColor: '#1B84FF' // Bleu
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Heures'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+
     <!-- Slimscroll JS -->
     <script src="{{ URL::asset('') }}assets/js/jquery.slimscroll.min.js"></script>
     <script src="{{ URL::asset('') }}assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -101,26 +204,27 @@
         </div>
         <!-- /Breadcrumb -->
 
-        <div class="alert bg-secondary-transparent alert-dismissible fade show mb-4">
+        {{-- <div class="alert bg-secondary-transparent alert-dismissible fade show mb-4">
             Votre demande de congé du “24 Avril 2024” a été approuvée !!!
             <button type="button" class="btn-close fs-14" data-bs-dismiss="alert" aria-label="Close"><i
                     class="ti ti-x"></i></button>
-        </div>
+        </div> --}}
         <div class="row">
             <div class="col-xl-4 d-flex">
                 <div class="card position-relative flex-fill">
                     <div class="card-header bg-dark">
                         <div class="d-flex align-items-center">
                             <span class="avatar avatar-lg avatar-rounded border border-white border-2 flex-shrink-0 me-2">
-                                <img src="assets/img/users/user-01.jpg" alt="Img">
+                                <img src="{{ Auth::user()->photo == '' ? URL::asset('assets/img/profiles/avatar-12.jpg') : url(Auth::user()->photo) }}"
+                                    alt="Img">
                             </span>
                             <div>
-                                <h5 class="text-white mb-1">Yapi n'guessan kouassi théodoret</h5>
-                                <div class="d-flex align-items-center">
+                                <h5 class="text-white mb-1">{{ Auth::user()->name }} {{ Auth::user()->last_name }}</h5>
+                                {{-- <div class="d-flex align-items-center">
                                     <p class="text-white fs-12 mb-0">Informatique</p>
                                     <span class="mx-1"><i class="ti ti-point-filled text-primary"></i></span>
                                     <p class="fs-12">Développeur Mobile</p>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <a href="#" class="btn btn-icon btn-sm text-white rounded-circle edit-top"><i
@@ -129,24 +233,106 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <span class="d-block mb-1 fs-13">Numéro de téléphone</span>
-                            <p class="text-gray-9">+1 324 3453 545</p>
+                            <p class="text-gray-9">{{ Auth::user()->phone }}</p>
                         </div>
                         <div class="mb-3">
                             <span class="d-block mb-1 fs-13">Adresse email</span>
-                            <p class="text-gray-9">Steperde124@example.com</p>
+                            <p class="text-gray-9">{{ Auth::user()->email }}</p>
                         </div>
                         <div class="mb-3">
                             <span class="d-block mb-1 fs-13">Nationnalité</span>
-                            <p class="text-gray-9">Doglas Martini</p>
+                            <p class="text-gray-9">{{ Auth::user()->nationnalite }}</p>
                         </div>
                         <div>
                             <span class="d-block mb-1 fs-13">Date d'embauche</span>
-                            <p class="text-gray-9">15 Jan 2024</p>
+                            <p class="text-gray-9">{{ Auth::user()->date_embauche }}</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-5 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <h5>Membre de l'équipe</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-4 row">
+                            @foreach ($membres as $membre)
+                                <div class="d-flex align-items-center col-md-6">
+                                    <a href="javascript:void(0);" class="avatar flex-shrink-0">
+                                        <img src="{{ $membre->photo == '' ? URL::asset('assets/img/profiles/avatar-12.jpg') : url($membre->photo) }}"
+                                            class="rounded-circle border border-2" alt="img">
+                                    </a>
+                                    <div class="ms-2">
+                                        <h6 class="fs-14 fw-medium text-truncate mb-1"><a href="#">
+                                                {{ $membre->name }} {{ $membre->last_name }}</a>
+                                            </a>
+                                        </h6>
+                                        <p class="fs-13">{{ $membre->department_name }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 d-flex">
+                <div class="flex-fill">
+                    <div class="card card-bg-5 bg-dark mb-3">
+                        @if ($todayBirthdays)
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <h5 class="text-white mb-4">Anniversaire de l'équipe</h5>
+                                    <span class="avatar avatar-xl avatar-rounded mb-2">
+                                        <img src="assets/img/users/user-35.jpg" alt="Img">
+                                    </span>
+                                    <div class="mb-3">
+                                        <h6 class="text-white fw-medium mb-1">{{ $todayBirthdays->name }}
+                                            {{ $todayBirthdays->last_name }}</h6>
+                                        <p>{{ $todayBirthdays->name_designation }}</p>
+                                    </div>
+                                    <a href="#" class="btn btn-sm btn-primary">Envoyer des vœux</a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <h5 class="text-white mb-4">🎂 Aucun Anniversaire disponible</h5>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="card bg-secondary mb-3">
+                        <div class="card-body d-flex align-items-center justify-content-between p-3">
+                            <div>
+                                <h5 class="text-white mb-1">Politique de congé</h5>
+                                <p class="text-white">Dernière mise à jour : aujourd'hui</p>
+                            </div>
+                            <a href="#" class="btn btn-white btn-sm px-3">Tout voir</a>
+                        </div>
+                    </div>
+                    <div class="card bg-warning">
+                        <div class="card-body d-flex align-items-center justify-content-between p-3">
+                            <div>
+                                <h5 class="mb-1">Prochain férié</h5>
+                                @if ($nextHoliday)
+                                    <p class="text-gray-9">
+                                        {{ $nextHoliday->title }},
+                                        {{ \Carbon\Carbon::parse($nextHoliday->date)->translatedFormat('d F Y') }}
+                                    </p>
+                                @else
+                                    <p class="text-gray-9">Aucun jour férié prévu</p>
+                                @endif
+                            </div>
+                            {{-- <a href="{{ url('holidays') }}" class="btn btn-white btn-sm px-3">Tout voir</a> --}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {{-- <div class="col-xl-5 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header">
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
@@ -300,198 +486,130 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
+        <script>
+            function updateDateTime() {
+                const now = new Date();
+
+                // Heure au format 24h avec les minutes
+                const time = now.toLocaleTimeString('fr-FR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }).replace(':', 'h'); // ex: 19:07 -> 19h07
+
+                // Date formatée (jour, mois abrégé, année)
+                const date = now.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+
+                document.getElementById('currentTime').textContent = `${time}, ${date}`;
+            }
+
+            // Mise à jour chaque minute
+            setInterval(updateDateTime, 1000);
+            updateDateTime();
+        </script>
+
         <div class="row">
-            <div class="col-xl-4 d-flex">
-                <div class="card flex-fill border-primary attendance-bg">
+            <div class="col-xl-3 col-lg-4 d-flex">
+                <div class="card flex-fill">
                     <div class="card-body">
-                        <div class="mb-4 text-center">
-                            <h6 class="fw-medium text-gray-5 mb-1">Présence</h6>
-                            <h4>08:35 AM, 11 Mar 2025</h4>
+                        <div class="mb-3 text-center">
+                            <h6 class="fw-medium text-gray-5 mb-2">Bonjour, {{ Auth::user()->name }}</h6>
+                            <h4 id="currentTime"></h4>
                         </div>
-                        <div class="attendance-circle-progress attendance-progress mx-auto mb-3" data-value='65'>
+                        <div class="attendance-circle-progress mx-auto mb-3" data-value='65'>
                             <span class="progress-left">
                                 <span class="progress-bar border-success"></span>
                             </span>
                             <span class="progress-right">
                                 <span class="progress-bar border-success"></span>
                             </span>
-                            <div class="total-work-hours text-center w-100">
-                                <span class="fs-13 d-block mb-1">Total heure</span>
-                                <h6>5:45:32</h6>
+                            <div class="avatar avatar-xxl avatar-rounded">
+                                <img src="{{ URL::asset('') }}assets/img/profiles/avatar-27.jpg" alt="Img">
                             </div>
                         </div>
-                        <div class="text-center">
-                            <div class="badge badge-dark badge-md mb-3">Production : 3.45 hrs</div>
-                            <h6 class="fw-medium d-flex align-items-center justify-content-center mb-4">
+                        <div class="text-center" id="punch-section">
+                            <div class="badge badge-md badge-primary mb-3"></div>
+                            <h6 class="fw-medium d-flex align-items-center justify-content-center mb-3 punch-in-time">
                                 <i class="ti ti-fingerprint text-primary me-1"></i>
-                                Pointage à 10h00
+
                             </h6>
-                            <a href="#" class="btn btn-primary w-100">Terminer service</a>
+
+                            <button id="punch-btn" href="#" class="btn btn-dark w-100">Pointage entrée / Pointage
+                                sortie</button>
+                            <div id="punch-message" class="mt-2 text-success fw-bold"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-8 d-flex">
+            <div class="col-xl-9 col-lg-8 d-flex">
                 <div class="row flex-fill">
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="border-bottom mb-3 pb-2">
+                                <div class="border-bottom mb-2 pb-2">
                                     <span class="avatar avatar-sm bg-primary mb-2"><i class="ti ti-clock-stop"></i></span>
-                                    <h2 class="mb-2">8.36 / <span class="fs-20 text-gray-5"> 9</span></h2>
-                                    <p class="fw-medium text-truncate">Heure aujourd'hui</p>
-                                </div>
-                                <div>
-                                    <p class="d-flex align-items-center fs-13">
-                                        <span class="avatar avatar-xs rounded-circle bg-success flex-shrink-0 me-2">
-                                            <i class="ti ti-arrow-up fs-12"></i>
-                                        </span>
-                                        <span>5% cette semaine</span>
-                                    </p>
+                                    <h2 class="mb-2">{{ number_format($stats['today'], 2) }} h</h2>
+                                    <p class="fw-medium text-truncate">Nombre total d'heures aujourd'hui</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="border-bottom mb-3 pb-2">
+                                <div class="border-bottom mb-2 pb-2">
                                     <span class="avatar avatar-sm bg-dark mb-2"><i class="ti ti-clock-up"></i></span>
-                                    <h2 class="mb-2">10 / <span class="fs-20 text-gray-5"> 40</span></h2>
-                                    <p class="fw-medium text-truncate">Heure semaine</p>
-                                </div>
-                                <div>
-                                    <p class="d-flex align-items-center fs-13">
-                                        <span class="avatar avatar-xs rounded-circle bg-success flex-shrink-0 me-2">
-                                            <i class="ti ti-arrow-up fs-12"></i>
-                                        </span>
-                                        <span>7% semaine dernière</span>
-                                    </p>
+                                    <h2 class="mb-2">{{ number_format($stats['week'], 2) }} h</h2>
+                                    <p class="fw-medium text-truncate">Total cette semaine</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="border-bottom mb-3 pb-2">
+                                <div class="border-bottom mb-2 pb-2">
+                                    <span class="avatar avatar-sm bg-dark mb-2"><i class="ti ti-clock-up"></i></span>
+                                    <h2 class="mb-2">{{ number_format($stats['month'], 2) }} h</h2>
+                                    <p class="fw-medium text-truncate">Total ce mois-ci</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="border-bottom mb-2 pb-2">
+                                    <span class="avatar avatar-sm bg-dark mb-2"><i class="ti ti-clock-up"></i></span>
+                                    <h2 class="mb-2">{{ number_format($stats['productive_today'], 2) }} h</h2>
+                                    <p class="fw-medium text-truncate">Heures productives aujourd'hui</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="border-bottom mb-2 pb-2">
                                     <span class="avatar avatar-sm bg-info mb-2"><i class="ti ti-calendar-up"></i></span>
-                                    <h2 class="mb-2">75 / <span class="fs-20 text-gray-5"> 98</span></h2>
-                                    <p class="fw-medium text-truncate">Heure mois</p>
-                                </div>
-                                <div>
-                                    <p class="d-flex align-items-center fs-13 text-truncate">
-                                        <span class="avatar avatar-xs rounded-circle bg-danger flex-shrink-0 me-2">
-                                            <i class="ti ti-arrow-down fs-12"></i>
-                                        </span>
-                                        <span>8% mois dernier</span>
-                                    </p>
+                                    <h2 class="mb-2">{{ number_format($stats['break_today'], 2) }} h</h2>
+                                    <p class="fw-medium text-truncate">Pause aujourd'hui</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="border-bottom mb-3 pb-2">
+                                <div class="border-bottom mb-2 pb-2">
                                     <span class="avatar avatar-sm bg-pink mb-2"><i class="ti ti-calendar-star"></i></span>
-                                    <h2 class="mb-2">16 / <span class="fs-20 text-gray-5"> 28</span></h2>
-                                    <p class="fw-medium text-truncate">Heure supplémentaire</p>
-                                </div>
-                                <div>
-                                    <p class="d-flex align-items-center fs-13 text-truncate">
-                                        <span class="avatar avatar-xs rounded-circle bg-danger flex-shrink-0 me-2">
-                                            <i class="ti ti-arrow-down fs-12"></i>
-                                        </span>
-                                        <span>6% mois dernier</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-xl-3">
-                                        <div class="mb-4">
-                                            <p class="d-flex align-items-center mb-1"><i
-                                                    class="ti ti-point-filled text-dark-transparent me-1"></i>Heures de travail totales</p>
-                                            <h3>12h 36m</h3>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-3">
-                                        <div class="mb-4">
-                                            <p class="d-flex align-items-center mb-1"><i
-                                                    class="ti ti-point-filled text-success me-1"></i>Heures productives</p>
-                                            <h3>08h 36m</h3>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-3">
-                                        <div class="mb-4">
-                                            <p class="d-flex align-items-center mb-1"><i
-                                                    class="ti ti-point-filled text-warning me-1"></i>Heures de pause</p>
-                                            <h3>22m 15s</h3>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-3">
-                                        <div class="mb-4">
-                                            <p class="d-flex align-items-center mb-1"><i
-                                                    class="ti ti-point-filled text-info me-1"></i>Au fil du temps</p>
-                                            <h3>02h 15m</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="progress bg-transparent-dark mb-3" style="height: 24px;">
-                                            <div class="progress-bar bg-white rounded" role="progressbar"
-                                                style="width: 18%;"></div>
-                                            <div class="progress-bar bg-success rounded me-2" role="progressbar"
-                                                style="width: 18%;"></div>
-                                            <div class="progress-bar bg-warning rounded me-2" role="progressbar"
-                                                style="width: 5%;"></div>
-                                            <div class="progress-bar bg-success rounded me-2" role="progressbar"
-                                                style="width: 28%;"></div>
-                                            <div class="progress-bar bg-warning rounded me-2" role="progressbar"
-                                                style="width: 17%;"></div>
-                                            <div class="progress-bar bg-success rounded me-2" role="progressbar"
-                                                style="width: 22%;"></div>
-                                            <div class="progress-bar bg-warning rounded me-2" role="progressbar"
-                                                style="width: 5%;"></div>
-                                            <div class="progress-bar bg-info rounded me-2" role="progressbar"
-                                                style="width: 3%;"></div>
-                                            <div class="progress-bar bg-info rounded" role="progressbar"
-                                                style="width: 2%;"></div>
-                                            <div class="progress-bar bg-white rounded" role="progressbar"
-                                                style="width: 18%;"></div>
-                                        </div>
-
-                                    </div>
-                                    <div class="co-md-12">
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
-                                            <span class="fs-10">06:00</span>
-                                            <span class="fs-10">07:00</span>
-                                            <span class="fs-10">08:00</span>
-                                            <span class="fs-10">09:00</span>
-                                            <span class="fs-10">10:00</span>
-                                            <span class="fs-10">11:00</span>
-                                            <span class="fs-10">12:00</span>
-                                            <span class="fs-10">01:00</span>
-                                            <span class="fs-10">02:00</span>
-                                            <span class="fs-10">03:00</span>
-                                            <span class="fs-10">04:00</span>
-                                            <span class="fs-10">05:00</span>
-                                            <span class="fs-10">06:00</span>
-                                            <span class="fs-10">07:00</span>
-                                            <span class="fs-10">08:00</span>
-                                            <span class="fs-10">09:00</span>
-                                            <span class="fs-10">10:00</span>
-                                            <span class="fs-10">11:00</span>
-                                        </div>
-                                    </div>
+                                    <h2 class="mb-2">{{ number_format($stats['overtime'], 2) }} h</h2>
+                                    <p class="fw-medium text-truncate">Pause</p>
                                 </div>
                             </div>
                         </div>
@@ -913,7 +1031,7 @@
             </div>
         </div> --}}
         <div class="row">
-            <div class="col-xl-5 d-flex">
+            {{-- <div class="col-xl-5 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header">
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
@@ -950,7 +1068,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             {{-- <div class="col-xl-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header">
@@ -1082,7 +1200,7 @@
                     </div>
                 </div>
             </div> --}}
-            <div class="col-xl-4 d-flex">
+            {{-- <div class="col-xl-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-header">
                         <div class="d-flex align-items-center justify-content-between flex-wrap">
@@ -1142,7 +1260,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
         {{-- <div class="row">
             <div class="col-xl-4 d-flex">
