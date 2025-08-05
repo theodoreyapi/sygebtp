@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\Departments;
+use App\Models\Holidays;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -116,7 +118,96 @@ class CustomAuthController extends Controller
                     ->select('users.name', 'users.last_name', 'users.photo', 'departments.deparment_name as department_name')
                     ->get();
 
-                return view('dashboard.employee-dashboard', compact('membres'));
+                $today = Carbon::today()->format('d-m');
+
+                // 🎂 Anniversaires aujourd'hui
+                $todayBirthdays = User::join('designations', 'users.designation_id', '=', 'designations.design')
+                    ->select('users.name', 'users.last_name', 'designations.name_designation')
+                    ->whereRaw("DATE_FORMAT(STR_TO_DATE(date_naissance, '%d-%m-%Y'), '%d-%m') = ?", [$today])
+                    ->inRandomOrder()
+                    ->first();
+
+                $nextHoliday = Holidays::whereDate('date', '>=', Carbon::today())
+                    ->orderBy('date', 'asc')
+                    ->first();
+
+                $user = Auth::user();
+
+                $today = now()->toDateString();
+                $weekStart = now()->startOfWeek();
+                $weekEnd = now()->endOfWeek();
+                $monthStart = now()->startOfMonth();
+                $monthEnd = now()->endOfMonth();
+
+                $stats = [
+                    // Heures aujourd'hui
+                    'today' => Attendance::where('user_id', $user->id)
+                        ->whereDate('date', $today)
+                        ->sum('worked_hours'),
+
+                    // Heures cette semaine
+                    'week' => Attendance::where('user_id', $user->id)
+                        ->whereBetween('date', [$weekStart, $weekEnd])
+                        ->sum('worked_hours'),
+
+                    // Heures ce mois
+                    'month' => Attendance::where('user_id', $user->id)
+                        ->whereBetween('date', [$monthStart, $monthEnd])
+                        ->sum('worked_hours'),
+
+                    // Heures supplémentaires
+                    'overtime' => Attendance::where('user_id', $user->id)
+                        ->whereBetween('date', [$monthStart, $monthEnd])
+                        ->sum('overtime_hours'),
+
+                    // Heures productives aujourd’hui
+                    'productive_today' => Attendance::where('user_id', $user->id)
+                        ->whereDate('date', $today)
+                        ->sum('productive_hours'),
+
+                    // Pauses aujourd’hui
+                    'break_today' => Attendance::where('user_id', $user->id)
+                        ->whereDate('date', $today)
+                        ->sum('break_minutes') / 60, // en heures
+                ];
+
+                // Exemple de structure vide : 06h à 23h
+                $timeline = [];
+                for ($hour = 6; $hour <= 23; $hour++) {
+                    $timeline[$hour] = [
+                        'productive' => 0,
+                        'break' => 0,
+                        'overtime' => 0,
+                    ];
+                }
+
+                // Récupérer les données du jour
+                $attendances = Attendance::where('user_id', $user->id)
+                    ->whereDate('date', $today)
+                    ->get();
+
+                foreach ($attendances as $att) {
+                    $start = Carbon::parse($att->punch_in_time);
+                    $end = Carbon::parse($att->punch_out_time ?? now());
+
+                    for ($hour = $start->hour; $hour <= $end->hour; $hour++) {
+                        if (isset($timeline[$hour])) {
+                            $timeline[$hour]['productive'] += $att->productive_hours / ($end->hour - $start->hour + 1);
+                            $timeline[$hour]['break'] += $att->break_minutes / 60 / ($end->hour - $start->hour + 1);
+                            $timeline[$hour]['overtime'] += $att->overtime_hours / ($end->hour - $start->hour + 1);
+                        }
+                    }
+                }
+
+                $states = [
+                    'working' => $attendances->sum('worked_hours'),
+                    'productive' => $attendances->sum('productive_hours'),
+                    'break' => $attendances->sum('break_minutes') / 60,
+                    'overtime' => $attendances->sum('overtime_hours'),
+                    'timeline' => $timeline,
+                ];
+
+                return view('dashboard.employee-dashboard', compact('membres', 'todayBirthdays', 'nextHoliday', 'stats', 'states'));
             }
         } else {
             return view('auth.login');
